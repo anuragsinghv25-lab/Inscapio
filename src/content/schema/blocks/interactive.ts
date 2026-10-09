@@ -10,8 +10,8 @@ export const Claims = z
     id: Id,
     type: z.literal("claims"),
     accent: Accent,
-    /** Visible prefix on each claim, e.g. "They say:". */
-    label: ShortText,
+    /** Optional visible prefix on each claim, e.g. "They say:". v0 has none. */
+    label: ShortText.optional(),
     /** Hint on a closed card, e.g. "Tap for a fair answer". */
     hint: ShortText,
     /** Label of the "no filter" chip. */
