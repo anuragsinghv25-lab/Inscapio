@@ -1,0 +1,794 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>InScapio — Don't just read it. Explore it.</title>
+<meta name="description" content="InScapio is an interactive knowledge platform where ideas become experiences you can explore.">
+<meta name="theme-color" content="#E3E9EA">
+<link rel="canonical" href="https://inscapio.in/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="InScapio">
+<meta property="og:title" content="InScapio — Don't just read it. Explore it.">
+<meta property="og:description" content="InScapio is an interactive knowledge platform where ideas become experiences you can explore.">
+<meta property="og:url" content="https://inscapio.in/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="InScapio — Don't just read it. Explore it.">
+<meta name="twitter:description" content="InScapio is an interactive knowledge platform where ideas become experiences you can explore.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23102C33'/%3E%3Crect x='13' y='13' width='6' height='13' fill='%23fff'/%3E%3Ccircle cx='16' cy='7.5' r='3.5' fill='%23F2A900'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Literata:ital,opsz,wght@0,7..72,400..700;1,7..72,400..700&display=swap">
+<style>
+/* ===== InScapio design tokens ===== */
+:root{--fog:#E3E9EA;--paper:#F5F8F8;--deep:#102C33;--mid:#4A646B;--tarn:#0B2F38;--cobalt:#2447D6;--cobalt-d:#1A36A6;--amber:#F2A900;--g:clamp(18px,4.5vw,56px);
+--d:"Bricolage Grotesque",ui-sans-serif,"Helvetica Neue",Helvetica,sans-serif;--b:Literata,Georgia,"Times New Roman",serif}
+*,*:before,*:after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px;-webkit-text-size-adjust:100%}
+[hidden]{display:none!important}
+body{margin:0;background:var(--fog);color:var(--deep);font:400 1.0625rem/1.65 var(--b);transition:background .3s}
+body[data-v=about]{background:var(--deep)}body[data-v=cl]{background:var(--tarn)}
+.view{overflow-x:clip}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:3px solid var(--cobalt);outline-offset:3px}
+h1:focus{outline:none}
+.dk :focus-visible,.cl :focus-visible{outline-color:var(--amber)}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* entering an experience: the view opens from the point you tapped */
+.view.entering{animation:entering .75s cubic-bezier(.7,0,.2,1)}
+@keyframes entering{from{clip-path:circle(0 at var(--ox,50%) var(--oy,60%))}to{clip-path:circle(150vmax at var(--ox,50%) var(--oy,60%))}}
+
+/* ===== site nav (home + about) ===== */
+.nav{position:absolute;z-index:5;inset:0 0 auto 0;display:flex;justify-content:space-between;align-items:center;padding:calc(env(safe-area-inset-top,0px) + 10px) var(--g) 0;color:var(--deep)}
+body[data-v=about] .nav{color:#fff}
+body[data-v=xp1] .nav,body[data-v=cl] .nav,body[data-v=xp1] #ft,body[data-v=cl] #ft{display:none}
+.wm{font:800 1.6rem/1 var(--d);letter-spacing:-.04em;color:inherit;text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+.nav ul{display:flex;gap:4px;list-style:none;margin:0;padding:0}
+.nav .nl{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;font:600 1rem var(--d);color:inherit;text-decoration:none;border-bottom:2px solid transparent}
+.nav .nl:hover{border-color:currentColor}
+
+/* ===== home: opening ===== */
+.opening{max-width:1400px;margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 112px) var(--g) clamp(48px,8vw,96px)}
+.ttl{margin:0;font-family:var(--d);font-size:clamp(3rem,12.5vw,10.5rem);line-height:.9;letter-spacing:-.045em}
+.ttl span{display:block}
+.ttl .a{font-weight:250;font-variation-settings:"wdth" 75;color:var(--mid)}
+.ttl .b{font-weight:800;font-variation-settings:"wdth" 100}
+.opening .sub{margin:clamp(20px,3vw,32px) 0 0;font:500 clamp(1.15rem,2.2vw,1.5rem)/1.3 var(--d);max-width:24em}
+.strip{--v:50%;position:relative;margin-top:clamp(40px,6vw,80px);height:clamp(350px,38vw,410px);background:var(--paper);overflow:hidden}
+.pane{position:absolute;inset:0}
+.read{padding:clamp(18px,3vw,36px)}
+.read .art{max-width:34rem;color:var(--mid)}
+@media(min-width:900px){.read .art{margin-left:auto}}
+.read h2{margin:0 0 .6em;font:700 clamp(1.35rem,3vw,1.9rem)/1.15 var(--d);color:var(--deep)}
+.read p{margin:0 0 .8em;font-size:1rem;line-height:1.6}
+.read:after{content:"";position:absolute;left:0;right:0;bottom:0;height:90px;background:linear-gradient(transparent,var(--paper))}
+.exp{background:var(--tarn);color:#fff;clip-path:inset(0 calc(100% - var(--v)) 0 0)}
+.exp .hl{position:absolute;left:clamp(18px,3vw,36px);right:clamp(18px,3vw,36px);top:clamp(18px,3vw,32px);margin:0;font:800 clamp(1.45rem,4vw,2.7rem)/1.02 var(--d);letter-spacing:-.03em;max-width:15em}
+.exp .hl b{color:var(--amber);font-weight:800}
+.exp svg{position:absolute;left:0;right:0;bottom:34px;width:100%;height:64%}
+.exp .lg{position:absolute;left:clamp(18px,3vw,36px);right:clamp(18px,3vw,36px);bottom:8px;display:flex;flex-wrap:wrap;gap:0 18px;margin:0;padding:0;list-style:none;font:500 .78rem/1.5 var(--d)}
+.exp .lg i{display:inline-block;width:18px;margin-right:6px;vertical-align:middle;border-top:3px solid}
+.rule{position:absolute;top:0;bottom:0;left:var(--v);width:3px;margin-left:-1.5px;background:var(--amber);pointer-events:none}
+.ctl{margin-top:16px;max-width:760px}
+.ctl label{display:block;font:600 1rem var(--d)}
+.ctl .row{display:flex;align-items:center;gap:14px}
+.ctl .row span{font:700 .95rem var(--d);flex:none}
+.rng{-webkit-appearance:none;appearance:none;flex:1;min-width:0;height:48px;background:transparent;cursor:pointer;margin:0}
+.rng::-webkit-slider-runnable-track{height:4px;background:var(--deep)}
+.rng::-moz-range-track{height:4px;background:var(--deep)}
+.rng::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;margin-top:-12px;background:var(--cobalt);border:3px solid var(--fog);border-radius:2px}
+.rng::-moz-range-thumb{width:22px;height:22px;background:var(--cobalt);border:3px solid var(--fog);border-radius:2px}
+.rng:hover::-webkit-slider-thumb{background:var(--cobalt-d)}
+
+/* ===== home: rooms ===== */
+.room{padding:clamp(72px,12vw,168px) var(--g)}
+.room .in{max-width:1400px;margin:0 auto;display:grid;gap:clamp(36px,6vw,96px);grid-template-columns:minmax(0,1fr)}
+.room h2{margin:0;font:800 clamp(2.7rem,8.4vw,7.4rem)/.92 var(--d);letter-spacing:-.045em;overflow-wrap:break-word}
+.room .desc{max-width:26em;margin:1.2em 0 1.6em;font-size:clamp(1.1rem,1.8vw,1.3rem);line-height:1.5}
+.rh{margin:0 0 14px;font:600 1rem var(--d)}
+.enter{display:inline-flex;align-items:center;min-height:56px;padding:0 28px;background:var(--deep);color:#fff;font:700 1.05rem var(--d);text-decoration:none;border-radius:2px;transition:background .2s}
+.enter:hover{background:var(--cobalt)}
+.r1{background:var(--paper)}
+.r2{background:var(--tarn);color:#fff}
+.r2 .enter{background:#fff;color:var(--deep)}.r2 .enter:hover{background:var(--amber)}
+@media(min-width:900px){.r1 .in{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);align-items:end}.r2 .in{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);align-items:end}}
+@media(max-width:899px){.r2 .rt{order:-1}}
+.bands{display:grid}
+.band{background:var(--bg);color:#fff}
+.band>button{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;width:100%;min-height:64px;padding:12px 20px;border:0;border-radius:0;background:none;color:inherit;font:700 1.15rem/1.2 var(--d);text-align:left;cursor:pointer}
+.band>button i{font:400 1.6rem/1 var(--d);font-style:normal}
+.band .bd{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s}
+.band .bd>div{overflow:hidden;visibility:hidden;transition:visibility 0s .3s}
+.band .bd p{margin:0;padding:0 20px 18px;font-size:1rem;line-height:1.5}
+.band.open .bd{grid-template-rows:1fr}.band.open .bd>div{visibility:visible;transition-delay:0s}
+.band:focus-within{position:relative;z-index:1}
+.wall{display:flex;flex-wrap:wrap;gap:0 18px;margin:0 0 20px}
+.wall button{min-height:48px;padding:0;border:0;background:none;color:#ffffffa6;font:700 clamp(1.5rem,4vw,2.5rem)/1.1 var(--d);letter-spacing:-.025em;cursor:pointer;border-bottom:3px solid transparent}
+.wall button:hover{color:#fff}
+.wall button[aria-pressed=true]{color:var(--amber);border-color:var(--amber)}
+.wans{margin:0;min-height:3.6em;font:800 clamp(1.4rem,3.4vw,2.2rem)/1.1 var(--d);letter-spacing:-.025em}
+.wans b{color:var(--amber)}
+.note{margin:10px 0 0;font-size:.88rem;color:#ffffffb3}
+.what{padding:clamp(72px,12vw,160px) var(--g)}
+.what .in{max-width:1400px;margin:0 auto}
+.what h2{margin:0 0 1em;max-width:19em;font:700 clamp(1.8rem,4.6vw,3.4rem)/1.1 var(--d);letter-spacing:-.03em}
+.ulink{display:inline-flex;align-items:center;min-height:48px;font:700 1.05rem var(--d);color:inherit;text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:2px}
+.ulink:hover{color:var(--cobalt)}
+.closing{background:var(--cobalt);color:#fff;padding:clamp(80px,14vw,200px) var(--g)}
+.closing .in{max-width:1400px;margin:0 auto}
+.closing h2{margin:0 0 .8em;max-width:11em;font:800 clamp(2.6rem,8vw,6.8rem)/.94 var(--d);letter-spacing:-.045em}
+.cta{display:inline-flex;align-items:center;min-height:56px;padding:0 28px;background:#fff;color:var(--deep);font:700 1.05rem var(--d);text-decoration:none;border-radius:2px;transition:background .2s}
+.cta:hover{background:var(--amber)}
+#ft{padding:40px var(--g) calc(env(safe-area-inset-bottom,0px) + 40px);background:var(--deep);color:#c6d3d6;font-size:.92rem}
+#ft p{margin:0 0 .4em;max-width:40em}#ft b{font:800 1.3rem var(--d);color:#fff;letter-spacing:-.03em}
+
+/* ===== about ===== */
+.ab{max-width:1100px;margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 120px) var(--g) 96px;color:#fff}
+.ab h1{margin:0 0 .8em;font:800 clamp(2.8rem,10vw,8rem)/.92 var(--d);letter-spacing:-.045em}
+.prose{max-width:30em;font-size:clamp(1.2rem,2.4vw,1.6rem);line-height:1.5}
+.prose p{margin:0 0 1em}
+.prose .q{margin:1.3em 0;font:800 clamp(1.8rem,4.6vw,3.2rem)/1.05 var(--d);letter-spacing:-.03em;color:var(--amber)}
+.gd{max-width:30em;margin:56px 0;padding-top:28px;border-top:1px solid #ffffff40}
+.gd p{margin:0 0 1em}
+.gd button{min-height:48px;padding:0 22px;background:#fff;color:var(--deep);border:0;border-radius:2px;font:700 1rem var(--d);cursor:pointer}
+.gd button[aria-expanded=true]{background:var(--amber)}
+.gd .more{margin-top:1em;padding:14px 0 0 18px;border-left:3px solid var(--amber)}
+.ab .fin{margin:0 0 1em;font:800 clamp(2.4rem,8vw,6rem)/.95 var(--d);letter-spacing:-.045em}
+.ab .fin span{display:block;font-weight:250;font-variation-settings:"wdth" 75;color:#9fb4b9}
+.ab .ulink:hover{color:var(--amber)}
+
+/* ===== climate experience ===== */
+.cl{--w:0;--ch:#7FD6E8;--bgc:#0B2F38;background:var(--bgc);color:#E8F0F2;transition:background .5s;min-height:100svh;font-size:1.0625rem}
+.cl h1,.cl h2,.cl h3{font-family:var(--d);margin:0}
+@supports(background:color-mix(in oklab,red,blue)){.cl{--ch:color-mix(in oklab,#7FD6E8 calc((1 - var(--w))*100%),#FF8A4C);--bgc:color-mix(in oklab,#0B2F38 calc((1 - var(--w))*100%),#3A1A12)}}
+.bk{display:inline-flex;align-items:center;min-height:44px;padding-right:6px;font:800 1.05rem var(--d);letter-spacing:-.02em;color:inherit;text-decoration:none}
+.bk:before{content:"\2190";margin-right:8px;font-weight:400}
+.cb{position:fixed;z-index:9;inset:0 0 auto 0;display:flex;align-items:center;gap:12px;padding:calc(env(safe-area-inset-top,0px) + 4px) 12px 4px;background:var(--bgc);transition:background .5s;font-size:.95rem}
+.cb b{flex:1;min-width:0;font:600 .95rem var(--d);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cb button,.cb .bk{color:#fff}
+.cb button{min-height:44px;padding:0 14px;background:none;border:1px solid #ffffff59;border-radius:3px;font:600 .95rem var(--d);cursor:pointer}
+.cb button[aria-pressed=true]{background:var(--amber);border-color:var(--amber);color:#101}
+#cp{position:absolute;left:0;bottom:0;height:3px;width:100%;background:var(--amber);transform-origin:0 50%;transform:scaleX(0)}
+.cs{max-width:1100px;margin:0 auto;padding:clamp(72px,12vh,140px) var(--g)}
+.cs.first{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding-top:100px}
+.cl h1{font-size:clamp(2.8rem,10vw,8rem);line-height:.92;letter-spacing:-.045em;font-weight:800;max-width:11em}
+.cl h2{font-size:clamp(2rem,6vw,3.8rem);line-height:1;letter-spacing:-.035em;font-weight:800;max-width:14em;margin-bottom:.5em}
+.cs p{max-width:34em;color:#C5D6DA}
+.cs .sub{margin:1.4em 0 1.6em;font-size:clamp(1.15rem,2vw,1.4rem);line-height:1.5}
+.go{display:inline-flex;align-items:center;align-self:flex-start;min-height:52px;padding:0 26px;background:#fff;color:var(--tarn);font:700 1rem var(--d);text-decoration:none;border-radius:2px}
+.go:hover{background:var(--amber)}
+.q3{display:grid;gap:24px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin:2rem 0}
+.q3 div{border-top:3px solid var(--ch);padding-top:12px;color:#C5D6DA}
+.q3 b{display:block;font:800 clamp(1.8rem,4vw,2.6rem)/1 var(--d);letter-spacing:-.03em;color:#fff}
+.dp{display:none;max-width:36em;margin:1.4rem 0;padding:6px 0 6px 18px;border-left:3px solid var(--amber);color:#C5D6DA}
+.deepmode .dp{display:block}
+.dp:before{content:"Going deeper";display:block;font:700 .9rem var(--d);color:var(--amber)}
+.rail{scroll-padding-inline:var(--g);display:flex;gap:8px;overflow-x:auto;margin:0 calc(var(--g)*-1) 8px;padding:4px var(--g) 14px;scroll-snap-type:x proximity}
+.rail button{flex:none;scroll-snap-align:start;min-height:44px;padding:0 16px;background:none;color:inherit;border:1px solid #ffffff59;border-radius:3px;font:600 1rem var(--d);cursor:pointer}
+.rail button:hover{border-color:#fff}
+.rail button[aria-pressed=true]{background:var(--amber);border-color:var(--amber);color:#101}
+@media(min-width:900px){.rail{flex-wrap:wrap;overflow:visible;margin:0 0 8px;padding:4px 0 14px}}
+.gz{margin:12px 0 36px;padding:2px 0 2px 18px;border-left:3px solid var(--ch)}
+.gz p{margin:0 0 .8em;color:#fff;font:700 clamp(1.15rem,2.4vw,1.5rem)/1.25 var(--d)}
+.gz .opts{display:flex;flex-wrap:wrap;gap:8px}
+.gz button{min-height:48px;padding:0 20px;background:none;color:inherit;border:1px solid #ffffff80;border-radius:3px;font:700 1rem var(--d);cursor:pointer}
+.gz button:hover{border-color:#fff}
+.gz button.ok{background:var(--amber);border-color:var(--amber);color:#101}
+.gz button.no{background:#ffffff26}
+.gz .res{min-height:1.6em;margin:.9em 0 0;font:500 1rem var(--d);color:#C5D6DA}
+.hdr{display:grid;gap:4px 36px;align-items:end;margin-bottom:6px}
+@media(min-width:760px){.hdr{grid-template-columns:auto 1fr}}
+.yr{font:800 clamp(5rem,20vw,11rem)/.9 var(--d);letter-spacing:-.05em;color:var(--ch);font-variant-numeric:tabular-nums}
+.cs .an{margin:0;max-width:14em;color:#fff;font:800 clamp(1.5rem,4vw,2.6rem)/1.05 var(--d);letter-spacing:-.03em}
+.an b{color:var(--amber)}
+.sl label{display:flex;justify-content:space-between;font:600 1rem var(--d)}
+.cl input[type=range]{width:100%;height:48px;accent-color:var(--amber);margin:0}
+.chart{display:block;width:100%;height:auto;margin-top:8px}
+.lg2{display:flex;flex-wrap:wrap;gap:6px 22px;margin:8px 0 28px;padding:0;list-style:none;font:500 .92rem var(--d)}
+.lg2 i{display:inline-block;width:26px;margin-right:8px;vertical-align:middle;border-top:3px solid}
+.st{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:20px}
+.st div{border-top:2px solid var(--ch);padding-top:10px}
+.st b{display:block;font:800 clamp(1.6rem,3.4vw,2.2rem)/1.1 var(--d);letter-spacing:-.03em}
+.st small{color:#C5D6DA;font-size:.92rem}
+.dm{max-width:36em;margin-top:2.4rem;padding-left:18px;border-left:3px solid var(--amber);font-size:.92rem;color:#C5D6DA}
+
+/* ===== feedback (shared) ===== */
+:is(#fb1,#fb2){background:var(--deep);color:#fff;padding:clamp(64px,10vw,120px) var(--g);font-family:var(--b);font-size:1.0625rem;line-height:1.6}
+:is(#fb1,#fb2) .fw{max-width:720px;margin:0 auto 0 0}
+@media(min-width:1200px){:is(#fb1,#fb2) .fw{margin-left:max(0px,calc((100vw - 1100px)/2))}}
+:is(#fb1,#fb2) h2{margin:0 0 .3em;font:800 clamp(2rem,5vw,3.4rem)/1 var(--d);letter-spacing:-.035em;color:#fff}
+:is(#fb1,#fb2) h3{margin:1.8em 0 .5em;font:700 1.1rem/1.3 var(--d);color:#fff;letter-spacing:0}
+:is(#fb1,#fb2) p{margin:0;color:#c6d3d6;max-width:none}
+:is(#fb1,#fb2) .fo{display:flex;flex-wrap:wrap;gap:8px}
+:is(#fb1,#fb2) button{min-height:48px;min-width:48px;padding:0 18px;background:none;color:#fff;border:1px solid #ffffff80;border-radius:3px;font:700 1rem var(--d);cursor:pointer}
+:is(#fb1,#fb2) button:hover{border-color:#fff}
+:is(#fb1,#fb2) button[aria-pressed=true]{background:var(--amber);border-color:var(--amber);color:#101}
+:is(#fb1,#fb2) button.sub{background:#fff;color:var(--deep);border-color:#fff}
+:is(#fb1,#fb2) button.sub:hover{background:var(--amber);border-color:var(--amber)}
+:is(#fb1,#fb2) .fe{display:flex;justify-content:space-between;max-width:280px;margin-top:6px;font-size:.85rem}
+:is(#fb1,#fb2) .ft{margin-top:1.4em}
+:is(#fb1,#fb2) label{display:block;margin-bottom:.4em;font:700 1.1rem/1.3 var(--d);color:#fff}
+:is(#fb1,#fb2) textarea{display:block;width:100%;min-height:84px;padding:12px;background:#ffffff14;color:#fff;border:1px solid #ffffff59;border-radius:3px;font:1rem/1.5 var(--b);resize:vertical}
+:is(#fb1,#fb2) .fa{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+:is(#fb1,#fb2) .fm{margin-top:14px;min-height:1.6em;color:#fff}
+:is(#fb1,#fb2) :focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+
+#xp1{--bg:#f7f6fb;--ink:#1d1b3a;--mute:#5a5878;--card:#fff;--line:#dedbee;--fs:19px}
+@media(prefers-color-scheme:dark){#xp1:not([data-theme="light"]){--bg:#13122a;--ink:#f1effc;--mute:#b4b1d3;--card:#1e1c3c;--line:#38356a}
+}
+#xp1[data-theme="dark"]{--bg:#13122a;--ink:#f1effc;--mute:#b4b1d3;--card:#1e1c3c;--line:#38356a}
+#xp1 *,#xp1 *:before,#xp1 *:after{box-sizing:border-box}
+#xp1{margin:0;background:var(--bg);color:var(--ink);font:var(--fs)/1.7 var(--b)}
+#xp1 h1,#xp1 h2,#xp1 h3{font-family:var(--d);line-height:1.2;margin:0 0 .5em}
+#xp1 h2{font-size:clamp(1.8rem,5vw,2.6rem)}
+#xp1 h3{font-size:1.3rem}
+#xp1 p{margin:0 0 1em}
+#xp1 .wrap{max-width:760px;margin:0 auto;padding:0 20px}
+#xp1 #bar{position:fixed;left:0;right:0;top:env(safe-area-inset-top,0px);z-index:9;background:var(--card);border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:center;padding:8px 12px;font-size:14px}
+#xp1 #bar b{flex:1;font-family:var(--d);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#xp1 button,#xp1 select{font:inherit;font-size:14px;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:6px 10px;cursor:pointer}
+#xp1 button:focus-visible,#xp1 select:focus-visible,#xp1 a:focus-visible{outline:3px solid #f2a900;outline-offset:2px}
+#xp1 #prog{position:fixed;left:0;top:calc(env(safe-area-inset-top,0px) + 49px);height:4px;width:0;background:linear-gradient(90deg,#c8374f,#f2a900,#17787A);z-index:10}
+#xp1 .hero{min-height:100vh;display:flex;align-items:center;padding:90px 0 40px;background:radial-gradient(circle at 80% 10%,#c8374f55,transparent 45%),radial-gradient(circle at 10% 90%,#17787A55,transparent 45%),#1d1b3a;color:#fff}
+#xp1 .hero h1{font-size:clamp(2.6rem,9vw,5rem);margin-bottom:.3em}
+#xp1 .hero p{font-size:1.2rem;max-width:34em;color:#e6e3fa}
+#xp1 .btn{display:inline-block;background:#f2a900;color:#1d1b3a;font-weight:700;border-radius:999px;padding:12px 24px;text-decoration:none;margin:6px 8px 0 0}
+#xp1 .btn.alt{background:transparent;color:#fff;border:2px solid #fff}
+#xp1 section.ch{padding:64px 0;border-top:8px solid var(--c)}
+#xp1 .tag{display:inline-block;background:var(--c);color:#fff;border-radius:999px;padding:2px 14px;font-size:14px;margin-bottom:12px}
+#xp1 .lead{font-size:1.25em;font-family:var(--d)}
+#xp1 .say{border-left:6px solid var(--c);background:color-mix(in srgb,var(--c) 12%,var(--card));padding:14px 18px;border-radius:0 14px 14px 0;margin:1.2em 0;font-family:var(--d);font-size:1.1em}
+#xp1 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:12px 0}
+#xp1 .deep{display:none;border:2px dashed var(--c);border-radius:14px;padding:12px 16px;margin:1em 0}
+#xp1.deepmode .deep{display:block}
+#xp1 .deep:before{content:"Going deeper";display:block;font-weight:700;color:var(--c);font-size:.8em}
+#xp1 .steps{display:grid;gap:8px;margin:16px 0}
+#xp1 .step{text-align:left;width:100%;border-radius:14px;padding:12px 16px;border:2px solid var(--c);background:var(--card);font-size:1em}
+#xp1 .step.on{background:var(--c);color:#fff}
+#xp1 .step small{display:block;font-size:.85em;opacity:.9}
+#xp1 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+#xp1 .chip[aria-pressed=true]{background:#1d1b3a;color:#fff;border-color:#1d1b3a}
+#xp1 .flip{display:block;width:100%;text-align:left;background:var(--card);border:2px solid var(--c);border-radius:16px;padding:16px 18px;margin:12px 0;font-size:1em;cursor:pointer}
+#xp1 .flip .q{font-weight:700}
+#xp1 .flip .q:before{content:"They say: ";color:var(--c)}
+#xp1 .flip .a{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+#xp1 .flip.open .a{display:block}
+#xp1 .flip .hint{color:var(--mute);font-size:.8em;margin-top:6px}
+#xp1 .flip.open .hint{display:none}
+#xp1 .sort{background:var(--card);border:2px solid var(--c);border-radius:16px;padding:18px;margin:16px 0;text-align:center}
+#xp1 .sort .s{font-family:var(--d);font-size:1.25em;margin:10px 0 16px;min-height:3.4em}
+#xp1 .sort button{margin:4px;padding:10px 16px}
+#xp1 .fb{min-height:3em;font-size:.95em}
+#xp1 .layers{display:grid;gap:10px}
+#xp1 .layer{border-radius:14px;padding:14px 18px;color:#fff;cursor:pointer;border:0;text-align:left;width:100%;font-size:1em}
+#xp1 .layer span{display:none;margin-top:8px;font-size:.92em}
+#xp1 .layer.open span{display:block}
+#xp1 table{width:100%;border-collapse:collapse;font-size:.88em;display:block;overflow-x:auto}
+#xp1 td,#xp1 th{border:1px solid var(--line);padding:8px 10px;text-align:left;min-width:140px}
+#xp1 th{background:var(--card)}
+#xp1 .who{display:grid;gap:12px}
+#xp1 .help{background:#17787A;color:#fff;border-radius:18px;padding:20px;margin:20px 0}
+#xp1 .help a{color:#fff}
+#xp1 footer{padding:40px 0;color:var(--mute);font-size:.8em}
+
+/* ---- InScapio skin for this experience ---- */
+#xp1{overflow-x:clip}
+#xp1 :is(h1,h2,h3){font-weight:800;letter-spacing:-.03em;line-height:1.02}
+#xp1 h2{font-size:clamp(2rem,6vw,3.6rem)}
+#xp1 h3{font-size:1.4rem}
+#xp1 button,#xp1 .btn,#xp1 .tag,#xp1 th{font-family:var(--d)}
+#xp1 .lead{font-family:var(--d);font-weight:500;font-size:clamp(1.25rem,2.6vw,1.6rem);line-height:1.3;letter-spacing:-.01em}
+#xp1 .say{font-weight:600;border-radius:0;font-size:clamp(1.15rem,2.2vw,1.4rem);line-height:1.3}
+#xp1 #bar{top:0;gap:10px;padding:calc(env(safe-area-inset-top,0px) + 4px) 12px 4px}
+#xp1 #bar b{font-weight:700;font-size:.95rem}
+#xp1 #bar button{min-height:44px;min-width:44px;border-radius:3px}
+#xp1 .bk{display:inline-flex;align-items:center;min-height:44px;font:800 1.05rem var(--d);letter-spacing:-.02em;color:var(--ink);text-decoration:none}
+#xp1 .bk:before{content:"\2190";margin-right:8px;font-weight:400}
+#xp1 #prog{top:auto;bottom:auto;width:100%;height:3px;transform-origin:0 50%;transform:scaleX(0);position:fixed;top:calc(env(safe-area-inset-top,0px) + 53px)}
+#xp1 .hero{position:relative;min-height:100svh;align-items:flex-end;padding:110px 0 64px;background:#10242B}
+#xp1 .hero:after{content:"";position:absolute;left:0;right:0;bottom:0;height:10px;background:linear-gradient(90deg,#c8374f 0 16.66%,#a85f00 0 33.33%,#8a2a6e 0 50%,#6a3fb5 0 66.66%,#1d6fb8 0 83.33%,#17787A 0)}
+#xp1 .hero .wrap{max-width:980px}
+#xp1 .hero h1{font-size:clamp(3rem,11vw,7.6rem);line-height:.92;letter-spacing:-.045em;margin-bottom:.35em}
+#xp1 .hero p{max-width:32em}
+#xp1 .btn{border-radius:2px;min-height:48px;display:inline-flex;align-items:center;padding:0 22px}
+#xp1 .tag{border-radius:2px;font-weight:600;padding:3px 12px}
+#xp1 .card,#xp1 .sort,#xp1 .flip,#xp1 .help{border-radius:4px}
+#xp1 .step,#xp1 .layer,#xp1 .deep{border-radius:3px}
+#xp1 .layer{min-height:56px;font-family:var(--d);font-weight:700;font-size:1.1rem}
+#xp1 .layer span{font-family:var(--b);font-weight:400}
+#xp1 .step,#xp1 .chip,#xp1 .sort button{min-height:48px}
+#xp1 .chip{border-radius:3px}
+#xp1 .xpm{display:block}
+@media(max-width:560px){#xp1 #bar b{display:none}#xp1 #bar .bk{flex:1}}
+#xp1 .fbx{display:none}
+
+</style>
+</head>
+<body data-v="home">
+<nav class="nav" aria-label="InScapio">
+  <a class="wm" href="#/">InScapio</a>
+  <ul><li><a class="nl" href="#/explore">Explore</a></li><li><a class="nl" href="#/about">About</a></li></ul>
+</nav>
+<main>
+
+<!-- ========== HOME ========== -->
+<div class="view" id="home">
+  <section class="opening" aria-labelledby="t">
+    <h1 class="ttl" id="t" tabindex="-1"><span class="a">Don’t just read it.</span><span class="b">Explore it.</span></h1>
+    <p class="sub">Where knowledge becomes an experience.</p>
+    <div class="strip" id="strip" role="group" aria-label="The same idea, first as text and then as something you can explore">
+      <div class="pane read"><div class="art">
+        <h2>What will your city feel like in 2070?</h2>
+        <p>Cities are warming. In the demo model used on this site, Madrid’s year in 2070 starts to resemble a different city’s: summers are hotter, winters are milder, and the gap between the seasons grows.</p>
+        <p>Climatologists describe this with classifications built from temperature and rainfall. A place keeps its label until the pattern of its year moves far enough to earn another.</p>
+      </div></div>
+      <div class="pane exp">
+        <p class="hl" id="hl"></p>
+        <svg id="hs" viewBox="0 0 600 220" preserveAspectRatio="none" role="img" aria-label="Madrid's monthly temperature today compared with 2070 in the demo model"></svg>
+        <ul class="lg" id="hlg"></ul>
+      </div>
+      <div class="rule" aria-hidden="true"></div>
+    </div>
+    <div class="ctl">
+      <label for="wipe">Drag to move from reading to exploring</label>
+      <div class="row"><span>Read</span><input class="rng" id="wipe" type="range" min="0" max="100" value="50" aria-valuetext="Half read, half explored"><span>Explore</span></div>
+    </div>
+  </section>
+
+  <section class="room r1" id="rooms" aria-labelledby="r1t">
+    <div class="in">
+      <div class="rt">
+        <h2 id="r1t">Whose Body Is It?</h2>
+        <p class="desc">Safety, honour, gender, respect and the boundaries we place around other people’s lives.</p>
+        <a class="enter" data-enter href="#/experiences/whose-body-is-it">Enter experience →</a>
+      </div>
+      <div class="rv">
+        <p class="rh" id="bh">Six layers sit behind one harm. Tap a layer to open it.</p>
+        <div class="bands" id="bands" role="group" aria-labelledby="bh"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="room r2 dk" aria-labelledby="r2t">
+    <div class="in">
+      <div class="rv">
+        <p class="rh" id="wh">Pick a city.</p>
+        <div class="wall" id="wall" role="group" aria-labelledby="wh"></div>
+        <p class="wans" id="wans" aria-live="polite">Where will it be in 2070?</p>
+        <p class="note">Illustrative data, not a forecast.</p>
+      </div>
+      <div class="rt">
+        <h2 id="r2t">What will your city feel like in 2070?</h2>
+        <p class="desc">Explore how a changing climate could transform the places we know.</p>
+        <a class="enter" data-enter href="#/experiences/climate">Enter experience →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="what" aria-labelledby="wt">
+    <div class="in">
+      <h2 id="wt">InScapio is an interactive knowledge platform where ideas become experiences you can explore.</h2>
+      <a class="ulink" href="#/about">What is InScapio?</a>
+    </div>
+  </section>
+
+  <section class="closing dk" aria-labelledby="ct">
+    <div class="in">
+      <h2 id="ct">Some ideas are worth more than a scroll.</h2>
+      <a class="cta" href="#/explore">Explore InScapio →</a>
+    </div>
+  </section>
+</div>
+
+<!-- ========== ABOUT ========== -->
+<div class="view dk" id="about" hidden>
+  <article class="ab">
+    <h1 tabindex="-1">What is InScapio?</h1>
+    <div class="prose">
+      <p>The web is full of things worth knowing.</p>
+      <p>Most of them arrive the same way: a headline, a paragraph, another paragraph, a scroll.</p>
+      <p class="q">What if an idea could be explored?</p>
+      <p>What if understanding meant moving, choosing, comparing and going deeper only when you want to?</p>
+      <p>That is what InScapio is trying out: a small set of experiences, built to find out whether ideas land better when you can step inside them.</p>
+    </div>
+    <div class="gd">
+      <p>Every experience has a deeper layer. It stays closed until you ask for it.</p>
+      <button type="button" id="gdb" aria-expanded="false" aria-controls="gdt">Go deeper</button>
+      <div class="more" id="gdt" hidden><p>This is what a deeper layer looks like: the context, the sources and the harder questions that would crowd a first pass. Open it where you are curious. Skip it where you are not.</p></div>
+    </div>
+    <p class="fin"><span>Don’t just read it.</span>Explore it.</p>
+    <a class="ulink" href="#/explore">See the experiences</a>
+  </article>
+</div>
+
+<!-- ========== CLIMATE ========== -->
+<div class="view" id="cl" hidden>
+<div class="cl" id="clr">
+  <div class="cb"><a class="bk" href="#/" aria-label="Back to InScapio home">InScapio</a><b>Your city in 2070</b><button type="button" id="cd" aria-pressed="false">Deeper</button><div id="cp" aria-hidden="true"></div></div>
+  <section class="cs first">
+    <h1 tabindex="-1">What will your city feel like in 2070?</h1>
+    <p class="sub">You can’t picture 2.5 °C. You can picture Madrid in August. Pick a city, drag time forward, and see which place it starts to resemble.</p>
+    <a class="go" href="#k1">Begin</a>
+  </section>
+  <section class="cs" id="k1">
+    <h2>A climate is a pattern, not a day.</h2>
+    <p>Scientists sort climates with a few questions about a place’s year:</p>
+    <div class="q3"><div><b>How hot?</b>The warmest month</div><div><b>How cold?</b>The coldest month</div><div><b>How dry?</b>How much rain, and when</div></div>
+    <p>Answer those and a city gets a label. When the answers shift, the label can too, which is why a warming world changes where a city “belongs”.</p>
+    <div class="dp">This follows the idea of the Köppen classification, drawn up in the early 1900s. This demo uses a simplified rule set with one rough dryness flag per city, so labels are approximate.</div>
+  </section>
+  <section class="cs" id="k2">
+    <h2>Choose a city. Drag time.</h2>
+    <div class="rail" id="cc" role="group" aria-label="Choose a city"></div>
+    <div class="gz"><p id="gq"></p><div class="opts" id="go2"></div><p class="res" id="gr" aria-live="polite"></p></div>
+    <div class="hdr"><div class="yr" id="yr" aria-hidden="true">2026</div><p class="an" id="an" aria-live="polite"></p></div>
+    <div class="sl"><label for="sl">Year <output id="slo" for="sl">2026</output></label><input type="range" id="sl" min="2026" max="2070" value="2026" aria-valuetext="2026"></div>
+    <svg class="chart" id="ch" viewBox="0 0 600 260" role="img" aria-label="Monthly temperature chart"></svg>
+    <ul class="lg2" id="lg"></ul>
+    <div class="st" id="stt"></div>
+    <div class="dp">Analogue matching: we compare the city’s projected yearly mean and seasonal swing with every other city’s present values, and pick the nearest. Weighted: mean temperature counts double the seasonal swing.</div>
+  </section>
+  <section class="cs">
+    <h2>Weather changes daily. Climate moves slowly, then all at once.</h2>
+    <p>Nothing here tells you what will happen. It shows what a few degrees can mean when you attach them to a place you can picture.</p>
+    <p class="dm"><b>Demo data, not a forecast.</b> City temperatures are rounded approximations and the warming per city is an invented illustrative rule (more at higher latitudes). Real projections depend on emissions pathways and models; for real numbers see the IPCC Sixth Assessment Report and the Köppen-Geiger maps by Beck et al. (2018, CC BY 4.0).</p>
+  </section>
+  <section id="fb2" aria-label="Feedback"></section>
+</div>
+</div>
+
+<!-- ========== WHOSE BODY IS IT? ========== -->
+<div class="view" id="xp1" hidden>
+
+<nav id="bar" aria-label="Experience controls"><a class="bk" href="#/" aria-label="Back to InScapio home">InScapio</a><b>Whose Body Is It?</b>
+<button id="dm" aria-pressed="false" title="Show deeper notes">Deeper</button>
+<button id="fa" title="Bigger text" aria-label="Bigger text">A+</button><button id="fs" title="Smaller text" aria-label="Smaller text">A-</button>
+<button id="th" title="Light or dark" aria-label="Switch between light and dark"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 2a7 7 0 0 0 0 14z" fill="currentColor"/></svg></button></nav><div id="prog" aria-hidden="true"></div>
+
+<header class="hero"><div class="wrap">
+<h1>Whose Body Is It?</h1>
+<p>A clear-eyed book on safety, honour, gender and respect. For the girl walking home, the boy who is learning what "no" means, the parent who is worried, and the elder who grew up in a different time.</p>
+<p>Read it simply. Tap "Deeper" at the top whenever you want the root causes, the research and the hard arguments.</p>
+<a class="btn" href="#c1">Begin</a><a class="btn alt" href="#c6">Jump to the arguments</a>
+</div></header>
+
+<div class="xpm">
+<section class="ch" id="c1" style="--c:#c8374f"><div class="wrap">
+<span class="tag">Chapter 1 · Why this book</span><h2>A phone buzzes. A family goes quiet.</h2>
+<p class="lead">Every few months a story shakes the country. A girl and a boy coming home from coaching are stopped, surrounded and humiliated while strangers film it. We feel anger. Then the arguments begin, and the arguments often hurt as much as the news.</p>
+<p>"Why was she there?" "Girls should be careful." "Hang them all." "Not all men." "It's the village mindset." "It's feminism's fault." Everyone shouts, nobody listens, and the girl, who did nothing wrong, is forgotten.</p>
+<p>This book slows the shouting down. It does not ask you to pick a team. It asks you to hold several true things at once, and to be brave enough to say all of them.</p>
+<div class="say">A person can be given advice to reduce a risk without giving the person who harms them an excuse.</div>
+<div class="deep"><p>Most online debates fail because each side hears a different claim. One person says "gender norms shape violence" and the other hears "all men are guilty." One says "be careful" and the other hears "it was your fault." Separating <b>risk</b> from <b>responsibility</b>, <b>pattern</b> from <b>person</b>, and <b>motive</b> from <b>conduct</b> removes most of the heat.</p></div>
+</div></section>
+
+<section class="ch" id="c2" style="--c:#17787A"><div class="wrap">
+<span class="tag">Chapter 2 · The one idea</span><h2>Your body is yours. Nobody else's.</h2>
+<p class="lead">Everything in this book grows from one sentence. No person's body becomes another person's property because of sex, clothes, marriage, drink, caste, family name or a community's idea of honour.</p>
+<div class="card"><b>For a child:</b> If something feels wrong, you may say no, even to a grown-up, and you will not be in trouble for telling.</div>
+<div class="card"><b>For a teenager:</b> "No" is a full sentence. So is silence, fear, or being too drunk to answer. Only a clear, free "yes" is a yes.</div>
+<div class="card"><b>For an adult:</b> Marriage, love, a date, a favour or a job does not cancel this. Consent can be taken back at any moment.</div>
+<div class="say">Respecting this is not weakness. It is what strength looks like.</div>
+</div></section>
+
+<section class="ch" id="c3" style="--c:#6a3fb5"><div class="wrap">
+<span class="tag">Chapter 3 · Root causes</span><h2>Violence does not appear from nowhere</h2>
+<p>Think of a tree. The harm is the fruit we see on the news. But roots run deep. Tap each layer to see what feeds it.</p>
+<div class="layers" id="layers"></div>
+<p style="margin-top:1em">Two warnings. A risk factor is not a prediction: most people who grow up around violence never harm anyone. And not every offender is driven by hatred of women. Some are driven by power, impulse, a group's approval or the belief that they will never be caught.</p>
+<div class="deep"><p>Public-health bodies such as the CDC and WHO list the same themes again and again: hostility toward women, acceptance of violence, rigid ideas of masculinity, peer groups that reward sexual aggression, alcohol and drugs, and weak community or institutional penalties. The better wording is: <b>sexual violence can be gendered without being reducible to hatred of women.</b></p></div>
+</div></section>
+
+<section class="ch" id="c4" style="--c:#c8374f"><div class="wrap">
+<span class="tag">Chapter 4 · Moral policing</span><h2>How "honour" becomes control</h2>
+<p class="lead">It almost always starts with a sentence that sounds like care: "Her behaviour reflects on our family." Tap each step and watch how far it travels.</p>
+<div class="steps" id="ladder"></div>
+<div class="say">The dangerous shift: a woman stops being a person with her own life and becomes "a daughter, a sister, a wife, a symbol", and the community starts to claim her choices.</div>
+<p><b>A fair line:</b> a parent may dislike a grown child's choices. Disapproval is not abuse. It becomes abuse when it turns into threats, confinement, humiliation, forced obedience, violence or "punishment".</p>
+<p><b>The asymmetry at the heart of it:</b> a man's behaviour is treated as his own business. A woman's behaviour is treated as the family's and the community's business.</p>
+<div class="deep"><p><b>Backlash.</b> When old arrangements are challenged, some people feel their status, identity or family order is under threat. That explains the reaction. It never excuses violence.</p><p><b>Reverence is not freedom.</b> A culture can worship women as mothers, goddesses and keepers of honour while limiting their movement, inheritance, sexuality and decisions. Ideals and everyday practice can pull apart. Naming that gap does not mean the tradition is bad. It means we ask how the ideal reaches real life.</p></div>
+</div></section>
+
+<section class="ch" id="c5" style="--c:#a85f00"><div class="wrap">
+<span class="tag">Chapter 5 · "Dehati soch"</span><h2>It is not about villages. It is about control.</h2>
+<p>Many women know this moment: you live independently in a freer setting, then you enter a conservative community and are quietly judged "characterless" for your clothes, your male friends, your late nights, a drink or a cigarette.</p>
+<p>The observation is real. But "rural people are like this" is too wide, and unfair to millions of kind villagers. The sharper idea is <b>conservative, honour-based gender policing</b>. It lives in villages, in cities, in rich homes, in offices with degrees on the wall and in every religion.</p>
+<div class="card"><b>Why villages can feel more intense:</b> everyone knows everyone, reputation is currency, families depend on each other and gossip travels fast. Close ties also bring real support. The same network can protect and watch at once.</div>
+<div class="card"><b>Modern outside, old inside:</b> someone can use the latest phone, work for a multinational and live in a metro while holding old beliefs about women's sexuality. Economic modernisation and attitude modernisation are different things.</div>
+<div class="say">Question the belief, not the whole place or people it comes from.</div>
+<div class="deep"><p><b>The Jamui case (as reported in September 2026).</b> News reports describe an incident on 19 September in which a teenage girl and a male classmate, returning from coaching around 6 to 7 in the evening, were stopped and surrounded by a group, with assault, filming and circulation of the video. A case was registered under BNS and POCSO provisions, an SIT was formed and arrests were reported. <b>What it can show:</b> how "I disapprove" slides into "I can stop you" and "I can control you". <b>What it cannot show:</b> that the whole village thinks this way, or what each accused person's motive was. That is for investigators. Please never share the victim's identity or video. Also beware: unrelated old clips were falsely passed off online as arrest footage. Facts can change as the case develops, so check current reports.</p></div>
+</div></section>
+
+<section class="ch" id="c6" style="--c:#1d6fb8"><div class="wrap">
+<span class="tag">Chapter 6 · Risk or blame?</span><h2>"Why was she out at night?"</h2>
+<p class="lead">Safety advice and blame can use almost the same words. The difference is who ends up carrying the guilt.</p>
+<div class="card"><b>The laptop test.</b> Leaving a laptop on a car seat raises the chance of theft. It does not make the thief the owner. Reducing risk and assigning responsibility are two separate questions.</div>
+<div class="card"><b>The clock test.</b> If the same judgment is made at 2 a.m., 10 p.m., 7 p.m., 5 p.m., at work, at home and inside marriage, it is about <i>respectability</i>, not safety.</div>
+<p>Try it. Is this fair safety advice, or victim-blaming?</p>
+<div class="sort" id="sort"><div class="s" id="ss"></div><button class="btn" style="background:#17787A;color:#fff" data-a="s">Safety advice</button><button class="btn" style="background:#c8374f;color:#fff" data-a="b">Blame</button><div class="fb" id="sf" aria-live="polite"></div><div><small id="sc"></small></div></div>
+<div class="deep"><table><tr><th>Claim</th><th>What can be true</th><th>What does not follow</th></tr>
+<tr><td>"The area was risky."</td><td>The risk can be real.</td><td>The victim caused the crime.</td></tr>
+<tr><td>"She could have taken another route."</td><td>Precautions can reduce exposure.</td><td>She consented to harm.</td></tr>
+<tr><td>"She knew men can be dangerous."</td><td>Awareness informs choices.</td><td>The offender got permission.</td></tr>
+<tr><td>"Her clothes attracted attention."</td><td>People notice clothes.</td><td>Attention equals consent.</td></tr>
+<tr><td>"She should be more careful."</td><td>Caution can help.</td><td>Responsibility moves to her.</td></tr></table>
+<p>Also remember: most sexual violence is not a stranger in a dark alley. It is usually someone the victim knows, such as a partner, an acquaintance or a person in authority. With children, "why did she go there?" is never an adequate question.</p></div>
+</div></section>
+
+<section class="ch" id="c7" style="--c:#8a2a6e"><div class="wrap">
+<span class="tag">Chapter 7 · The arguments</span><h2>What people say on X, and honest answers</h2>
+<p>Tap a card to open the answer. Each answer tries to keep what is true in the claim and drop what does not follow. Filter by theme.</p>
+<div class="chips" id="chips"></div><div id="cards"></div>
+</div></section>
+
+<section class="ch" id="c8" style="--c:#2f7d4f"><div class="wrap">
+<span class="tag">Chapter 8 · Punishment and culture</span><h2>Does fear change a society?</h2>
+<p class="lead">Many say "hang them" in the first hour of anger. That anger is understandable. But we should look at what works.</p>
+<p>Research on deterrence, summarised by the US National Institute of Justice, finds that the <b>certainty of getting caught</b> matters more than how harsh the penalty is. Offenders often believe they will escape, act on impulse, are drunk, or are driven by anger and a wish to dominate. None of them are doing a careful sum about sentences.</p>
+<p>Does that mean punishment is pointless? No. Punishment gives accountability, keeps dangerous people away from others and tells everyone that this harm is serious. It is just not enough alone.</p>
+<div class="say">"I won't, because I fear prison" is an outside fence. "I won't, because another person's body is not mine to override" is an inner fence. A society needs both, and the second one lasts.</div>
+<p>Click to build the ladder from fear to culture:</p>
+<div class="steps" id="culture"></div>
+<div class="deep"><p>WHO's RESPECT Women framework (2025) names seven strategies: <b>R</b>elationship skills, <b>E</b>mpowerment of women, <b>S</b>ervices, <b>P</b>overty reduction, safer <b>E</b>nvironments, <b>C</b>hild and adolescent abuse prevention, and <b>T</b>ransformed attitudes, beliefs and norms. Notice that law is only one part of a bigger picture.</p></div>
+</div></section>
+
+<section class="ch" id="c9" style="--c:#d6336c"><div class="wrap">
+<span class="tag">Chapter 9 · Feminism, fairly</span><h2>What to accept. What you may challenge.</h2>
+<p>Feminism is argued over fiercely, so let us be fair to both its supporters and its critics.</p>
+<div class="card"><b>Accept:</b> equal worth, equal rights, and bodily autonomy for all. A woman is not property, and her "no" is final.</div>
+<div class="card"><b>Equality is not sameness.</b> Equal worth does not require pretending that everyone has identical bodies, tastes or roles.</div>
+<div class="card"><b>Freedom is not rebellion.</b> Choosing a traditional life can be free. Rejecting it can be free. The question is always: was it her own choice?</div>
+<div class="card"><b>Empowerment is not exemption.</b> Equal rights come with equal responsibility for harmful conduct.</div>
+<div class="card"><b>Feminism is not one voice.</b> Feminists disagree about family, religion, sex, work, motherhood and masculinity.</div>
+<div class="card"><b>You may criticise:</b> selective empathy, hatred of men, ideological overreach, or treating every disagreement as evil. You can say this and still believe in women's equality.</div>
+<div class="card"><b>Handle "patriarchy" with care.</b> It names systems of unequal authority well. It should not be a magic word that explains every difference between men and women or every individual act.</div>
+<div class="say">Support equal rights and bodily autonomy, and stay free to criticise anyone, however righteous their cause, who behaves unfairly.</div>
+</div></section>
+
+<section class="ch" id="c10" style="--c:#3b5bdb"><div class="wrap">
+<span class="tag">Chapter 10 · Boys, men and fairness</span><h2>Men are not the enemy. Men are half of the answer.</h2>
+<p class="lead">If this book only warned women, it would be half a book. Boys need a picture of strength that does not need anyone to submit.</p>
+<div class="card"><b>Healthy masculinity:</b> strength includes self-control. Confidence includes handling rejection. Protection does not mean ownership. Leadership does not mean one-man authority. Sexual success never means overcoming someone's resistance.</div>
+<div class="card"><b>Courage, duty and protectiveness are not anti-woman.</b> They turn harmful only when mixed with entitlement or domination.</div>
+<div class="card"><b>Men can be victims.</b> Bodily autonomy is universal, so male survivors deserve belief and care too. This does not erase the gendered patterns in the data, and the data does not erase male victims.</div>
+<div class="card"><b>False allegations exist, and so does due process.</b> A fair system investigates carefully, protects the accused and punishes proven lies. But some false reports do not show most reports are false. Survivors should be heard. The accused should get a fair hearing. Both can be true.</div>
+<div class="deep"><p>Do not turn these points into weapons. "Men can be victims" should widen protection, not be used to dismiss women. "Women are more often victims" should not be used to dismiss men.</p></div>
+</div></section>
+
+<section class="ch" id="c11" style="--c:#c8374f"><div class="wrap">
+<span class="tag">Chapter 11 · Easy to miss</span><h2>Eleven things that rarely make the headline</h2>
+<div id="miss"></div>
+</div></section>
+
+<section class="ch" id="c12" style="--c:#17787A"><div class="wrap">
+<span class="tag">Chapter 12 · What you can do</span><h2>Prevention belongs to everyone</h2>
+<p class="lead">Teaching girls safety and teaching boys consent are not rivals. One lowers exposure, the other lowers harm done, and strong institutions lower impunity.</p>
+<div class="chips" id="who"></div><div class="card" id="whoOut" aria-live="polite"></div>
+<div class="say">The ideal end: the law does not need to stand in every room, because every person already carries the boundary inside.</div>
+<div class="help"><h3>If you or someone you know needs help (India)</h3>
+<p><b>112</b> emergency police · <b>181</b> women's helpline · <b>1098</b> Childline · <b>1930</b> cyber-crime helpline (also cybercrime.gov.in for reporting online abuse or leaked videos). If you are in danger, call now. If you are a survivor: it was not your fault, and you deserve support.</p></div>
+</div></section>
+</div>
+
+<section id="fb1" aria-label="Feedback"></section><footer><div class="wrap"><p><b>Sources used for the underlying facts:</b> WHO, Violence Against Women fact sheet; WHO, RESPECT Women (2nd ed., 2025); CDC, sexual violence risk and protective factors; National Institute of Justice, Five Things About Deterrence; UN Women, material on gender norms and stereotypes; Bharatiya Nyaya Sanhita 2023; September 2026 reporting by Indian Express, Times of India and India Today on the Jamui incident.</p>
+<p>This is an educational book, not legal advice or a systematic review. Risk factors are not destiny, and open criminal cases can change.</p></div></footer>
+
+
+</div>
+
+</main>
+<footer id="ft"><p><b>InScapio</b></p><p>An early-stage prototype. The experiences are works in progress, and some of the data in them is illustrative.</p><p>inscapio.in</p></footer>
+
+<script>
+'use strict';
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const E=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!==undefined)e.innerHTML=h;return e};
+const RM=matchMedia('(prefers-reduced-motion: reduce)');
+
+/* ---------- shared data ---------- */
+const C=[["London",51,11.5,7.5,0],["Paris",49,12,8,0],["Madrid",40,15,9.5,2],["Rome",42,16,8,2],["Cairo",30,22,8,1],["Dubai",25,28,8,1],["Delhi",29,25,9,0],["Mumbai",19,27.5,2.5,0],["Singapore",1,27.5,.8,0],["Lagos",6,27,1.8,0],["Nairobi",-1,18,1.3,0],["Sydney",-34,18,5,0],["São Paulo",-24,20,3,0],["Mexico City",19,17,2.5,0],["New York",41,13,12,0],["Chicago",42,10,13,0],["Toronto",44,9,12,0],["Moscow",56,6,13,0],["Beijing",40,13,13,0],["Tokyo",36,16,10,0]].map(([n,l,T,A,d])=>({n,l,T,A,d,dT:1.5+Math.min(Math.abs(l),60)/60*1.5}));
+const LAYERS=[["#c8374f","The fruit: the harm","An act that overrides someone's will, often with a video or threats added to deepen humiliation."],
+["#a85f00","The moment: opportunity","Being alone, drink, a gap in authority, a crowd, and the belief that nothing will happen to me."],
+["#8a2a6e","The group: peers","Friends who laugh at aggression, reward 'conquest' or stay silent. Bystanders can feed it or stop it."],
+["#6a3fb5","The mind: beliefs","Entitlement ('she owes me'), hostility toward women, and not hearing 'no' as final. Poor impulse control adds to it."],
+["#1d6fb8","The home: what children see","Where women obey and men decide, where violence is normal, where a girl's body is 'family honour'."],
+["#17787A","The soil: society and institutions","Weak policing, slow courts, shaming of survivors, poor lighting and transport, and little money or exit for women."]];
+
+/* ---------- demo climate model (illustrative, not a forecast) ---------- */
+const mA=(c,g)=>c.A+.15*c.dT*g;
+const temp=(c,m,g)=>c.T+c.dT*g+mA(c,g)*Math.cos(2*Math.PI*(m-(c.l<0?0:6))/12);
+const stats=(c,g)=>{const a=Array.from({length:12},(_,m)=>temp(c,m,g));return{w:Math.max(...a),k:Math.min(...a)}};
+const kind=(c,g)=>{const s=stats(c,g);return s.k>=18?'Tropical':c.d==1?'Dry (desert or steppe)':c.d==2?'Mediterranean':s.k<-3?'Cold-winter continental':s.w>=22?'Humid subtropical':'Mild oceanic'};
+const feels=(c,g)=>C.filter(x=>x!==c).map(x=>[(c.T+c.dT*g-x.T)**2*4+(mA(c,g)-x.A)**2,x]).sort((a,b)=>a[0]-b[0])[0][1];
+const SC=[-12,42,26,24];
+const Y=(t,H,[lo,hi,b,tp]=SC)=>H-b-((t-lo)/(hi-lo))*(H-b-tp);
+const curve=(c,g,W,H,x0=0,sc=SC)=>{let p='';for(let i=0;i<=44;i++){const m=i/4;p+=(i?'L':'M')+(x0+m/11*(W-x0-8)).toFixed(1)+' '+Y(temp(c,m,g),H,sc).toFixed(1)}return p};
+const city=n=>C.find(c=>c.n===n);
+
+/* ---------- router (hash today; paths mirror the future clean URLs) ---------- */
+const ROUTES={'':'home','explore':'home','about':'about','experiences/whose-body-is-it':'xp1','experiences/climate':'cl','body':'xp1','climate':'cl'};
+const TITLES={home:"InScapio — Don't just read it. Explore it.",about:'What is InScapio? — InScapio',xp1:'Whose Body Is It? — InScapio',cl:'What Will Your City Feel Like in 2070? — InScapio'};
+const SHARE={body:'experiences/whose-body-is-it',climate:'experiences/climate'};
+let cur=null,curPath=null;
+function route(first){
+  const h=location.hash;
+  if(h&&!h.startsWith('#/')&&!first)return;               /* in-page anchors keep the current view */
+  const path=h.startsWith('#/')?h.slice(2).replace(/\/$/,''):'';
+  const id=ROUTES[path]||'home';
+  if(id===cur&&path===curPath)return;
+  const changed=id!==cur;
+  $$('.view').forEach(v=>{v.hidden=v.id!==id});
+  document.body.dataset.v=id;document.title=TITLES[id];
+  const v=document.getElementById(id);
+  if(changed&&(id==='xp1'||id==='cl')){v.classList.remove('entering');void v.offsetWidth;v.classList.add('entering')}
+  cur=id;curPath=path;
+  if(path==='explore'){requestAnimationFrame(()=>$('#rooms').scrollIntoView())}else if(changed||path==='')scrollTo(0,0);
+  const hd=$('h1',v);if(hd&&!first){hd.focus({preventScroll:true})}
+  progress();
+}
+addEventListener('hashchange',()=>route(false));
+document.addEventListener('click',e=>{const a=e.target.closest('[data-enter]');if(!a)return;const k=e.detail>0;
+  document.documentElement.style.setProperty('--ox',k?e.clientX+'px':'50%');document.documentElement.style.setProperty('--oy',k?e.clientY+'px':'60%')});
+
+/* one passive scroll handler drives both progress lines */
+let tick=false;
+function progress(){const h=document.documentElement.scrollHeight-innerHeight,p=h>0?Math.min(1,scrollY/h):0;
+  if(cur==='xp1')$('#prog').style.transform='scaleX('+p+')';if(cur==='cl')$('#cp').style.transform='scaleX('+p+')'}
+addEventListener('scroll',()=>{if(tick)return;tick=true;requestAnimationFrame(()=>{tick=false;progress()})},{passive:true});
+
+/* ---------- home: read vs explore ---------- */
+(()=>{
+  const strip=$('#strip'),wipe=$('#wipe'),c=city('Madrid'),a=feels(c,1),W=600,H=220,S=[2,32,6,6];
+  $('#hl').innerHTML=c.n+' in 2070 feels like <b>'+a.n+'</b> does today.';
+  $('#hs').innerHTML='<path d="'+curve(c,1,W,H,0,S)+'L'+(W-8)+' '+H+'L0 '+H+'Z" fill="#fff" fill-opacity=".1"/>'+
+    '<path d="'+curve(a,0,W,H,0,S)+'" fill="none" stroke="#7FD6E8" stroke-width="2" vector-effect="non-scaling-stroke"/>'+
+    '<path d="'+curve(c,0,W,H,0,S)+'" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="6 6" vector-effect="non-scaling-stroke"/>'+
+    '<path d="'+curve(c,1,W,H,0,S)+'" fill="none" stroke="#F2A900" stroke-width="4" vector-effect="non-scaling-stroke"/>';
+  $('#hlg').innerHTML='<li><i style="border-color:#fff;border-top-style:dashed"></i>'+c.n+' today</li><li><i style="border-color:#F2A900"></i>'+c.n+' in 2070</li><li><i style="border-color:#7FD6E8"></i>'+a.n+' today</li>';
+  const set=v=>{strip.style.setProperty('--v',v+'%');wipe.value=v;wipe.setAttribute('aria-valuetext',v<15?'Reading':v>85?'Exploring':'Part read, part explored')};
+  let raf=0;const stop=()=>cancelAnimationFrame(raf);
+  wipe.addEventListener('input',()=>{stop();set(+wipe.value)});
+  set(RM.matches?50:6);
+  if(!RM.matches){setTimeout(()=>{const t0=performance.now(),s=6,e=58;const step=t=>{const k=Math.min(1,(t-t0)/1700);set(s+(e-s)*(1-Math.pow(1-k,3)));if(k<1)raf=requestAnimationFrame(step)};raf=requestAnimationFrame(step)},900)}
+})();
+
+/* ---------- home: layer bands ---------- */
+(()=>{const box=$('#bands');
+  LAYERS.forEach(([col,t,d],i)=>{const band=E('div','band');band.style.setProperty('--bg',col);
+    band.innerHTML='<button type="button" aria-expanded="false" aria-controls="bd'+i+'"><span>'+t+'</span><i aria-hidden="true">+</i></button><div class="bd"><div id="bd'+i+'"><p>'+d+'</p></div></div>';
+    const b=$('button',band);b.onclick=()=>{const o=band.classList.toggle('open');b.setAttribute('aria-expanded',o);$('i',b).textContent=o?'−':'+'};box.append(band)})})();
+
+/* ---------- home: city wall ---------- */
+(()=>{const wall=$('#wall'),ans=$('#wans');
+  ['London','Madrid','Cairo','Delhi','Mumbai','Chicago','Tokyo','Moscow','Sydney','Lagos','New York','Singapore'].forEach(n=>{
+    const b=E('button','',n);b.type='button';b.setAttribute('aria-pressed','false');
+    b.onclick=()=>{$$('button',wall).forEach(x=>x.setAttribute('aria-pressed',x===b));const c=city(n);ans.innerHTML=n+' in 2070 feels like <b>'+feels(c,1).n+'</b> does today.'};wall.append(b)})})();
+
+/* ---------- about: go deeper ---------- */
+$('#gdb').onclick=e=>{const o=e.currentTarget.getAttribute('aria-expanded')!=='true';e.currentTarget.setAttribute('aria-expanded',o);e.currentTarget.textContent=o?'Back to simple':'Go deeper';$('#gdt').hidden=!o};
+
+/* ---------- feedback ---------- */
+function FB(el,key,title){
+  const S={};
+  const grp=(id,q,opts,ends)=>'<div class="fq" role="group" aria-labelledby="'+key+'-'+id+'"><h3 id="'+key+'-'+id+'">'+q+'</h3><div class="fo">'+opts.map(o=>'<button type="button" data-k="'+id+'" data-v="'+o+'" aria-pressed="false">'+o+'</button>').join('')+'</div>'+(ends?'<p class="fe"><span>'+ends[0]+'</span><span>'+ends[1]+'</span></p>':'')+'</div>';
+  const tx=(id,q)=>'<div class="ft"><label for="'+key+'-'+id+'">'+q+'</label><textarea id="'+key+'-'+id+'" data-k="'+id+'" rows="3"></textarea></div>';
+  el.innerHTML='<div class="fw"><h2>Help shape what this becomes</h2><p>One minute. No account.</p>'+
+    grp('interest','How interesting was this?',[1,2,3,4,5],['Not much','Very'])+
+    grp('different','How different did this feel from a normal article?',[1,2,3,4,5],['The same','Very different'])+
+    grp('share','Would you share it with someone?',['Yes','Maybe','No'])+
+    grp('return','Would you come back for another experience?',['Yes','Maybe','No'])+
+    tx('liked','What did you like?')+tx('change','What would you change?')+tx('other','Anything else?')+
+    '<div class="fa"><button type="button" class="sub" id="'+key+'-sb">Send feedback</button><button type="button" id="'+key+'-sh">Enjoyed the rabbit hole? Share it</button></div><p class="fm" id="'+key+'-fm" role="status"></p></div>';
+  const msg=t=>{$('#'+key+'-fm').textContent=t};
+  el.addEventListener('click',e=>{const b=e.target.closest('button[data-k]');if(!b)return;S[b.dataset.k]=b.dataset.v;$$('button[data-k="'+b.dataset.k+'"]',el).forEach(x=>x.setAttribute('aria-pressed',x===b))});
+  el.addEventListener('input',e=>{if(e.target.matches('textarea'))S[e.target.dataset.k]=e.target.value});
+  $('#'+key+'-sb').onclick=()=>{
+    if(!Object.keys(S).length){msg('Add an answer first.');return}
+    const txt='InScapio feedback — '+title+'\n'+Object.entries(S).map(([k,v])=>k+': '+v).join('\n');
+    try{const a=JSON.parse(localStorage.inscapio||'[]');a.push({key,...S});localStorage.inscapio=JSON.stringify(a)}catch(_){}
+    (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>msg('Thanks. Your answers are copied to your clipboard. Paste them to whoever sent you this link.'),()=>msg('Thanks. Your answers were saved on this device.'))};
+  $('#'+key+'-sh').onclick=()=>{const u=location.href.split('#')[0]+'#/'+SHARE[key],d={title:'InScapio: '+title,text:"Don't just read it. Explore it.",url:u};
+    if(navigator.share)navigator.share(d).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(u).then(()=>msg('Link copied.'),()=>msg(u))}}
+
+/* ---------- climate experience ---------- */
+(()=>{
+  const st={ci:0,f:0},clr=$('#clr'),sl=$('#sl'),ch=$('#ch');
+  const rail=$('#cc');
+  C.forEach((c,i)=>{const b=E('button','',c.n);b.type='button';b.setAttribute('aria-pressed',i===0);b.onclick=()=>{stop();st.ci=i;st.f=0;draw();guess()};rail.append(b)});
+  let tw=0;const stop=()=>cancelAnimationFrame(tw);
+  function tweenTo(target,ms=1500){stop();if(RM.matches){st.f=target;draw();return}const s=st.f,t0=performance.now();
+    const step=t=>{const k=Math.min(1,(t-t0)/ms);st.f=s+(target-s)*(1-Math.pow(1-k,3));draw();if(k<1)tw=requestAnimationFrame(step)};tw=requestAnimationFrame(step)}
+  sl.addEventListener('input',()=>{stop();st.f=(sl.value-2026)/44;draw()});
+  function draw(){
+    const c=C[st.ci],g=st.f,y=Math.round(2026+g*44),a=feels(c,g),s=stats(c,g),s0=stats(c,0),wv=Math.min(1,c.dT*g/3);
+    $$('button',rail).forEach((b,i)=>b.setAttribute('aria-pressed',i===st.ci));
+    $('#yr').textContent=y;sl.value=y;sl.setAttribute('aria-valuetext',String(y));$('#slo').textContent=y;
+    clr.style.setProperty('--w',wv.toFixed(3));
+    const near=g<.04,W=Math.max(300,Math.round(ch.getBoundingClientRect().width)||300),H=W<560?300:270,x0=34;
+    ch.setAttribute('viewBox','0 0 '+W+' '+H);
+    let svg='';[0,10,20,30,40].forEach(t=>{const yy=Y(t,H).toFixed(1);svg+='<line x1="'+x0+'" x2="'+W+'" y1="'+yy+'" y2="'+yy+'" stroke="#fff" stroke-opacity=".14"/><text x="'+(x0-6)+'" y="'+(+yy+4)+'" fill="#fff" fill-opacity=".7" font-size="12" text-anchor="end">'+t+'°</text>'});
+    svg+='<path d="'+curve(c,g,W,H,x0)+'L'+(W-8)+' '+(H-26)+'L'+x0+' '+(H-26)+'Z" style="fill:var(--ch)" fill-opacity=".3"/>';
+    if(!near)svg+='<path d="'+curve(a,0,W,H,x0)+'" fill="none" stroke="#7FD6E8" stroke-width="2.5"/>';
+    svg+='<path d="'+curve(c,0,W,H,x0)+'" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="6 6"/><path d="'+curve(c,g,W,H,x0)+'" fill="none" stroke="#F2A900" stroke-width="4"/>';
+    'JFMAMJJASOND'.split('').forEach((l,i)=>{svg+='<text x="'+(x0+i/11*(W-x0-8)).toFixed(1)+'" y="'+(H-6)+'" fill="#fff" fill-opacity=".8" font-size="12" text-anchor="middle">'+l+'</text>'});
+    ch.innerHTML=svg;
+    ch.setAttribute('aria-label',c.n+' monthly temperature. Warmest month today '+s0.w.toFixed(1)+' degrees, in '+y+' '+s.w.toFixed(1)+' degrees.');
+    $('#lg').innerHTML='<li><i style="border-color:#fff;border-top-style:dashed"></i>'+c.n+' today</li><li><i style="border-color:#F2A900"></i>'+c.n+' in '+y+'</li>'+(near?'':'<li><i style="border-color:#7FD6E8"></i>'+a.n+' today</li>');
+    const d=v=>(v>=.05?'+':'')+v.toFixed(1);
+    $('#stt').innerHTML='<div><b>'+s.w.toFixed(1)+'°</b><small>warmest month ('+d(s.w-s0.w)+')</small></div><div><b>'+s.k.toFixed(1)+'°</b><small>coldest month ('+d(s.k-s0.k)+')</small></div><div><b>'+kind(c,g)+'</b><small>simplified type'+(kind(c,g)!==kind(c,0)?', changed from '+kind(c,0):'')+'</small></div>';
+    $('#an').innerHTML=near?c.n+' today. Drag forward to see where its climate is heading.':'In '+y+', '+c.n+' feels most like <b>'+a.n+'</b> does today.';
+  }
+  function guess(){
+    const c=C[st.ci],t=feels(c,1),o=[t,...C.filter(x=>x!==c&&x!==t).sort((a,b)=>((a.n+c.n).length%7)-((b.n+c.n).length%7)).slice(0,2)].sort((a,b)=>a.n<b.n?-1:1);
+    $('#gq').textContent='Before you drag: which city’s climate will '+c.n+' come closest to by 2070?';$('#gr').textContent='';$('#go2').innerHTML='';
+    o.forEach(x=>{const b=E('button','',x.n);b.type='button';b.onclick=()=>{$$('#go2 button').forEach(z=>z.className='');b.className=x===t?'ok':'no';
+      $('#gr').textContent=(x===t?'Close. ':'Not quite. ')+'In this demo model it’s '+t.n+'. Watch the year move to 2070.';tweenTo(1)};$('#go2').append(b)})}
+  $('#cd').onclick=e=>{const o=clr.classList.toggle('deepmode');e.currentTarget.setAttribute('aria-pressed',o);e.currentTarget.textContent=o?'Simple':'Deeper'};
+  new ResizeObserver(()=>draw()).observe(ch);
+  draw();guess();
+})();
+
+/* ---------- Whose Body Is It? (original logic, scoped to its view) ---------- */
+(()=>{
+
+const $=s=>document.querySelector(s),E=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!==undefined)e.innerHTML=h;return e};
+const R=document.getElementById('xp1');
+$('#dm').onclick=e=>{const o=R.classList.toggle('deepmode');e.target.setAttribute('aria-pressed',o);e.target.textContent=o?'Simple':'Deeper'};
+let fs=19;const sf=d=>{fs=Math.min(26,Math.max(15,fs+d));R.style.setProperty('--fs',fs+'px')};
+$('#fa').onclick=()=>sf(2);$('#fs').onclick=()=>sf(-2);
+$('#th').onclick=()=>{const d=getComputedStyle(R).getPropertyValue('--bg').trim()==='#13122a';R.dataset.theme=d?'light':'dark'};
+
+const L=LAYERS;
+const lay=$('#layers');L.forEach(([c,t,d])=>{const b=E('button','layer','<b>'+t+'</b><span>'+d+'</span>');b.style.background=c;b.onclick=()=>b.classList.toggle('open');lay.append(b)});
+
+function stepper(id,items,col){const box=$(id);const bs=items.map(([t,s],i)=>{const b=E('button','step',t+'<small style="display:none">'+s+'</small>');b.style.setProperty('--c',col);b.onclick=()=>{bs.forEach((x,j)=>{x.classList.toggle('on',j<=i);x.querySelector('small').style.display=j===i?'block':'none'})};box.append(b);return b})}
+stepper('#ladder',[["1. \"That is wrong.\"","A private opinion about clothes, friends, dating or a drink."],["2. \"It affects our honour.\"","Now her life belongs to the family and the community."],["3. \"So we can judge.\"","Gossip, labels, the word 'characterless'."],["4. \"So we can intervene.\"","Questioning, stopping, following, calling parents."],["5. \"So we can control.\"","Threats, confinement, forced marriage or silence."],["6. Coercion and violence","The final step. Every earlier step made this one feel normal."]],'#c8374f');
+stepper('#culture',[["Law","This behaviour is prohibited."],["Certainty","Wrongdoing will likely be caught and acted on."],["Social norm","People around me reject it."],["Personal morality","I see the other person's autonomy."],["Identity","Respecting boundaries is part of being strong and decent."]],'#2f7d4f');
+
+const Q=[["Share your live location with a friend when you travel late.","s","Right. It is an offer of practical help, and it puts no blame on anyone."],
+["What did she expect, dressed like that?","b","Blame. Clothes are never consent, and this moves guilt to the victim."],
+["Boys will be boys.","b","Blame in disguise. It excuses the person who chose to harm."],
+["Let us ask the city to fix the broken streetlights on that road.","s","Yes. Safer environments are part of prevention. This asks the system to change."],
+["Why was she even out with a boy?","b","Blame. The question is about her respectability, not about the offender's choice."],
+["Keep a trusted number on speed dial and tell us when you reach.","s","Fine, if said with care and not as a condition for her freedom."]];
+let qi=0,sc=0;const ss=$('#ss'),sfb=$('#sf');
+function showQ(){if(qi>=Q.length){ss.textContent='You scored '+sc+' of '+Q.length+'. The same words can be care or blame depending on who they punish.';document.querySelectorAll('#sort button').forEach(b=>b.style.display='none');$('#sc').textContent='';return}ss.textContent='"'+Q[qi][0]+'"';$('#sc').textContent='Question '+(qi+1)+' of '+Q.length}
+document.querySelectorAll('#sort button').forEach(b=>b.onclick=()=>{const q=Q[qi];const ok=b.dataset.a===q[1];if(ok)sc++;sfb.textContent=(ok?'Correct. ':'Not quite. ')+q[2];qi++;setTimeout(showQ,50)});showQ();
+
+const A=[["women","\"No country is safe, so why complain?\"","True: no society has solved this. But 'nowhere is perfect' cannot mean 'nothing can improve'. Countries differ a lot in reporting, policing and public safety. Saying it is global is a reason to act everywhere."],
+["women","\"Why was she out at night?\"","It is a fair question only when asked as 'how can we make roads safer?' It becomes unfair when it means 'she caused it'. The harm began with a person who chose to do it. Also, this happened at 6 to 7 p.m. in a case in the news, so the 'night' argument is often about respectability, not safety."],
+["women","\"She should have known men are dangerous.\"","Knowing a risk exists never gives anyone permission. Most of us know bike thieves exist, but we do not blame the bike owner."],
+["women","\"Women should stay within cultural limits.\"","Traditions can be freely chosen, and many women do choose them. The issue is coercion. If she can say no without punishment, it is tradition. If she cannot, it is control."],
+["women","\"Dressing modestly will keep women safe.\"","Assault happens to people of every age and in every kind of clothing, and most offenders are known to the victim. Clothes do not decide whether someone will cross a line."],
+["women","\"Feminism means women can do anything without consequences.\"","No serious school of feminism says that. Equal rights come with equal responsibility. Equal does not mean immune."],
+["women","\"Feminism is anti-men.\"","Some voices are. They can and should be criticised. But the core demand, equal rights and bodily autonomy, benefits men too, including male survivors and boys pushed into harmful ideas of manhood."],
+["men","\"It is about strength, not gender. If women were stronger, men would be the victims.\"","Strength matters, but power is wider: threats, money, authority, housing, isolation, blackmail, drink, group pressure and position. That argument cannot explain abuse of children, abuse in marriage or by a boss. Strength creates vulnerability, norms decide who is expected to submit, and institutions decide whether it is challenged."],
+["men","\"All men are dangerous.\"","No. This is an unfair generalisation. Take male violence seriously because patterns exist, and respect the huge majority of men who never harm anyone. Both stand together."],
+["men","\"Not all men! Why do you keep blaming men?\"","Correct, not all men. Good men do not need to feel attacked. They can lead by speaking up when friends joke about aggression, because peers shape peers."],
+["men","\"Women can be violent too.\"","Yes, and male victims deserve belief and help. Bodily autonomy is universal. It does not wipe out population-level patterns, and the patterns do not wipe out male victims."],
+["men","\"False cases are common, so do not believe every woman.\"","False reports exist and should be punished when proven. Due process protects everyone. But their existence does not show most reports are false. The answer is a fair, competent investigation, not blanket disbelief."],
+["law","\"Give the harshest punishment, then it will end.\"","The research says certainty of getting caught works better than severity alone. Harsh punishment can still be a form of justice and protection. Add faster investigations, trusted police and courts, and change in attitudes."],
+["law","\"The law is useless. Nothing changes.\"","Law alone is not enough, but it sets the line, protects survivors and makes accountability believable. It works best with families, schools and communities who back it."],
+["law","\"It is a village mindset (dehati soch).\"","Partly right about honour policing, wrong as a blanket label. The same control happens in cities, rich families and educated circles. Name the belief, not the place."],
+["law","\"Why discuss feelings? Just teach girls self-defence.\"","Self-defence and safety skills help and are worth teaching. But they only cut exposure. Without teaching consent and changing norms, we keep treating the symptom."]];
+const tabs=[["all","All"],["women","About women and feminism"],["men","About men"],["law","About law and society"]];let cur='all';
+function draw(){const c=$('#cards');c.innerHTML='';A.filter(a=>cur==='all'||a[0]===cur).forEach(a=>{const b=E('button','flip','<div class="q">'+a[1].replace(/^"|"$/g,'')+'</div><div class="hint">Tap for a fair answer</div><div class="a">'+a[2]+'</div>');b.style.setProperty('--c','#8a2a6e');b.onclick=()=>b.classList.toggle('open');c.append(b)})}
+const ch=$('#chips');tabs.forEach(([k,t])=>{const b=E('button','chip',t);b.setAttribute('aria-pressed',k==='all');b.onclick=()=>{cur=k;[...ch.children].forEach(x=>x.setAttribute('aria-pressed',x===b));draw()};ch.append(b)});draw();
+
+const M=["Most sexual violence is by someone the victim knows, not a stranger in an alley.","Marriage does not erase consent.","Children need special protection. Grooming, authority and dependency make 'why did she go?' wholly inadequate.","Digital abuse is real: recording, threats to publish and circulation are tools of humiliation.","Bystanders matter. A group can excuse harm or interrupt it.","Money matters. Rights are hard to use when housing, income or education depend on the person controlling you.","Safety infrastructure matters: transport, lighting, public spaces and responsive police.","Statistics have limits. Recorded crime reflects both what happens and what gets reported.","City versus village is not simple. Cities lower community watching but bring other risks. Villages can both support and surveil.","Caste and class interact with gender. They affect who is believed and whose reputation counts.","Being harmed does not make someone powerless, and never makes them responsible for what was done to them."];
+const mi=$('#miss');M.forEach((t,i)=>mi.append(E('div','card','<b>'+(i+1)+'.</b> '+t)));
+
+const W={"A child":"Know the names of your body parts. You may say no. Tell a trusted grown-up about any secret that makes you uneasy. It is never your fault.","A teenager":"Ask clearly and accept 'no' without sulking or pressure. Never film or share private images. If a friend jokes about aggression, say 'not funny'.","A parent":"Teach your sons and daughters the same rule about bodies. Stay approachable, so a child tells you before a stranger. Do not make your daughter the carrier of family honour.","An elder":"Your words carry weight. Defend a grandchild's right to choose, and challenge the saying 'what will people say'. Respect and control are not the same.","A man":"Respect rejection. Speak up when your circle mocks or pressures women. Real protection means making space, not owning.","A woman":"You deserve safety and freedom, and you do not owe anyone an explanation for your choices. Share your plans with people you trust. Support other women without gossip.","A teacher or leader":"Teach consent in school and workplace. Build real reporting channels. Protect those who speak up. Never ask a survivor 'why?'"};
+const wc=$('#who'),wo=$('#whoOut');Object.keys(W).forEach((k,i)=>{const b=E('button','chip',k);b.setAttribute('aria-pressed',i===0);b.onclick=()=>{[...wc.children].forEach(x=>x.setAttribute('aria-pressed',x===b));wo.textContent=W[k]};wc.append(b)});wo.textContent=W["A child"];
+
+})();
+FB($('#fb1'),'body','Whose Body Is It?');
+FB($('#fb2'),'climate','What Will Your City Feel Like in 2070?');
+route(true);
+</script>
+</body>
+</html>
+
+</body></html>
