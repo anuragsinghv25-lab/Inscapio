@@ -1,0 +1,43 @@
+/*
+ * Section-accent mapping. Content documents select an accent NAME from a closed enum
+ * (src/content/schema/presentation.ts); the renderer sets data-accent="<name>".
+ * --c       fill colour (borders, backgrounds with white text)
+ * --c-text  accent as TEXT colour; resolved per colour-scheme with light-dark(),
+ *           so each accent keeps >= 4.5:1 in both modes (INTENDED CHANGE vs v0).
+ */
+[data-accent="rose"] {
+  --c: var(--accent-rose);
+  --c-text: light-dark(var(--accent-rose-text-light), var(--accent-rose-text-dark));
+}
+[data-accent="teal"] {
+  --c: var(--accent-teal);
+  --c-text: light-dark(var(--accent-teal-text-light), var(--accent-teal-text-dark));
+}
+[data-accent="violet"] {
+  --c: var(--accent-violet);
+  --c-text: light-dark(var(--accent-violet-text-light), var(--accent-violet-text-dark));
+}
+[data-accent="ochre"] {
+  --c: var(--accent-ochre);
+  --c-text: light-dark(var(--accent-ochre-text-light), var(--accent-ochre-text-dark));
+}
+[data-accent="blue"] {
+  --c: var(--accent-blue);
+  --c-text: light-dark(var(--accent-blue-text-light), var(--accent-blue-text-dark));
+}
+[data-accent="plum"] {
+  --c: var(--accent-plum);
+  --c-text: light-dark(var(--accent-plum-text-light), var(--accent-plum-text-dark));
+}
+[data-accent="green"] {
+  --c: var(--accent-green);
+  --c-text: light-dark(var(--accent-green-text-light), var(--accent-green-text-dark));
+}
+[data-accent="pink"] {
+  --c: var(--accent-pink);
+  --c-text: light-dark(var(--accent-pink-text-light), var(--accent-pink-text-dark));
+}
+[data-accent="indigo"] {
+  --c: var(--accent-indigo);
+  --c-text: light-dark(var(--accent-indigo-text-light), var(--accent-indigo-text-dark));
+}

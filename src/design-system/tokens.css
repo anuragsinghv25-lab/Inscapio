@@ -1,0 +1,194 @@
+/*
+ * InScapio design tokens.
+ *
+ * Source: prototype/v0/index.html (lines 24-26, 143-145, 218-221) and
+ * docs/design/current-design-audit.md §3. Values are v0's unless marked
+ * "INTENDED CHANGE", each of which is listed in docs/architecture/migration-strategy.md.
+ *
+ * Rules (docs/engineering/coding-principles.md §5): raw colours, sizes and durations
+ * appear ONLY in this file. Components consume roles via var(--…).
+ * Content documents never reference these names: they select closed enum values
+ * (theme, accent) that the application maps to tokens.
+ *
+ * Breakpoints cannot be custom properties inside @media; the values used are
+ * 560px, 760px, 900px and 1200px (mirrored in src/design-system/breakpoints.ts).
+ */
+
+:root {
+  color-scheme: light;
+
+  /* ---- raw palette (v0) ---- */
+  --palette-fog: #e3e9ea;
+  --palette-paper: #f5f8f8;
+  --palette-deep: #102c33;
+  --palette-mid: #4a646b;
+  --palette-tarn: #0b2f38;
+  --palette-cobalt: #2447d6;
+  --palette-cobalt-strong: #1a36a6;
+  --palette-amber: #f2a900;
+  --palette-white: #ffffff;
+  --palette-cool: #7fd6e8; /* climate: cool end of the data-bound theme */
+  --palette-hot: #ff8a4c; /* climate: warm end */
+  --palette-warm-field: #3a1a12; /* climate: warm-end background */
+
+  /* ---- site roles (home, about) ---- */
+  --color-page: var(--palette-fog);
+  --color-surface: var(--palette-paper);
+  --color-ink: var(--palette-deep);
+  --color-ink-muted: var(--palette-mid);
+  --color-field-dark: var(--palette-tarn);
+  --color-field-deep: var(--palette-deep);
+  --color-accent: var(--palette-cobalt);
+  --color-accent-strong: var(--palette-cobalt-strong);
+  --color-attention: var(--palette-amber);
+  --color-on-dark: #ffffff;
+  --color-on-dark-muted: #c6d3d6; /* v0 footer/feedback secondary text */
+  --color-on-dark-soft: #c5d6da; /* v0 climate body text */
+  --color-on-dark-faint: #ffffffa6; /* v0 wall buttons (6.8:1 on tarn) */
+  --color-rule-on-dark: #ffffff40;
+  --color-control-border-on-dark: #ffffff80;
+  --color-focus: var(--palette-cobalt);
+  --color-focus-on-dark: var(--palette-amber);
+  --color-pressed-bg: var(--palette-amber);
+  --color-pressed-ink: #110011; /* v0 "#101"; 10.1:1 on amber */
+
+  /* ---- section accents: fills (white text on each is >= 4.5:1) ---- */
+  --accent-rose: #c8374f;
+  --accent-teal: #17787a;
+  --accent-violet: #6a3fb5;
+  --accent-ochre: #a85f00;
+  --accent-blue: #1d6fb8;
+  --accent-plum: #8a2a6e;
+  --accent-green: #2f7d4f;
+  --accent-pink: #d6336c;
+  --accent-indigo: #3b5bdb;
+
+  /* ---- section accents: TEXT variants per mode (>= 4.5:1 on page AND card surfaces).
+         INTENDED CHANGE: v0 used the fill colour for text, which fell to 2.3-3.96:1 in the dark theme. ---- */
+  --accent-rose-text-light: #c8374f;
+  --accent-teal-text-light: #17787a;
+  --accent-violet-text-light: #6a3fb5;
+  --accent-ochre-text-light: #a85f00;
+  --accent-blue-text-light: #1d6fb8;
+  --accent-plum-text-light: #8a2a6e;
+  --accent-green-text-light: #2f7d4f;
+  --accent-pink-text-light: #d42b66;
+  --accent-indigo-text-light: #3b5bdb;
+  --accent-rose-text-dark: #d46376;
+  --accent-teal-text-dark: #1d9698;
+  --accent-violet-text-dark: #9776cf;
+  --accent-ochre-text-dark: #c97200;
+  --accent-blue-text-dark: #2d8ade;
+  --accent-plum-text-dark: #ce5ead;
+  --accent-green-text-dark: #399961;
+  --accent-pink-text-dark: #de5988;
+  --accent-indigo-text-dark: #6881e3;
+
+  /* ---- typography ---- */
+  --font-display: "Bricolage Grotesque Variable", "Bricolage Grotesque", ui-sans-serif, "Helvetica Neue", Helvetica, sans-serif;
+  --font-text: "Literata Variable", Literata, Georgia, "Times New Roman", serif;
+
+  --text-body: 1.0625rem;
+  --leading-body: 1.65;
+  --text-hero: clamp(3rem, 12.5vw, 10.5rem);
+  --text-room: clamp(2.7rem, 8.4vw, 7.4rem);
+  --text-closing: clamp(2.6rem, 8vw, 6.8rem);
+  --text-page-title: clamp(2.8rem, 10vw, 8rem);
+  --text-experience-title: clamp(3rem, 11vw, 7.6rem);
+  --text-section-title: clamp(2rem, 6vw, 3.6rem);
+  --text-statement: clamp(1.8rem, 4.6vw, 3.4rem);
+  --text-subtitle: clamp(1.15rem, 2.2vw, 1.5rem);
+  --text-lead: clamp(1.25rem, 2.6vw, 1.6rem);
+  --text-callout: clamp(1.15rem, 2.2vw, 1.4rem);
+  --text-label: 1rem;
+  --text-small: 0.92rem;
+  --text-year: clamp(5rem, 20vw, 11rem);
+  --tracking-display: -0.045em;
+  --tracking-title: -0.03em;
+  --tracking-tight: -0.02em;
+
+  /* ---- space and layout ---- */
+  --gutter: clamp(18px, 4.5vw, 56px);
+  --space-room: clamp(72px, 12vw, 168px);
+  --space-section: clamp(64px, 10vw, 120px);
+  --width-page: 1400px;
+  --width-narrow: 1100px;
+  --width-reading: 760px;
+  --measure: 34em;
+  --target-min: 44px; /* minimum touch target */
+  --target-comfortable: 48px;
+
+  /* ---- shape: small, restrained, flat. No shadows by design. ---- */
+  --radius-none: 0;
+  --radius-control: 2px;
+  --radius-chip: 3px;
+  --radius-card: 4px;
+  --border-thin: 1px;
+  --rule-medium: 3px;
+  --focus-ring: 3px;
+  --focus-offset: 3px;
+
+  /* ---- motion ---- */
+  --duration-fast: 0.2s;
+  --duration-base: 0.3s;
+  --duration-slow: 0.5s;
+  --duration-enter: 0.75s;
+  --ease-enter: cubic-bezier(0.7, 0, 0.2, 1);
+  --ease-standard: ease;
+}
+
+/* ================= theme: paper (v0 "Whose Body Is It?" #xp1, 218-221) =================
+   Light by default; follows the system dark preference unless the reader chose a mode. */
+[data-theme="paper"] {
+  --t-bg: #f7f6fb;
+  --t-ink: #1d1b3a;
+  --t-mute: #5a5878;
+  --t-card: #ffffff;
+  --t-line: #dedbee;
+  --t-hero-bg: #10242b;
+  --t-accent-text-suffix: light;
+  --t-hover-chip-bg: #1d1b3a;
+  --t-hover-chip-ink: #ffffff;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  [data-theme="paper"]:not([data-mode="light"]) {
+    --t-bg: #13122a;
+    --t-ink: #f1effc;
+    --t-mute: #b4b1d3;
+    --t-card: #1e1c3c;
+    --t-line: #38356a;
+    --t-hover-chip-bg: #f1effc;
+    --t-hover-chip-ink: #13122a;
+    color-scheme: dark;
+  }
+}
+[data-theme="paper"][data-mode="dark"] {
+  --t-bg: #13122a;
+  --t-ink: #f1effc;
+  --t-mute: #b4b1d3;
+  --t-card: #1e1c3c;
+  --t-line: #38356a;
+  --t-hover-chip-bg: #f1effc;
+  --t-hover-chip-ink: #13122a;
+  color-scheme: dark;
+}
+
+/* ================= theme: tarn (v0 climate #cl, 143-145) =================
+   Always dark. --warm (0..1) is written by the scrubber block and drives colour
+   exactly as v0's --w does: cool teal field to warm brown field. */
+[data-theme="tarn"] {
+  --warm: 0;
+  --t-bg: var(--palette-tarn);
+  --t-ink: #e8f0f2;
+  --t-mute: var(--color-on-dark-soft);
+  --t-line: #ffffff59;
+  --t-data: var(--palette-cool);
+  color-scheme: dark;
+}
+@supports (background: color-mix(in oklab, red, blue)) {
+  [data-theme="tarn"] {
+    --t-data: color-mix(in oklab, var(--palette-cool) calc((1 - var(--warm)) * 100%), var(--palette-hot));
+    --t-bg: color-mix(in oklab, var(--palette-tarn) calc((1 - var(--warm)) * 100%), var(--palette-warm-field));
+  }
+}
