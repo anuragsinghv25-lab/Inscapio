@@ -149,7 +149,7 @@ function personas(id) {
 function help(el, id) {
   const p = el.querySelector("p");
   const parts = plain(p).split(" · ");
-  const items = parts.map((s, i) => {
+  const items = parts.map((s) => {
     const m = s.match(/^(\d+) ([^(.]+?)(?: \((.*?)\))?(?:\. (.*))?$/);
     if (!m) throw new Error("helpline parse: " + s);
     return { id: `line-${m[1]}`, value: m[1], label: m[2], ...(m[3] ? { detail: m[3] } : {}), _note: m[4] };
