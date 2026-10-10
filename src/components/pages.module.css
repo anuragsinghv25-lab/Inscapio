@@ -25,7 +25,7 @@
 .lFirst { stroke: var(--color-on-dark); stroke-width: 2; stroke-dasharray: 6 6; }
 .lNow { stroke: var(--color-attention); stroke-width: 4; }
 .lg { position: absolute; left: clamp(18px, 3vw, 36px); right: clamp(18px, 3vw, 36px); bottom: 8px; display: flex; flex-wrap: wrap; gap: 0 18px; margin: 0; padding: 0; list-style: none; font: 500 0.78rem / 1.5 var(--font-display); }
-.lg i { display: inline-block; width: 18px; margin-right: 6px; vertical-align: middle; border-top: 3px solid; }
+.lg i { display: inline-block; width: 18px; margin-right: 6px; vertical-align: middle; border-top-width: 3px; border-top-style: solid; }
 .kFirst { border-color: var(--color-on-dark); border-top-style: dashed !important; }
 .kNow { border-color: var(--color-attention); }
 .kMatch { border-color: var(--palette-cool); }

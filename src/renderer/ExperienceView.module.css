@@ -23,7 +23,7 @@
 :global([data-theme="tarn"]) .section { border: 0; padding: clamp(72px, 12vh, 140px) 0; }
 :global([data-theme="tarn"]) .section .wrap { max-width: var(--width-narrow); padding: 0 var(--gutter); }
 :global([data-theme="tarn"]) .section h2 { max-width: 14em; font-size: clamp(2rem, 6vw, 3.8rem); line-height: 1; letter-spacing: -0.035em; }
-:global([data-theme="tarn"]) .section p { max-width: 34em; color: var(--color-on-dark-soft); }
+:global([data-theme="tarn"]) .section .wrap > p { max-width: 34em; color: var(--color-on-dark-soft); }
 
 /* ---- end notes ---- */
 .endnotes { padding: 40px 0; color: var(--t-mute); font-size: 0.8em; }

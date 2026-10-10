@@ -32,7 +32,7 @@
 .lineNow { fill: none; stroke: var(--color-attention); stroke-width: 4; }
 
 .legend { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 8px 0 28px; padding: 0; list-style: none; font: 500 0.92rem var(--font-display); }
-.legend i { display: inline-block; width: 26px; margin-right: 8px; vertical-align: middle; border-top: 3px solid; }
+.legend i { display: inline-block; width: 26px; margin-right: 8px; vertical-align: middle; border-top-width: 3px; border-top-style: solid; }
 .keyFirst { border-color: var(--color-on-dark); border-top-style: dashed !important; }
 .keyNow { border-color: var(--color-attention); }
 .keyMatch { border-color: var(--palette-cool); }
