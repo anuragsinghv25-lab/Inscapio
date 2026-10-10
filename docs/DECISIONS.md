@@ -266,3 +266,31 @@ Status for these entries is **Accepted (implemented on `phase-1/schema-renderer`
 
 ## D-037 · Chapter 7 link fix is an intentional difference
 - **Decision:** v0's "Jump to the arguments" targeted chapter 6 ("Risk or blame?"); the label describes chapter 7 ("The arguments"), so the migrated link targets chapter 7.
+
+---
+
+# Proposed in Phase 1.5 (product design review; documentation only)
+
+Status for these entries is **Proposed, pending owner review**. Nothing is implemented. See [`design/phase-1-5-product-design-review.md`](./design/phase-1-5-product-design-review.md).
+
+## D-038 · Experiences share a predictable reader shell; subject-specific content lives in the body
+- **Context:** the review found the gaps in both experiences are mostly platform-level (size and structure not shown, no outline, no end state, preferences not persisted, evidence footer-only).
+- **Options considered:** (a) fix each experience separately; (b) define a standard shell and let the body vary by subject.
+- **Decision:** (b). Standard: entry hero with size line, reading controls (persisted), outline/progress, evidence at point of use, Deeper behaviour, end state, share, feedback after the end state, accessibility contract. Varies: blocks and order, theme and accents, data-bound theme, presentation variants, pacing. Details: [`design/phase-1-5-experience-specification.md`](./design/phase-1-5-experience-specification.md).
+- **Reason:** fixes apply to every present and future experience at once, and readers do not relearn navigation.
+- **Trade-offs:** adds platform surface to maintain; some elements may need small schema additions (Q-25) and presentation variants (Q-26), which are proposals, not decisions.
+- **Status:** Proposed
+
+## D-039 · Roadmap is expressed as five stages that map onto the earlier phases
+- **Decision:** Stage 1 design decisions; 2 visible design evolution (no backend); 3 backend foundation (old Phase 2); 4 AI authoring (old Phase 3); 5 closed alpha (old Phase 4). Mapping and dependencies: [`architecture/phase-2-readiness.md`](./architecture/phase-2-readiness.md). `mvp-scope.md` is unchanged.
+- **Reason:** the owner's Phase 1.5 brief separates a visible design stage from the backend; the table prevents two numbering schemes drifting.
+- **Trade-offs:** two vocabularies exist until `mvp-scope.md` is next revised.
+- **Status:** Proposed
+
+## D-040 · No styled UI library as the design system; headless primitives only where hard interaction behaviour is needed
+- **Context:** MUI, HeroUI and UI Lora were evaluated against actual requirements ([`design/ui-library-evaluation.md`](./design/ui-library-evaluation.md)).
+- **Options considered:** MUI; HeroUI; UI Lora; headless primitives (React Aria Components, Base UI, Radix); none.
+- **Decision:** keep `src/design-system/` (tokens, CSS Modules) as the single design system. For the publisher workspace and a few reader controls, prefer an unstyled behaviour library wrapped in our own components, chosen by a time-boxed spike at Stage 3/4. MUI is the fallback if confined to workspace routes behind a lint boundary.
+- **Reason:** styled libraries bring a second token/styling system (Emotion or Tailwind) against D-015, and the reader surface is bespoke by identity.
+- **Trade-offs:** more own components to write; accessibility of the primitives must be verified, not assumed. Library facts are a 10 Oct 2026 snapshot; bundle impact was not measured.
+- **Status:** Proposed

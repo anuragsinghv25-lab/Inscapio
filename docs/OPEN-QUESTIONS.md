@@ -127,3 +127,42 @@
 ### Q-23 · Production deployment is intentionally separate
 - **Context:** `inscapio.in` currently shows "Page not found" after a project configuration change. This branch contains no deployment or DNS change and no Netlify configuration.
 - **Needed by:** when the owner asks to deploy the completed application.
+
+---
+
+## Raised in Phase 1.5
+
+Context: [`design/phase-1-5-product-design-review.md`](./design/phase-1-5-product-design-review.md), [`design/phase-1-5-experience-specification.md`](./design/phase-1-5-experience-specification.md), [`architecture/phase-2-readiness.md`](./architecture/phase-2-readiness.md).
+
+### Q-24 · Which reader-shell elements ship in Stage 2?
+- **Why it matters:** outline, size line, end state, persisted preferences and point-of-use evidence are each a build; scope control keeps Stage 2 from becoming a redesign.
+- **Leaning:** persistence, outline and end state first; evidence placement and size line after.
+- **Needed by:** start of Stage 2.
+
+### Q-25 · May the schema gain optional end-state lines and per-section purpose lines?
+- **Why it matters:** CLAUDE.md requires schema changes to be proposed first; alternatives reuse existing blocks.
+- **Leaning:** try existing blocks first; add a field only if that proves awkward.
+- **Needed by:** start of Stage 2.
+
+### Q-26 · Should blocks gain presentation variants (for example claims one at a time)?
+- **Why it matters:** fixes the long identical-card list without a schema change, but enlarges the design-system surface (D-004).
+- **Needed by:** Stage 2.
+
+### Q-27 · Must the publisher workspace work on a phone?
+- **Why it matters:** changes the workspace IA, layout and testing.
+- **Leaning:** desktop first; verify with publishers.
+- **Needed by:** before workspace design (Stage 4).
+
+### Q-28 · Keep "Whose Body Is It?" unpromoted until Q-16 closes?
+- **Why it matters:** the homepage currently features it; promotion increases exposure of unreviewed content about a real case involving minors.
+- **Leaning:** yes; the homepage must work when it is omitted.
+- **Needed by:** before any public deployment.
+
+### Q-29 · Run first-impression sessions on the current build?
+- **Why it matters:** the review rests on expert judgment; no reader has been observed.
+- **Leaning:** a handful of moderated phone sessions before Stage 2 design.
+- **Needed by:** Stage 1.
+
+### Q-30 · Supabase ownership, region, plan and the start of privacy/legal advice
+- **Why it matters:** region and plan are expensive to change after data exists; see S1..S16 in `architecture/phase-2-readiness.md`.
+- **Needed by:** before Stage 3.

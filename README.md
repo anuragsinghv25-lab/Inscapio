@@ -4,7 +4,7 @@
 
 InScapio is an early-stage product exploring an **AI-native publishing platform for interactive knowledge experiences**: a place where a publisher's expertise becomes something a reader can explore, not just scroll.
 
-**Status: Phase 1 (schema, renderer, design system) on branch `phase-1/schema-renderer`; Phase 0 is merged.** There is a frozen HTML prototype, a set of planning documents, and a small Next.js application that renders both prototype experiences from validated, versioned content. There is no database, auth, publisher studio or AI yet, and nothing here is deployed.
+**Status: Phase 1 (schema, renderer, design system) is merged; Phase 1.5 (product design review, documentation only) is in review.** There is a frozen HTML prototype, a set of planning documents, and a small Next.js application that renders both prototype experiences from validated, versioned content. There is no database, auth, publisher studio or AI yet, and nothing here is deployed.
 
 ## Labels used in this repository
 
