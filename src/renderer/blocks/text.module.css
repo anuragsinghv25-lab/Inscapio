@@ -1,0 +1,25 @@
+.lead { font-family: var(--font-display); font-weight: 500; font-size: var(--text-lead); line-height: 1.3; letter-spacing: -0.01em; }
+.say {
+  margin: 1.2em 0; padding: 14px 18px;
+  border-left: 6px solid var(--c, var(--color-attention));
+  background: color-mix(in srgb, var(--c, transparent) 12%, var(--t-card, transparent));
+  font: 600 var(--text-callout) / 1.3 var(--font-display);
+}
+.card {
+  margin: 12px 0; padding: 16px 18px;
+  background: var(--t-card); border: var(--border-thin) solid var(--t-line); border-radius: var(--radius-card);
+}
+.card strong { font-family: var(--font-display); }
+.facts { display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin: 2rem 0; }
+.fact { border-top: var(--rule-medium) solid var(--t-data); padding-top: 12px; color: var(--color-on-dark-soft); }
+.fact b { display: block; font: 800 clamp(1.8rem, 4vw, 2.6rem) / 1 var(--font-display); letter-spacing: var(--tracking-title); color: var(--color-on-dark); }
+.tableWrap { overflow-x: auto; margin: 1em 0; }
+.table { width: 100%; border-collapse: collapse; font-size: 0.88em; }
+.table th, .table td { border: var(--border-thin) solid var(--t-line); padding: 8px 10px; text-align: left; min-width: 140px; vertical-align: top; }
+.table th { background: var(--t-card); font-family: var(--font-display); }
+.help { margin: 20px 0; padding: 20px; background: var(--accent-teal); color: var(--color-on-dark); border-radius: var(--radius-card); }
+.help h3 { font-size: 1.4rem; }
+.help p { margin: 0; }
+.dataNote { max-width: 36em; margin-top: 2.4rem; padding-left: 18px; border-left: var(--rule-medium) solid var(--color-attention); font-size: var(--text-small); color: var(--color-on-dark-soft); }
+.sources { color: var(--t-mute); font-size: 0.8em; }
+.sources a { color: inherit; }

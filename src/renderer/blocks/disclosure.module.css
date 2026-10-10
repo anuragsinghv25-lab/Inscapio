@@ -1,0 +1,39 @@
+/* ---- deeper ---- */
+.deeper { display: none; margin: 1em 0; padding: 12px 16px; border: 2px dashed var(--c, var(--color-attention)); border-radius: var(--radius-control); }
+:global([data-deeper="true"]) .deeper { display: block; }
+@media (scripting: none) { .deeper { display: block; } }
+:global([data-theme="tarn"]) .deeper { max-width: 36em; padding: 6px 0 6px 18px; border: 0; border-left: var(--rule-medium) solid var(--color-attention); border-radius: 0; color: var(--color-on-dark-soft); }
+.deeperLabel { display: block; margin: 0 0 0.4em; font: 700 0.8em var(--font-display); color: var(--c-text, var(--color-attention)); }
+:global([data-theme="tarn"]) .deeperLabel { color: var(--color-attention); font-size: 0.9rem; }
+
+/* ---- accordion (layers | bands) ---- */
+.accordion { display: grid; gap: 10px; margin: 1em 0; }
+.bands { gap: 0; }
+.item { background: var(--c); color: var(--color-on-dark); border-radius: var(--radius-control); }
+.bands .item { border-radius: 0; }
+.trigger {
+  display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center;
+  width: 100%; min-height: 56px; padding: 12px 18px; border: 0; background: none; color: inherit;
+  font: 700 1.1rem / 1.2 var(--font-display); text-align: left; cursor: pointer;
+}
+.bands .trigger { min-height: 64px; padding: 12px 20px; font-size: 1.15rem; }
+.sign { font: 400 1.6rem / 1 var(--font-display); font-style: normal; }
+.panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--duration-base); }
+.panelInner { overflow: hidden; visibility: hidden; transition: visibility 0s var(--duration-base); }
+.panelInner p { margin: 0; padding: 0 18px 16px; font: 400 0.92em / 1.5 var(--font-text); }
+.bands .panelInner p { padding: 0 20px 18px; font-size: 1rem; }
+.open .panel { grid-template-rows: 1fr; }
+.open .panelInner { visibility: visible; transition-delay: 0s; }
+@media (scripting: none) { .panel { grid-template-rows: 1fr; } .panelInner { visibility: visible; } .sign { display: none; } }
+
+/* ---- stepper ---- */
+.steps { display: grid; gap: 8px; margin: 16px 0; }
+.step {
+  display: block; width: 100%; min-height: var(--target-comfortable); padding: 12px 16px; text-align: left;
+  background: var(--t-card); color: var(--t-ink); border: 2px solid var(--c); border-radius: var(--radius-control);
+  font: 600 1em var(--font-display); cursor: pointer;
+}
+.step.on { background: var(--c); color: var(--color-on-dark); }
+.note { display: none; margin-top: 4px; font: 400 0.85em / 1.5 var(--font-text); }
+.step.current .note { display: block; }
+@media (scripting: none) { .note { display: block; } }

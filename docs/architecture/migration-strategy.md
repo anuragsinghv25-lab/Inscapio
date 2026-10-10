@@ -95,3 +95,43 @@ Steps 1–10 are the **Recommended Phase 1** (in the final Phase 0 report). Pers
 ## Rollback and reference
 
 `prototype/v0/` is permanent reference. If the production build ever regresses on a core interaction, the original remains available to compare, restore from, or demonstrate.
+
+---
+
+## Phase 1: as built
+
+> **Status:** Current on branch `phase-1/schema-renderer`. Both experiences, the home page and About are migrated. "Migrated" here means: content is data, rendered by the production renderer, and checked against v0 as described below. It does not mean pixel-identical.
+
+### How each part was migrated
+
+| Part | Method | Source of truth |
+|---|---|---|
+| Whose Body Is It? | `scripts/extract-whose-body.mjs` parses the frozen file with jsdom and reads its JS arrays in a `vm`; inline `<b>`/`<i>` become marks; script asserts counts (12 chapters, 7 deeper blocks, 6 layers, 6+5 steps, 6 statements, 16 claims, 11 cards, 7 personas) | `prototype/v0/index.html` |
+| Climate | `scripts/generate-climate-dataset.mjs` runs v0's model code and writes a dataset (D-026) | `prototype/v0/index.html` |
+| Home, About | copy moved to `src/content/site/pages.ts`; home layers and city wall are driven by the migrated experiences' data | v0 markup |
+
+### Parity evidence (run, not assumed)
+
+See the table in the README implementation note. In short: 900 city-years identical on discrete outputs; 100 displayed states identical; prediction identical for 20 cities; 163 + climate + home + about text items present; 100 browser tests passing across two viewports.
+
+### Intentional differences (allowed by "Intended improvements")
+
+1. **Real URLs** (`/experiences/...`) instead of hashes; v0 aliases are redirects.
+2. **Accent text colours** in the dark reading theme (D-028).
+3. **"Jump to the arguments"** targets chapter 7, not 6 (D-037).
+4. **Skip link**, `<main>` landmark, real heading focus targets, and "Going deeper" as real text rather than CSS-generated content.
+5. **Fonts self-hosted**; Bricolage loses its optical-size axis (D-027).
+6. **Climate slider** is index-based (0..44) with the year as `aria-valuetext` and label; v0's range used the year as value.
+7. **Curve rendering** is a spline through 12 monthly values, not a 45-point cosine sample (max deviation 0.036 C).
+8. **Pressed chips** in the dark reading theme use theme tokens (v0 used a fixed dark fill that vanished against the dark page).
+9. **No-JS baseline** for every interactive block (v0 was empty without script).
+10. **Feedback record key** is the experience slug (v0: `body` / `climate`). Behaviour is otherwise identical.
+11. **Explore** links to `/#rooms`.
+
+### Not migrated / not done
+
+Per-experience share metadata beyond title and description (no share images); stored feedback (Q-17); persistence of reading preferences (Q-19); deployment (Q-23). v0's entrance reveal is kept (circular clip-path from the tap point, skipped for reduced motion) but its timing was not compared to v0.
+
+### Schema gaps recorded
+
+None blocked the migration. Gaps found and resolved: `claims.label` had to be optional-then-set (v0 shows a "They say:" prefix); the `lastStep` template token was missing; hero action targets needed referential checking (which exposed v0's chapter-6 link mismatch).

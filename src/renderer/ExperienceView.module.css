@@ -1,0 +1,30 @@
+.main { outline: none; }
+.wrap { max-width: var(--width-reading); margin: 0 auto; padding: 0 20px; }
+
+/* ---- hero ---- */
+.hero { position: relative; min-height: 100svh; display: flex; align-items: flex-end; padding: 110px 0 64px; background: var(--t-hero-bg, var(--t-bg)); color: var(--color-on-dark); }
+.heroInner { width: 100%; max-width: 980px; margin: 0 auto; padding: 0 20px; }
+.hero h1 { font-size: var(--text-experience-title); line-height: 0.92; letter-spacing: var(--tracking-display); margin-bottom: 0.35em; }
+:global([data-theme="tarn"]) .hero h1 { max-width: 11em; }
+.intro { max-width: 32em; font-size: 1.2rem; color: var(--color-on-dark-hero); }
+.actions { display: flex; flex-wrap: wrap; gap: 6px 8px; margin-top: 6px; }
+:global([data-theme="paper"]) .hero::after {
+  content: ""; position: absolute; inset: auto 0 0 0; height: 10px;
+  background: linear-gradient(90deg, var(--accent-rose) 0 16.66%, var(--accent-ochre) 0 33.33%, var(--accent-plum) 0 50%, var(--accent-violet) 0 66.66%, var(--accent-blue) 0 83.33%, var(--accent-teal) 0);
+}
+:global([data-theme="tarn"]) .hero { background: none; padding: 100px 0 clamp(72px, 12vh, 140px); }
+:global([data-theme="tarn"]) .heroInner { max-width: 1100px; padding: 0 var(--gutter); }
+:global([data-theme="tarn"]) .intro { margin: 1.4em 0 1.6em; font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.5; color: var(--color-on-dark-soft); }
+
+/* ---- sections ---- */
+.section { padding: 64px 0; border-top: 8px solid var(--c, transparent); }
+.section h2 { font-size: var(--text-section-title); }
+.tag { display: inline-block; margin-bottom: 12px; padding: 3px 12px; background: var(--c); color: var(--color-on-dark); border-radius: var(--radius-control); font: 600 14px var(--font-display); }
+:global([data-theme="tarn"]) .section { border: 0; padding: clamp(72px, 12vh, 140px) 0; }
+:global([data-theme="tarn"]) .section .wrap { max-width: var(--width-narrow); padding: 0 var(--gutter); }
+:global([data-theme="tarn"]) .section h2 { max-width: 14em; font-size: clamp(2rem, 6vw, 3.8rem); line-height: 1; letter-spacing: -0.035em; }
+:global([data-theme="tarn"]) .section .wrap > p { max-width: 34em; color: var(--color-on-dark-soft); }
+
+/* ---- end notes ---- */
+.endnotes { padding: 40px 0; color: var(--t-mute); font-size: 0.8em; }
+.endnotes p { margin-bottom: 1em; }

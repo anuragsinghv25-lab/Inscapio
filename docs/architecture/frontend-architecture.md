@@ -163,3 +163,43 @@ Start with an **in-app gallery route** (development only) that renders every blo
 ## What is intentionally undecided
 
 Gallery tooling; whether to use TanStack Query; exact view-transition approach; chart helper approach; icon strategy. Each is a Phase 1 spike with a decision recorded in [`../DECISIONS.md`](../DECISIONS.md).
+
+---
+
+## Phase 1: as built
+
+> **Status:** Current on branch `phase-1/schema-renderer`. Decisions: D-029 to D-034.
+
+### Stack and layout
+
+Next.js 16 (App Router, Turbopack), React 19, TypeScript 5.9 strict (`noUncheckedIndexedAccess`), CSS Modules plus CSS custom-property tokens, pnpm. Routes: `/`, `/about`, `/experiences/[slug]` (statically generated from the content folder, unknown slugs 404), not-found, plus redirects for v0's aliases.
+
+### The renderer
+
+`ExperienceView` (server) validates nothing itself: it receives an `Experience` that has already passed the loader. It builds a `RenderContext` (sources and datasets by id) and renders hero, sections and end notes. `BlockRenderer` is a closed `switch` over `block.type` with a `never` exhaustiveness check, wrapped per block in a client error boundary. Static blocks are server components; interactive blocks (`accordion`, `stepper`, `claims`, `classify`, `selector-content`, `scrubber-chart`) and the shell are client components that receive validated props.
+
+`ExperienceShell` (client) owns Deeper, text size, light/dark and the progress line, and exposes them as `data-deeper`, `data-mode`, `--fs` and (for data-bound themes) `--warm`. Block styles respond to these in CSS, so server-rendered blocks never re-render when the reader toggles a preference.
+
+### Progressive enhancement
+
+All content is in the server HTML. `@media (scripting: none)` opens or shows every disclosed region and hides controls that need script. Tested with JavaScript disabled for both experiences.
+
+### Scrubber
+
+Pure geometry (`blocks/scrubber/geometry.ts`: scales, row interpolation, periodic Catmull-Rom path) is unit tested separately from the component. Width is measured with `ResizeObserver` (SVG `viewBox` follows the container, as in v0). Colours come from CSS classes using tokens, not from component code. Reduced motion skips the 1.5 s tween.
+
+### Styling
+
+Raw colours, sizes and durations appear only in `src/design-system/tokens.css`; components use role tokens. Themes are `data-theme="paper"` (light/dark by system preference or reader choice) and `data-theme="tarn"` (dark, data-bound). Section accents use `data-accent` to set `--c` and `--c-text`.
+
+### Platform strings and copy
+
+`src/renderer/ui-strings.ts` (UI wording) and `src/content/site/pages.ts` (home, About, footer, not-found copy). Experience wording is content (D-032).
+
+### Tests
+
+Vitest + Testing Library (schema, content, loader, geometry, renderer, block behaviour). Playwright at 1280 and 375: routes and console errors, overflow, interactions, axe, keyboard order, reduced motion, no-JS, and parity against the frozen prototype (D-036).
+
+### Known gaps
+
+Server render errors are not isolated per block (D-031). Inline `style` is used for two CSS variables (Q-22). Reading preferences are not persisted (Q-19). Only Chromium has been tested (Q-20).

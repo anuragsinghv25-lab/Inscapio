@@ -1,0 +1,83 @@
+/* Global base: reset, body, focus, motion kill-switch. Source: prototype/v0 lines 27-37. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 72px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-page);
+  color: var(--color-ink);
+  font: 400 var(--text-body) / var(--leading-body) var(--font-text);
+  transition: background var(--duration-base);
+}
+
+/* Dark site fields (about, closing) */
+body[data-surface="deep"] {
+  background: var(--color-field-deep);
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+:focus-visible {
+  outline: var(--focus-ring) solid var(--color-focus);
+  outline-offset: var(--focus-offset);
+}
+
+[data-on-dark] :focus-visible,
+[data-theme="tarn"] :focus-visible {
+  outline-color: var(--color-focus-on-dark);
+}
+
+h1:focus {
+  outline: none;
+}
+
+/* Skip link (INTENDED CHANGE: absent in v0) */
+.skip-link {
+  position: absolute;
+  left: 8px;
+  top: -100px;
+  z-index: 100;
+  padding: 12px 18px;
+  background: var(--color-ink);
+  color: var(--color-on-dark);
+  font: 700 var(--text-label) var(--font-display);
+  text-decoration: none;
+}
+.skip-link:focus {
+  top: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

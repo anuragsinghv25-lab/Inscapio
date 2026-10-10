@@ -1,6 +1,6 @@
 # InScapio: instructions for AI agents
 
-InScapio is an AI-native publishing platform for interactive knowledge experiences. The repository is in **Phase 0**: documentation and a frozen prototype; no application code yet.
+InScapio is an AI-native publishing platform for interactive knowledge experiences. The repository is in **Phase 1**: documentation, a frozen prototype, and a small Next.js app (content schema + renderer + design tokens) that renders both v0 experiences from validated data. No backend, auth, studio or AI yet. Commands: see `README.md` (Setup).
 
 ## Before you do anything
 

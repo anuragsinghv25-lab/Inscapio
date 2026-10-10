@@ -1,0 +1,1467 @@
+{
+  "schemaVersion": 1,
+  "id": "whose-body-is-it",
+  "slug": "whose-body-is-it",
+  "kind": "explainer",
+  "title": "Whose Body Is It?",
+  "shortTitle": "Whose Body Is It?",
+  "language": "en",
+  "summary": "Safety, honour, gender, respect and the boundaries we place around other people’s lives.",
+  "theme": "paper",
+  "reading": [
+    "deeper",
+    "text-size",
+    "theme"
+  ],
+  "hero": {
+    "title": "Whose Body Is It?",
+    "intro": [
+      "A clear-eyed book on safety, honour, gender and respect. For the girl walking home, the boy who is learning what \"no\" means, the parent who is worried, and the elder who grew up in a different time.",
+      "Read it simply. Tap \"Deeper\" at the top whenever you want the root causes, the research and the hard arguments."
+    ],
+    "actions": [
+      {
+        "label": "Begin",
+        "targetSectionId": "chapter-1",
+        "emphasis": "primary"
+      },
+      {
+        "label": "Jump to the arguments",
+        "targetSectionId": "chapter-7",
+        "emphasis": "secondary"
+      }
+    ]
+  },
+  "sections": [
+    {
+      "id": "chapter-1",
+      "kicker": "Chapter 1 · Why this book",
+      "title": "A phone buzzes. A family goes quiet.",
+      "accent": "rose",
+      "blocks": [
+        {
+          "id": "chapter-1-paragraph-1",
+          "type": "paragraph",
+          "variant": "lead",
+          "content": [
+            {
+              "text": "Every few months a story shakes the country. A girl and a boy coming home from coaching are stopped, surrounded and humiliated while strangers film it. We feel anger. Then the arguments begin, and the arguments often hurt as much as the news."
+            }
+          ]
+        },
+        {
+          "id": "chapter-1-paragraph-2",
+          "type": "paragraph",
+          "variant": "body",
+          "content": [
+            {
+              "text": "\"Why was she there?\" \"Girls should be careful.\" \"Hang them all.\" \"Not all men.\" \"It's the village mindset.\" \"It's feminism's fault.\" Everyone shouts, nobody listens, and the girl, who did nothing wrong, is forgotten."
+            }
+          ]
+        },
+        {
+          "id": "chapter-1-paragraph-3",
+          "type": "paragraph",
+          "variant": "body",
+          "content": [
+            {
+              "text": "This book slows the shouting down. It does not ask you to pick a team. It asks you to hold several true things at once, and to be brave enough to say all of them."
+            }
+          ]
+        },
+        {
+          "id": "chapter-1-callout-4",
+          "type": "callout",
+          "content": [
+            {
+              "text": "A person can be given advice to reduce a risk without giving the person who harms them an excuse."
+            }
+          ]
+        },
+        {
+          "id": "chapter-1-deeper-5",
+          "type": "deeper",
+          "blocks": [
+            {
+              "id": "chapter-1-deeper-5-p1",
+              "type": "paragraph",
+              "variant": "body",
+              "content": [
+                {
+                  "text": "Most online debates fail because each side hears a different claim. One person says \"gender norms shape violence\" and the other hears \"all men are guilty.\" One says \"be careful\" and the other hears \"it was your fault.\" Separating "
+                },
+                {
+                  "text": "risk",
+                  "marks": [
+                    "strong"
+                  ]
+                },
+                {
+                  "text": " from "
+                },
+                {
+                  "text": "responsibility",
+                  "marks": [
+                    "strong"
+                  ]
+                },
+                {
+                  "text": ", "
+                },
+                {
+                  "text": "pattern",
+                  "marks": [
+                    "strong"
+                  ]
+                },
+                {
+                  "text": " from "
+                },
+                {
+                  "text": "person",
+                  "marks": [
+                    "strong"
+                  ]
+                },
+                {
+                  "text": ", and "
+                },
+                {
+                  "text": "motive",
+                  "marks": [
+                    "strong"
+                  ]
+                },
+                {
+                  "text": " from "
+                },
+                {
+                  "text": "conduct",
+                  "marks": [
+                    "strong"
+                  ]
+                },
+                {
+                  "text": " removes most of the heat."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chapter-2",
+      "kicker": "Chapter 2 · The one idea",
+      "title": "Your body is yours. Nobody else's.",
+      "accent": "teal",
+      "blocks": [
+        {
+          "id": "chapter-2-paragraph-1",
+          "type": "paragraph",
+          "variant": "lead",
+          "content": [
+            {
+              "text": "Everything in this book grows from one sentence. No person's body becomes another person's property because of sex, clothes, marriage, drink, caste, family name or a community's idea of honour."
+            }
+          ]
+        },
+        {
+          "id": "chapter-2-card-2",
+          "type": "card",
+          "label": "For a child:",
+          "content": [
+            {
+              "text": "If something feels wrong, you may say no, even to a grown-up, and you will not be in trouble for telling."
+            }
+          ]
+        },
+        {
+          "id": "chapter-2-card-3",
+          "type": "card",
+          "label": "For a teenager:",
+          "content": [
+            {
+              "text": "\"No\" is a full sentence. So is silence, fear, or being too drunk to answer. Only a clear, free \"yes\" is a yes."
+            }
+          ]
+        },
+        {
+          "id": "chapter-2-card-4",
+          "type": "card",
+          "label": "For an adult:",
+          "content": [
+            {
+              "text": "Marriage, love, a date, a favour or a job does not cancel this. Consent can be taken back at any moment."
+            }
+          ]
+        },
+        {
+          "id": "chapter-2-callout-5",
+          "type": "callout",
+          "content": [
+            {
+              "text": "Respecting this is not weakness. It is what strength looks like."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chapter-3",
+      "kicker": "Chapter 3 · Root causes",
+      "title": "Violence does not appear from nowhere",
+      "accent": "violet",
+      "blocks": [
+        {
+          "id": "chapter-3-paragraph-1",
+          "type": "paragraph",
+          "variant": "body",
+          "content": [
+            {
+              "text": "Think of a tree. The harm is the fruit we see on the news. But roots run deep. Tap each layer to see what feeds it."
+            }
+          ]
+        },
+        {
+          "id": "chapter-3-accordion-2",
+          "type": "accordion",
+          "variant": "layers",
+          "items": [
+            {
+              "id": "layer-1",
+              "title": "The fruit: the harm",
+              "body": "An act that overrides someone's will, often with a video or threats added to deepen humiliation.",
+              "accent": "rose"
+            },
+            {
+              "id": "layer-2",
+              "title": "The moment: opportunity",
+              "body": "Being alone, drink, a gap in authority, a crowd, and the belief that nothing will happen to me.",
+              "accent": "ochre"
+            },
+            {
+              "id": "layer-3",
+              "title": "The group: peers",
+              "body": "Friends who laugh at aggression, reward 'conquest' or stay silent. Bystanders can feed it or stop it.",
+              "accent": "plum"
+            },
+            {
+              "id": "layer-4",
+              "title": "The mind: beliefs",
+              "body": "Entitlement ('she owes me'), hostility toward women, and not hearing 'no' as final. Poor impulse control adds to it.",
+              "accent": "violet"
+            },
+            {
+              "id": "layer-5",
+              "title": "The home: what children see",
+              "body": "Where women obey and men decide, where violence is normal, where a girl's body is 'family honour'.",
+              "accent": "blue"
+            },
+            {
+              "id": "layer-6",
+              "title": "The soil: society and institutions",
+              "body": "Weak policing, slow courts, shaming of survivors, poor lighting and transport, and little money or exit for women.",
+              "accent": "teal"
+            }
+          ]
+        },
+        {
+          "id": "chapter-3-paragraph-3",
+          "type": "paragraph",
+          "variant": "body",
+          "content": [
+            {
+              "text": "Two warnings. A risk factor is not a prediction: most people who grow up around violence never harm anyone. And not every offender is driven by hatred of women. Some are driven by power, impulse, a group's approval or the belief that they will never be caught."
+            }
+          ]
+        },
+        {
+          "id": "chapter-3-deeper-4",
+          "type": "deeper",
+          "blocks": [
+            {
+              "id": "chapter-3-deeper-4-p1",
+              "type": "paragraph",
+              "variant": "body",
+              "content": [
+                {
+                  "text": "Public-health bodies such as the CDC and WHO list the same themes again and again: hostility toward women, acceptance of violence, rigid ideas of masculinity, peer groups that reward sexual aggression, alcohol and drugs, and weak community or institutional penalties. The better wording is: "
+                },
+                {
+                  "text": "sexual violence can be gendered without being reducible to hatred of women.",
+                  "marks": [
+                    "strong"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chapter-4",
+      "kicker": "Chapter 4 · Moral policing",
+      "title": "How \"honour\" becomes control",
+      "accent": "rose",
+      "blocks": [
+        {
+          "id": "chapter-4-paragraph-1",
+          "type": "paragraph",
+          "variant": "lead",
+          "content": [
+            {
+              "text": "It almost always starts with a sentence that sounds like care: \"Her behaviour reflects on our family.\" Tap each step and watch how far it travels."
+            }
+          ]
+        },
+        {
+          "id": "chapter-4-stepper-2",
+          "type": "stepper",
+          "accent": "rose",
+          "steps": [
+            {
+              "id": "rung-1",
+              "title": "1. \"That is wrong.\"",
+              "note": "A private opinion about clothes, friends, dating or a drink."
+            },
+            {
+              "id": "rung-2",
+              "title": "2. \"It affects our honour.\"",
+              "note": "Now her life belongs to the family and the community."
+            },
+            {
+              "id": "rung-3",
+              "title": "3. \"So we can judge.\"",
+              "note": "Gossip, labels, the word 'characterless'."
+            },
+            {
+              "id": "rung-4",
+              "title": "4. \"So we can intervene.\"",
+              "note": "Questioning, stopping, following, calling parents."
+            },
+            {
+              "id": "rung-5",
+              "title": "5. \"So we can control.\"",
+              "note": "Threats, confinement, forced marriage or silence."
+            },
+            {
+              "id": "rung-6",
+              "title": "6. Coercion and violence",
+              "note": "The final step. Every earlier step made this one feel normal."
+            }
+          ]
+        },
+        {
+          "id": "chapter-4-callout-3",
+          "type": "callout",
+          "content": [
+            {
+              "text": "The dangerous shift: a woman stops being a person with her own life and becomes \"a daughter, a sister, a wife, a symbol\", and the community starts to claim her choices."
+            }
+          ]
+        },
+        {
+          "id": "chapter-4-paragraph-4",
+          "type": "paragraph",
+          "variant": "body",
+          "content": [
+            {
+              "text": "A fair line:",
+              "marks": [
+                "strong"
+              ]
+            },
+            {
+              "text": " a parent may dislike a grown child's choices. Disapproval is not abuse. It becomes abuse when it turns into threats, confinement, humiliation, forced obedience, violence or \"punishment\"."
+            }
+          ]
+        },
+        {
+          "id": "chapter-4-paragraph-5",
+          "type": "paragraph",
+          "variant": "body",
+          "content": [
+            {
+              "text": "The asymmetry at the heart of it:",
+              "marks": [
+                "strong"
+              ]
+            },
+            {
+              "text": " a man's behaviour is treated as his own business. A woman's behaviour is treated as the family's and the community's business."
+            }
+          ]
+        },
+        {
+          "id": "chapter-4-deeper-6",
+          "type": "deeper",
+          "blocks": [
+            {
+              "id": "chapter-4-deeper-6-p1",
+              "type": "paragraph",
+              "variant": "body",
+              "content": [
+                {
+                  "text": "Backlash.",
+                  "marks": [
+                    "strong"
+                  ]
+                },
+                {
+                  "text": " When old arrangements are challenged, some people feel their status, identity or family order is under threat. That explains the reaction. It never excuses violence."
+                }
+              ]
+            },
+            {
+              "id": "chapter-4-deeper-6-p2",
+              "type": "paragraph",
+              "variant": "body",
+              "content": [
+                {
+                  "text": "Reverence is not freedom.",
+                  "marks": [
+                    "strong"
+                  ]
+                },
+                {
+                  "text": " A culture can worship women as mothers, goddesses and keepers of honour while limiting their movement, inheritance, sexuality and decisions. Ideals and everyday practice can pull apart. Naming that gap does not mean the tradition is bad. It means we ask how the ideal reaches real life."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chapter-5",
+      "kicker": "Chapter 5 · \"Dehati soch\"",
+      "title": "It is not about villages. It is about control.",
+      "accent": "ochre",
+      "blocks": [
+        {
+          "id": "chapter-5-paragraph-1",
+          "type": "paragraph",
+          "variant": "body",
+          "content": [
+            {
+              "text": "Many women know this moment: you live independently in a freer setting, then you enter a conservative community and are quietly judged \"characterless\" for your clothes, your male friends, your late nights, a drink or a cigarette."
+            }
+          ]
+        },
+        {
+          "id": "chapter-5-paragraph-2",
+          "type": "paragraph",
+          "variant": "body",
+          "content": [
+            {
+              "text": "The observation is real. But \"rural people are like this\" is too wide, and unfair to millions of kind villagers. The sharper idea is "
+            },
+            {
+              "text": "conservative, honour-based gender policing",
+              "marks": [
+                "strong"
+              ]
+            },
+            {
+              "text": ". It lives in villages, in cities, in rich homes, in offices with degrees on the wall and in every religion."
+            }
+          ]
+        },
+        {
+          "id": "chapter-5-card-3",
+          "type": "card",
+          "label": "Why villages can feel more intense:",
+          "content": [
+            {
+              "text": "everyone knows everyone, reputation is currency, families depend on each other and gossip travels fast. Close ties also bring real support. The same network can protect and watch at once."
+            }
+          ]
+        },
+        {
+          "id": "chapter-5-card-4",
+          "type": "card",
+          "label": "Modern outside, old inside:",
+          "content": [
+            {
+              "text": "someone can use the latest phone, work for a multinational and live in a metro while holding old beliefs about women's sexuality. Economic modernisation and attitude modernisation are different things."
+            }
+          ]
+        },
+        {
+          "id": "chapter-5-callout-5",
+          "type": "callout",
+          "content": [
+            {
+              "text": "Question the belief, not the whole place or people it comes from."
+            }
+          ]
+        },
+        {
+          "id": "chapter-5-deeper-6",
+          "type": "deeper",
+          "blocks": [
+            {
+              "id": "chapter-5-deeper-6-p1",
+              "type": "paragraph",
+              "variant": "body",
+              "content": [
+                {
+                  "text": "The Jamui case (as reported in September 2026).",
+                  "marks": [
+                    "strong"
+                  ]
+                },
+                {
+                  "text": " News reports describe an incident on 19 September in which a teenage girl and a male classmate, returning from coaching around 6 to 7 in the evening, were stopped and surrounded by a group, with assault, filming and circulation of the video. A case was registered under BNS and POCSO provisions, an SIT was formed and arrests were reported. "
+                },
+                {
+                  "text": "What it can show:",
+                  "marks": [
+                    "strong"
+                  ]
+                },
+                {
+                  "text": " how \"I disapprove\" slides into \"I can stop you\" and \"I can control you\". "
+                },
+                {
+                  "text": "What it cannot show:",
+                  "marks": [
+                    "strong"
+                  ]
+                },
+                {
+                  "text": " that the whole village thinks this way, or what each accused person's motive was. That is for investigators. Please never share the victim's identity or video. Also beware: unrelated old clips were falsely passed off online as arrest footage. Facts can change as the case develops, so check current reports."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chapter-6",
+      "kicker": "Chapter 6 · Risk or blame?",
+      "title": "\"Why was she out at night?\"",
+      "accent": "blue",
+      "blocks": [
+        {
+          "id": "chapter-6-paragraph-1",
+          "type": "paragraph",
+          "variant": "lead",
+          "content": [
+            {
+              "text": "Safety advice and blame can use almost the same words. The difference is who ends up carrying the guilt."
+            }
+          ]
+        },
+        {
+          "id": "chapter-6-card-2",
+          "type": "card",
+          "label": "The laptop test.",
+          "content": [
+            {
+              "text": "Leaving a laptop on a car seat raises the chance of theft. It does not make the thief the owner. Reducing risk and assigning responsibility are two separate questions."
+            }
+          ]
+        },
+        {
+          "id": "chapter-6-card-3",
+          "type": "card",
+          "label": "The clock test.",
+          "content": [
+            {
+              "text": "If the same judgment is made at 2 a.m., 10 p.m., 7 p.m., 5 p.m., at work, at home and inside marriage, it is about "
+            },
+            {
+              "text": "respectability",
+              "marks": [
+                "em"
+              ]
+            },
+            {
+              "text": ", not safety."
+            }
+          ]
+        },
+        {
+          "id": "chapter-6-paragraph-4",
+          "type": "paragraph",
+          "variant": "body",
+          "content": [
+            {
+              "text": "Try it. Is this fair safety advice, or victim-blaming?"
+            }
+          ]
+        },
+        {
+          "id": "chapter-6-classify-5",
+          "type": "classify",
+          "categories": [
+            {
+              "id": "safety",
+              "label": "Safety advice",
+              "accent": "teal"
+            },
+            {
+              "id": "blame",
+              "label": "Blame",
+              "accent": "rose"
+            }
+          ],
+          "items": [
+            {
+              "id": "statement-1",
+              "text": "Share your live location with a friend when you travel late.",
+              "answer": "safety",
+              "feedback": "Right. It is an offer of practical help, and it puts no blame on anyone."
+            },
+            {
+              "id": "statement-2",
+              "text": "What did she expect, dressed like that?",
+              "answer": "blame",
+              "feedback": "Blame. Clothes are never consent, and this moves guilt to the victim."
+            },
+            {
+              "id": "statement-3",
+              "text": "Boys will be boys.",
+              "answer": "blame",
+              "feedback": "Blame in disguise. It excuses the person who chose to harm."
+            },
+            {
+              "id": "statement-4",
+              "text": "Let us ask the city to fix the broken streetlights on that road.",
+              "answer": "safety",
+              "feedback": "Yes. Safer environments are part of prevention. This asks the system to change."
+            },
+            {
+              "id": "statement-5",
+              "text": "Why was she even out with a boy?",
+              "answer": "blame",
+              "feedback": "Blame. The question is about her respectability, not about the offender's choice."
+            },
+            {
+              "id": "statement-6",
+              "text": "Keep a trusted number on speed dial and tell us when you reach.",
+              "answer": "safety",
+              "feedback": "Fine, if said with care and not as a condition for her freedom."
+            }
+          ],
+          "closing": "The same words can be care or blame depending on who they punish."
+        },
+        {
+          "id": "chapter-6-deeper-6",
+          "type": "deeper",
+          "blocks": [
+            {
+              "id": "chapter-6-deeper-6-t1",
+              "type": "compare-table",
+              "columns": [
+                "Claim",
+                "What can be true",
+                "What does not follow"
+              ],
+              "rows": [
+                [
+                  "\"The area was risky.\"",
+                  "The risk can be real.",
+                  "The victim caused the crime."
+                ],
+                [
+                  "\"She could have taken another route.\"",
+                  "Precautions can reduce exposure.",
+                  "She consented to harm."
+                ],
+                [
+                  "\"She knew men can be dangerous.\"",
+                  "Awareness informs choices.",
+                  "The offender got permission."
+                ],
+                [
+                  "\"Her clothes attracted attention.\"",
+                  "People notice clothes.",
+                  "Attention equals consent."
+                ],
+                [
+                  "\"She should be more careful.\"",
+                  "Caution can help.",
+                  "Responsibility moves to her."
+                ]
+              ]
+            },
+            {
+              "id": "chapter-6-deeper-6-p2",
+              "type": "paragraph",
+              "variant": "body",
+              "content": [
+                {
+                  "text": "Also remember: most sexual violence is not a stranger in a dark alley. It is usually someone the victim knows, such as a partner, an acquaintance or a person in authority. With children, \"why did she go there?\" is never an adequate question."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chapter-7",
+      "kicker": "Chapter 7 · The arguments",
+      "title": "What people say on X, and honest answers",
+      "accent": "plum",
+      "blocks": [
+        {
+          "id": "chapter-7-paragraph-1",
+          "type": "paragraph",
+          "variant": "body",
+          "content": [
+            {
+              "text": "Tap a card to open the answer. Each answer tries to keep what is true in the claim and drop what does not follow. Filter by theme."
+            }
+          ]
+        },
+        {
+          "id": "chapter-7-claims-2",
+          "type": "claims",
+          "accent": "plum",
+          "label": "They say:",
+          "hint": "Tap for a fair answer",
+          "allLabel": "All",
+          "themes": [
+            {
+              "id": "women",
+              "label": "About women and feminism"
+            },
+            {
+              "id": "men",
+              "label": "About men"
+            },
+            {
+              "id": "law",
+              "label": "About law and society"
+            }
+          ],
+          "items": [
+            {
+              "id": "claim-1",
+              "theme": "women",
+              "claim": "No country is safe, so why complain?",
+              "response": "True: no society has solved this. But 'nowhere is perfect' cannot mean 'nothing can improve'. Countries differ a lot in reporting, policing and public safety. Saying it is global is a reason to act everywhere."
+            },
+            {
+              "id": "claim-2",
+              "theme": "women",
+              "claim": "Why was she out at night?",
+              "response": "It is a fair question only when asked as 'how can we make roads safer?' It becomes unfair when it means 'she caused it'. The harm began with a person who chose to do it. Also, this happened at 6 to 7 p.m. in a case in the news, so the 'night' argument is often about respectability, not safety."
+            },
+            {
+              "id": "claim-3",
+              "theme": "women",
+              "claim": "She should have known men are dangerous.",
+              "response": "Knowing a risk exists never gives anyone permission. Most of us know bike thieves exist, but we do not blame the bike owner."
+            },
+            {
+              "id": "claim-4",
+              "theme": "women",
+              "claim": "Women should stay within cultural limits.",
+              "response": "Traditions can be freely chosen, and many women do choose them. The issue is coercion. If she can say no without punishment, it is tradition. If she cannot, it is control."
+            },
+            {
+              "id": "claim-5",
+              "theme": "women",
+              "claim": "Dressing modestly will keep women safe.",
+              "response": "Assault happens to people of every age and in every kind of clothing, and most offenders are known to the victim. Clothes do not decide whether someone will cross a line."
+            },
+            {
+              "id": "claim-6",
+              "theme": "women",
+              "claim": "Feminism means women can do anything without consequences.",
+              "response": "No serious school of feminism says that. Equal rights come with equal responsibility. Equal does not mean immune."
+            },
+            {
+              "id": "claim-7",
+              "theme": "women",
+              "claim": "Feminism is anti-men.",
+              "response": "Some voices are. They can and should be criticised. But the core demand, equal rights and bodily autonomy, benefits men too, including male survivors and boys pushed into harmful ideas of manhood."
+            },
+            {
+              "id": "claim-8",
+              "theme": "men",
+              "claim": "It is about strength, not gender. If women were stronger, men would be the victims.",
+              "response": "Strength matters, but power is wider: threats, money, authority, housing, isolation, blackmail, drink, group pressure and position. That argument cannot explain abuse of children, abuse in marriage or by a boss. Strength creates vulnerability, norms decide who is expected to submit, and institutions decide whether it is challenged."
+            },
+            {
+              "id": "claim-9",
+              "theme": "men",
+              "claim": "All men are dangerous.",
+              "response": "No. This is an unfair generalisation. Take male violence seriously because patterns exist, and respect the huge majority of men who never harm anyone. Both stand together."
+            },
+            {
+              "id": "claim-10",
+              "theme": "men",
+              "claim": "Not all men! Why do you keep blaming men?",
+              "response": "Correct, not all men. Good men do not need to feel attacked. They can lead by speaking up when friends joke about aggression, because peers shape peers."
+            },
+            {
+              "id": "claim-11",
+              "theme": "men",
+              "claim": "Women can be violent too.",
+              "response": "Yes, and male victims deserve belief and help. Bodily autonomy is universal. It does not wipe out population-level patterns, and the patterns do not wipe out male victims."
+            },
+            {
+              "id": "claim-12",
+              "theme": "men",
+              "claim": "False cases are common, so do not believe every woman.",
+              "response": "False reports exist and should be punished when proven. Due process protects everyone. But their existence does not show most reports are false. The answer is a fair, competent investigation, not blanket disbelief."
+            },
+            {
+              "id": "claim-13",
+              "theme": "law",
+              "claim": "Give the harshest punishment, then it will end.",
+              "response": "The research says certainty of getting caught works better than severity alone. Harsh punishment can still be a form of justice and protection. Add faster investigations, trusted police and courts, and change in attitudes."
+            },
+            {
+              "id": "claim-14",
+              "theme": "law",
+              "claim": "The law is useless. Nothing changes.",
+              "response": "Law alone is not enough, but it sets the line, protects survivors and makes accountability believable. It works best with families, schools and communities who back it."
+            },
+            {
+              "id": "claim-15",
+              "theme": "law",
+              "claim": "It is a village mindset (dehati soch).",
+              "response": "Partly right about honour policing, wrong as a blanket label. The same control happens in cities, rich families and educated circles. Name the belief, not the place."
+            },
+            {
+              "id": "claim-16",
+              "theme": "law",
+              "claim": "Why discuss feelings? Just teach girls self-defence.",
+              "response": "Self-defence and safety skills help and are worth teaching. But they only cut exposure. Without teaching consent and changing norms, we keep treating the symptom."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chapter-8",
+      "kicker": "Chapter 8 · Punishment and culture",
+      "title": "Does fear change a society?",
+      "accent": "green",
+      "blocks": [
+        {
+          "id": "chapter-8-paragraph-1",
+          "type": "paragraph",
+          "variant": "lead",
+          "content": [
+            {
+              "text": "Many say \"hang them\" in the first hour of anger. That anger is understandable. But we should look at what works."
+            }
+          ]
+        },
+        {
+          "id": "chapter-8-paragraph-2",
+          "type": "paragraph",
+          "variant": "body",
+          "content": [
+            {
+              "text": "Research on deterrence, summarised by the US National Institute of Justice, finds that the "
+            },
+            {
+              "text": "certainty of getting caught",
+              "marks": [
+                "strong"
+              ]
+            },
+            {
+              "text": " matters more than how harsh the penalty is. Offenders often believe they will escape, act on impulse, are drunk, or are driven by anger and a wish to dominate. None of them are doing a careful sum about sentences."
+            }
+          ]
+        },
+        {
+          "id": "chapter-8-paragraph-3",
+          "type": "paragraph",
+          "variant": "body",
+          "content": [
+            {
+              "text": "Does that mean punishment is pointless? No. Punishment gives accountability, keeps dangerous people away from others and tells everyone that this harm is serious. It is just not enough alone."
+            }
+          ]
+        },
+        {
+          "id": "chapter-8-callout-4",
+          "type": "callout",
+          "content": [
+            {
+              "text": "\"I won't, because I fear prison\" is an outside fence. \"I won't, because another person's body is not mine to override\" is an inner fence. A society needs both, and the second one lasts."
+            }
+          ]
+        },
+        {
+          "id": "chapter-8-paragraph-5",
+          "type": "paragraph",
+          "variant": "body",
+          "content": [
+            {
+              "text": "Click to build the ladder from fear to culture:"
+            }
+          ]
+        },
+        {
+          "id": "chapter-8-stepper-6",
+          "type": "stepper",
+          "accent": "green",
+          "steps": [
+            {
+              "id": "level-1",
+              "title": "Law",
+              "note": "This behaviour is prohibited."
+            },
+            {
+              "id": "level-2",
+              "title": "Certainty",
+              "note": "Wrongdoing will likely be caught and acted on."
+            },
+            {
+              "id": "level-3",
+              "title": "Social norm",
+              "note": "People around me reject it."
+            },
+            {
+              "id": "level-4",
+              "title": "Personal morality",
+              "note": "I see the other person's autonomy."
+            },
+            {
+              "id": "level-5",
+              "title": "Identity",
+              "note": "Respecting boundaries is part of being strong and decent."
+            }
+          ]
+        },
+        {
+          "id": "chapter-8-deeper-7",
+          "type": "deeper",
+          "blocks": [
+            {
+              "id": "chapter-8-deeper-7-p1",
+              "type": "paragraph",
+              "variant": "body",
+              "content": [
+                {
+                  "text": "WHO's RESPECT Women framework (2025) names seven strategies: "
+                },
+                {
+                  "text": "R",
+                  "marks": [
+                    "strong"
+                  ]
+                },
+                {
+                  "text": "elationship skills, "
+                },
+                {
+                  "text": "E",
+                  "marks": [
+                    "strong"
+                  ]
+                },
+                {
+                  "text": "mpowerment of women, "
+                },
+                {
+                  "text": "S",
+                  "marks": [
+                    "strong"
+                  ]
+                },
+                {
+                  "text": "ervices, "
+                },
+                {
+                  "text": "P",
+                  "marks": [
+                    "strong"
+                  ]
+                },
+                {
+                  "text": "overty reduction, safer "
+                },
+                {
+                  "text": "E",
+                  "marks": [
+                    "strong"
+                  ]
+                },
+                {
+                  "text": "nvironments, "
+                },
+                {
+                  "text": "C",
+                  "marks": [
+                    "strong"
+                  ]
+                },
+                {
+                  "text": "hild and adolescent abuse prevention, and "
+                },
+                {
+                  "text": "T",
+                  "marks": [
+                    "strong"
+                  ]
+                },
+                {
+                  "text": "ransformed attitudes, beliefs and norms. Notice that law is only one part of a bigger picture."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chapter-9",
+      "kicker": "Chapter 9 · Feminism, fairly",
+      "title": "What to accept. What you may challenge.",
+      "accent": "pink",
+      "blocks": [
+        {
+          "id": "chapter-9-paragraph-1",
+          "type": "paragraph",
+          "variant": "body",
+          "content": [
+            {
+              "text": "Feminism is argued over fiercely, so let us be fair to both its supporters and its critics."
+            }
+          ]
+        },
+        {
+          "id": "chapter-9-card-2",
+          "type": "card",
+          "label": "Accept:",
+          "content": [
+            {
+              "text": "equal worth, equal rights, and bodily autonomy for all. A woman is not property, and her \"no\" is final."
+            }
+          ]
+        },
+        {
+          "id": "chapter-9-card-3",
+          "type": "card",
+          "label": "Equality is not sameness.",
+          "content": [
+            {
+              "text": "Equal worth does not require pretending that everyone has identical bodies, tastes or roles."
+            }
+          ]
+        },
+        {
+          "id": "chapter-9-card-4",
+          "type": "card",
+          "label": "Freedom is not rebellion.",
+          "content": [
+            {
+              "text": "Choosing a traditional life can be free. Rejecting it can be free. The question is always: was it her own choice?"
+            }
+          ]
+        },
+        {
+          "id": "chapter-9-card-5",
+          "type": "card",
+          "label": "Empowerment is not exemption.",
+          "content": [
+            {
+              "text": "Equal rights come with equal responsibility for harmful conduct."
+            }
+          ]
+        },
+        {
+          "id": "chapter-9-card-6",
+          "type": "card",
+          "label": "Feminism is not one voice.",
+          "content": [
+            {
+              "text": "Feminists disagree about family, religion, sex, work, motherhood and masculinity."
+            }
+          ]
+        },
+        {
+          "id": "chapter-9-card-7",
+          "type": "card",
+          "label": "You may criticise:",
+          "content": [
+            {
+              "text": "selective empathy, hatred of men, ideological overreach, or treating every disagreement as evil. You can say this and still believe in women's equality."
+            }
+          ]
+        },
+        {
+          "id": "chapter-9-card-8",
+          "type": "card",
+          "label": "Handle \"patriarchy\" with care.",
+          "content": [
+            {
+              "text": "It names systems of unequal authority well. It should not be a magic word that explains every difference between men and women or every individual act."
+            }
+          ]
+        },
+        {
+          "id": "chapter-9-callout-9",
+          "type": "callout",
+          "content": [
+            {
+              "text": "Support equal rights and bodily autonomy, and stay free to criticise anyone, however righteous their cause, who behaves unfairly."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chapter-10",
+      "kicker": "Chapter 10 · Boys, men and fairness",
+      "title": "Men are not the enemy. Men are half of the answer.",
+      "accent": "indigo",
+      "blocks": [
+        {
+          "id": "chapter-10-paragraph-1",
+          "type": "paragraph",
+          "variant": "lead",
+          "content": [
+            {
+              "text": "If this book only warned women, it would be half a book. Boys need a picture of strength that does not need anyone to submit."
+            }
+          ]
+        },
+        {
+          "id": "chapter-10-card-2",
+          "type": "card",
+          "label": "Healthy masculinity:",
+          "content": [
+            {
+              "text": "strength includes self-control. Confidence includes handling rejection. Protection does not mean ownership. Leadership does not mean one-man authority. Sexual success never means overcoming someone's resistance."
+            }
+          ]
+        },
+        {
+          "id": "chapter-10-card-3",
+          "type": "card",
+          "label": "Courage, duty and protectiveness are not anti-woman.",
+          "content": [
+            {
+              "text": "They turn harmful only when mixed with entitlement or domination."
+            }
+          ]
+        },
+        {
+          "id": "chapter-10-card-4",
+          "type": "card",
+          "label": "Men can be victims.",
+          "content": [
+            {
+              "text": "Bodily autonomy is universal, so male survivors deserve belief and care too. This does not erase the gendered patterns in the data, and the data does not erase male victims."
+            }
+          ]
+        },
+        {
+          "id": "chapter-10-card-5",
+          "type": "card",
+          "label": "False allegations exist, and so does due process.",
+          "content": [
+            {
+              "text": "A fair system investigates carefully, protects the accused and punishes proven lies. But some false reports do not show most reports are false. Survivors should be heard. The accused should get a fair hearing. Both can be true."
+            }
+          ]
+        },
+        {
+          "id": "chapter-10-deeper-6",
+          "type": "deeper",
+          "blocks": [
+            {
+              "id": "chapter-10-deeper-6-p1",
+              "type": "paragraph",
+              "variant": "body",
+              "content": [
+                {
+                  "text": "Do not turn these points into weapons. \"Men can be victims\" should widen protection, not be used to dismiss women. \"Women are more often victims\" should not be used to dismiss men."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chapter-11",
+      "kicker": "Chapter 11 · Easy to miss",
+      "title": "Eleven things that rarely make the headline",
+      "accent": "rose",
+      "blocks": [
+        {
+          "id": "chapter-11-card-1",
+          "type": "card",
+          "label": "1.",
+          "content": [
+            {
+              "text": "Most sexual violence is by someone the victim knows, not a stranger in an alley."
+            }
+          ]
+        },
+        {
+          "id": "chapter-11-card-2",
+          "type": "card",
+          "label": "2.",
+          "content": [
+            {
+              "text": "Marriage does not erase consent."
+            }
+          ]
+        },
+        {
+          "id": "chapter-11-card-3",
+          "type": "card",
+          "label": "3.",
+          "content": [
+            {
+              "text": "Children need special protection. Grooming, authority and dependency make 'why did she go?' wholly inadequate."
+            }
+          ]
+        },
+        {
+          "id": "chapter-11-card-4",
+          "type": "card",
+          "label": "4.",
+          "content": [
+            {
+              "text": "Digital abuse is real: recording, threats to publish and circulation are tools of humiliation."
+            }
+          ]
+        },
+        {
+          "id": "chapter-11-card-5",
+          "type": "card",
+          "label": "5.",
+          "content": [
+            {
+              "text": "Bystanders matter. A group can excuse harm or interrupt it."
+            }
+          ]
+        },
+        {
+          "id": "chapter-11-card-6",
+          "type": "card",
+          "label": "6.",
+          "content": [
+            {
+              "text": "Money matters. Rights are hard to use when housing, income or education depend on the person controlling you."
+            }
+          ]
+        },
+        {
+          "id": "chapter-11-card-7",
+          "type": "card",
+          "label": "7.",
+          "content": [
+            {
+              "text": "Safety infrastructure matters: transport, lighting, public spaces and responsive police."
+            }
+          ]
+        },
+        {
+          "id": "chapter-11-card-8",
+          "type": "card",
+          "label": "8.",
+          "content": [
+            {
+              "text": "Statistics have limits. Recorded crime reflects both what happens and what gets reported."
+            }
+          ]
+        },
+        {
+          "id": "chapter-11-card-9",
+          "type": "card",
+          "label": "9.",
+          "content": [
+            {
+              "text": "City versus village is not simple. Cities lower community watching but bring other risks. Villages can both support and surveil."
+            }
+          ]
+        },
+        {
+          "id": "chapter-11-card-10",
+          "type": "card",
+          "label": "10.",
+          "content": [
+            {
+              "text": "Caste and class interact with gender. They affect who is believed and whose reputation counts."
+            }
+          ]
+        },
+        {
+          "id": "chapter-11-card-11",
+          "type": "card",
+          "label": "11.",
+          "content": [
+            {
+              "text": "Being harmed does not make someone powerless, and never makes them responsible for what was done to them."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chapter-12",
+      "kicker": "Chapter 12 · What you can do",
+      "title": "Prevention belongs to everyone",
+      "accent": "teal",
+      "blocks": [
+        {
+          "id": "chapter-12-paragraph-1",
+          "type": "paragraph",
+          "variant": "lead",
+          "content": [
+            {
+              "text": "Teaching girls safety and teaching boys consent are not rivals. One lowers exposure, the other lowers harm done, and strong institutions lower impunity."
+            }
+          ]
+        },
+        {
+          "id": "chapter-12-selector-content-2",
+          "type": "selector-content",
+          "options": [
+            {
+              "id": "a-child",
+              "label": "A child",
+              "content": "Know the names of your body parts. You may say no. Tell a trusted grown-up about any secret that makes you uneasy. It is never your fault."
+            },
+            {
+              "id": "a-teenager",
+              "label": "A teenager",
+              "content": "Ask clearly and accept 'no' without sulking or pressure. Never film or share private images. If a friend jokes about aggression, say 'not funny'."
+            },
+            {
+              "id": "a-parent",
+              "label": "A parent",
+              "content": "Teach your sons and daughters the same rule about bodies. Stay approachable, so a child tells you before a stranger. Do not make your daughter the carrier of family honour."
+            },
+            {
+              "id": "an-elder",
+              "label": "An elder",
+              "content": "Your words carry weight. Defend a grandchild's right to choose, and challenge the saying 'what will people say'. Respect and control are not the same."
+            },
+            {
+              "id": "a-man",
+              "label": "A man",
+              "content": "Respect rejection. Speak up when your circle mocks or pressures women. Real protection means making space, not owning."
+            },
+            {
+              "id": "a-woman",
+              "label": "A woman",
+              "content": "You deserve safety and freedom, and you do not owe anyone an explanation for your choices. Share your plans with people you trust. Support other women without gossip."
+            },
+            {
+              "id": "a-teacher-or-leader",
+              "label": "A teacher or leader",
+              "content": "Teach consent in school and workplace. Build real reporting channels. Protect those who speak up. Never ask a survivor 'why?'"
+            }
+          ],
+          "defaultOptionId": "a-child"
+        },
+        {
+          "id": "chapter-12-callout-3",
+          "type": "callout",
+          "content": [
+            {
+              "text": "The ideal end: the law does not need to stand in every room, because every person already carries the boundary inside."
+            }
+          ]
+        },
+        {
+          "id": "chapter-12-resource-box-4",
+          "type": "resource-box",
+          "title": "If you or someone you know needs help (India)",
+          "items": [
+            {
+              "id": "line-112",
+              "value": "112",
+              "label": "emergency police"
+            },
+            {
+              "id": "line-181",
+              "value": "181",
+              "label": "women's helpline"
+            },
+            {
+              "id": "line-1098",
+              "value": "1098",
+              "label": "Childline"
+            },
+            {
+              "id": "line-1930",
+              "value": "1930",
+              "label": "cyber-crime helpline",
+              "detail": "also cybercrime.gov.in for reporting online abuse or leaked videos"
+            }
+          ],
+          "note": "If you are in danger, call now. If you are a survivor: it was not your fault, and you deserve support."
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "who-vaw-fact-sheet",
+      "citation": "WHO, Violence Against Women fact sheet"
+    },
+    {
+      "id": "who-respect-women",
+      "citation": "WHO, RESPECT Women (2nd ed., 2025)"
+    },
+    {
+      "id": "cdc-sv-risk-factors",
+      "citation": "CDC, sexual violence risk and protective factors"
+    },
+    {
+      "id": "nij-deterrence",
+      "citation": "National Institute of Justice, Five Things About Deterrence"
+    },
+    {
+      "id": "un-women-gender-norms",
+      "citation": "UN Women, material on gender norms and stereotypes"
+    },
+    {
+      "id": "bns-2023",
+      "citation": "Bharatiya Nyaya Sanhita 2023"
+    },
+    {
+      "id": "jamui-reporting-2026",
+      "citation": "September 2026 reporting by Indian Express, Times of India and India Today on the Jamui incident"
+    }
+  ],
+  "datasets": [],
+  "endnotes": [
+    {
+      "id": "sources",
+      "type": "source-list",
+      "lead": "Sources used for the underlying facts:",
+      "sourceIds": [
+        "who-vaw-fact-sheet",
+        "who-respect-women",
+        "cdc-sv-risk-factors",
+        "nij-deterrence",
+        "un-women-gender-norms",
+        "bns-2023",
+        "jamui-reporting-2026"
+      ]
+    },
+    {
+      "id": "disclaimer",
+      "type": "paragraph",
+      "variant": "body",
+      "content": [
+        {
+          "text": "This is an educational book, not legal advice or a systematic review. Risk factors are not destiny, and open criminal cases can change."
+        }
+      ]
+    }
+  ]
+}

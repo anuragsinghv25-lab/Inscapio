@@ -1,0 +1,388 @@
+{
+  "schemaVersion": 1,
+  "id": "climate",
+  "slug": "climate",
+  "kind": "data-story",
+  "title": "What will your city feel like in 2070?",
+  "shortTitle": "Your city in 2070",
+  "language": "en",
+  "summary": "Explore how a changing climate could transform the places we know.",
+  "theme": "tarn",
+  "reading": [
+    "deeper"
+  ],
+  "hero": {
+    "title": "What will your city feel like in 2070?",
+    "intro": [
+      "You can’t picture 2.5 °C. You can picture Madrid in August. Pick a city, drag time forward, and see which place it starts to resemble."
+    ],
+    "actions": [
+      {
+        "label": "Begin",
+        "targetSectionId": "pattern",
+        "emphasis": "primary"
+      }
+    ]
+  },
+  "sections": [
+    {
+      "id": "pattern",
+      "title": "A climate is a pattern, not a day.",
+      "blocks": [
+        {
+          "id": "pattern-intro",
+          "type": "paragraph",
+          "variant": "body",
+          "content": [
+            {
+              "text": "Scientists sort climates with a few questions about a place’s year:"
+            }
+          ]
+        },
+        {
+          "id": "pattern-questions",
+          "type": "fact-row",
+          "items": [
+            {
+              "id": "question-1",
+              "title": "How hot?",
+              "text": "The warmest month"
+            },
+            {
+              "id": "question-2",
+              "title": "How cold?",
+              "text": "The coldest month"
+            },
+            {
+              "id": "question-3",
+              "title": "How dry?",
+              "text": "How much rain, and when"
+            }
+          ]
+        },
+        {
+          "id": "pattern-label",
+          "type": "paragraph",
+          "variant": "body",
+          "content": [
+            {
+              "text": "Answer those and a city gets a label. When the answers shift, the label can too, which is why a warming world changes where a city “belongs”."
+            }
+          ]
+        },
+        {
+          "id": "pattern-koppen",
+          "type": "deeper",
+          "blocks": [
+            {
+              "id": "pattern-koppen-note",
+              "type": "paragraph",
+              "variant": "body",
+              "content": [
+                {
+                  "text": "This follows the idea of the Köppen classification, drawn up in the early 1900s. This demo uses a simplified rule set with one rough dryness flag per city, so labels are approximate."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "explore",
+      "title": "Choose a city. Drag time.",
+      "blocks": [
+        {
+          "id": "city-scrubber",
+          "type": "scrubber-chart",
+          "datasetId": "city-temperatures",
+          "groupSelector": {
+            "label": "Choose a city",
+            "initialGroupId": "london"
+          },
+          "stepControl": {
+            "label": "Year"
+          },
+          "chart": {
+            "title": "Monthly temperature chart",
+            "yMin": -12,
+            "yMax": 42,
+            "yTicks": [
+              0,
+              10,
+              20,
+              30,
+              40
+            ],
+            "valueSuffix": "°"
+          },
+          "legend": {
+            "first": [
+              {
+                "token": "group"
+              },
+              {
+                "text": " today"
+              }
+            ],
+            "now": [
+              {
+                "token": "group"
+              },
+              {
+                "text": " in "
+              },
+              {
+                "token": "step"
+              }
+            ],
+            "match": [
+              {
+                "token": "match"
+              },
+              {
+                "text": " today"
+              }
+            ]
+          },
+          "headline": {
+            "atFirstStep": [
+              {
+                "token": "group"
+              },
+              {
+                "text": " today. Drag forward to see where its climate is heading."
+              }
+            ],
+            "later": [
+              {
+                "text": "In "
+              },
+              {
+                "token": "step"
+              },
+              {
+                "text": ", "
+              },
+              {
+                "token": "group"
+              },
+              {
+                "text": " feels most like "
+              },
+              {
+                "token": "match",
+                "marks": [
+                  "strong"
+                ]
+              },
+              {
+                "text": " does today."
+              }
+            ]
+          },
+          "stats": [
+            {
+              "kind": "high",
+              "label": "warmest month"
+            },
+            {
+              "kind": "low",
+              "label": "coldest month"
+            },
+            {
+              "kind": "category",
+              "label": "simplified type",
+              "changedFrom": ", changed from"
+            }
+          ],
+          "prediction": {
+            "question": [
+              {
+                "text": "Before you drag: which city’s climate will "
+              },
+              {
+                "token": "group"
+              },
+              {
+                "text": " come closest to by "
+              },
+              {
+                "token": "lastStep"
+              },
+              {
+                "text": "?"
+              }
+            ],
+            "optionsByGroup": {
+              "london": [
+                "madrid",
+                "new-york",
+                "singapore"
+              ],
+              "paris": [
+                "madrid",
+                "singapore",
+                "sao-paulo"
+              ],
+              "madrid": [
+                "new-york",
+                "singapore",
+                "tokyo"
+              ],
+              "rome": [
+                "mexico-city",
+                "paris",
+                "sydney"
+              ],
+              "cairo": [
+                "delhi",
+                "singapore",
+                "sao-paulo"
+              ],
+              "dubai": [
+                "mumbai",
+                "singapore",
+                "sao-paulo"
+              ],
+              "delhi": [
+                "dubai",
+                "singapore",
+                "sao-paulo"
+              ],
+              "mumbai": [
+                "new-york",
+                "singapore",
+                "sao-paulo"
+              ],
+              "singapore": [
+                "cairo",
+                "mumbai",
+                "paris"
+              ],
+              "lagos": [
+                "mumbai",
+                "singapore",
+                "sao-paulo"
+              ],
+              "nairobi": [
+                "chicago",
+                "sao-paulo",
+                "toronto"
+              ],
+              "sydney": [
+                "new-york",
+                "singapore",
+                "sao-paulo"
+              ],
+              "sao-paulo": [
+                "cairo",
+                "dubai",
+                "paris"
+              ],
+              "mexico-city": [
+                "paris",
+                "rome",
+                "sao-paulo"
+              ],
+              "new-york": [
+                "london",
+                "madrid",
+                "tokyo"
+              ],
+              "chicago": [
+                "beijing",
+                "nairobi",
+                "toronto"
+              ],
+              "toronto": [
+                "chicago",
+                "nairobi",
+                "new-york"
+              ],
+              "moscow": [
+                "new-york",
+                "singapore",
+                "toronto"
+              ],
+              "beijing": [
+                "chicago",
+                "nairobi",
+                "tokyo"
+              ],
+              "tokyo": [
+                "rome",
+                "singapore",
+                "sao-paulo"
+              ]
+            },
+            "correctPrefix": "Close.",
+            "wrongPrefix": "Not quite.",
+            "reveal": [
+              {
+                "text": "In this demo model it’s "
+              },
+              {
+                "token": "match"
+              },
+              {
+                "text": ". Watch the year move to "
+              },
+              {
+                "token": "lastStep"
+              },
+              {
+                "text": "."
+              }
+            ]
+          },
+          "themeBinding": "warmth"
+        },
+        {
+          "id": "explore-analogue",
+          "type": "deeper",
+          "blocks": [
+            {
+              "id": "explore-analogue-note",
+              "type": "paragraph",
+              "variant": "body",
+              "content": [
+                {
+                  "text": "Analogue matching: we compare the city’s projected yearly mean and seasonal swing with every other city’s present values, and pick the nearest. Weighted: mean temperature counts double the seasonal swing."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "closing",
+      "title": "Weather changes daily. Climate moves slowly, then all at once.",
+      "blocks": [
+        {
+          "id": "closing-body",
+          "type": "paragraph",
+          "variant": "body",
+          "content": [
+            {
+              "text": "Nothing here tells you what will happen. It shows what a few degrees can mean when you attach them to a place you can picture."
+            }
+          ]
+        },
+        {
+          "id": "demo-data-note",
+          "type": "data-note",
+          "lead": "Demo data, not a forecast.",
+          "content": [
+            {
+              "text": "City temperatures are rounded approximations and the warming per city is an invented illustrative rule (more at higher latitudes). Real projections depend on emissions pathways and models; for real numbers see the IPCC Sixth Assessment Report and the Köppen-Geiger maps by Beck et al. (2018, CC BY 4.0)."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sources": [],
+  "endnotes": []
+}
