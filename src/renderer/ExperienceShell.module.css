@@ -42,7 +42,7 @@
   font: 600 0.95rem var(--font-display); cursor: pointer;
   display: inline-flex; align-items: center; justify-content: center;
 }
-:global([data-theme="tarn"]) .btn { background: none; border: var(--border-thin) solid #ffffff59; color: var(--color-on-dark); }
+:global([data-theme="tarn"]) .btn { background: none; border: var(--border-thin) solid var(--color-border-on-dark); color: var(--color-on-dark); }
 .btn[aria-pressed="true"] { background: var(--color-pressed-bg); border-color: var(--color-pressed-bg); color: var(--color-pressed-ink); }
 .progress {
   position: fixed; left: 0; width: 100%; height: 3px; z-index: 10;

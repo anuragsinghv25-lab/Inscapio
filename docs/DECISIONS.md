@@ -193,3 +193,76 @@ Template for new entries:
 - **Reason:** Aligns with D-008, privacy, and the "analytics that explain understanding" differentiator.
 - **Trade-offs:** Less flexible than a full analytics product; we build the dashboards.
 - **Status:** Proposed
+
+---
+
+# Decisions made in Phase 1 (schema, renderer, design system)
+
+Status for these entries is **Accepted (implemented on `phase-1/schema-renderer`)** unless stated; they become final when the PR is merged.
+
+## D-023 · Strict, closed, versioned content schema in Zod; 15 blocks
+- **Context:** D-004/D-020 require a validated vocabulary that can express v0.
+- **Decision:** Every object is `z.strictObject`; unknown keys (`style`, `html`, `onClick`, `className`) are rejected. Blocks are a discriminated union of exactly 15 types: `paragraph`, `callout`, `card`, `fact-row`, `compare-table`, `resource-box`, `source-list`, `data-note`, `deeper`, `accordion`, `stepper`, `claims`, `classify`, `selector-content`, `scrubber-chart`. Documents carry `schemaVersion: 1`. Rich text is a tiny AST (text with `strong`/`em`, and `sourceRef`). Text that looks like markup, non-https URLs and control characters are rejected.
+- **Reason:** Only what v0 needs; nothing speculative. Rejection at validation, plus React's text-only rendering, is two lines of defence.
+- **Differences from the Phase 0 proposal:** no `heading` block (section titles are structure); `source-note` split into `source-list` and `data-note`; no per-block `depth` field (see D-024); no `teaser`, `media`, `subtitle`, `derivedFrom`; no `image`/`quote`/`timeline`/`compare-slider`.
+- **Trade-offs:** adding a block is a schema + component + test + docs change (intended friction).
+
+## D-024 · "Deeper" is a container block with a closed set of children
+- **Context:** the proposal allowed `depth: "deeper"` on any block.
+- **Decision:** `deeper` is a block whose children are only `paragraph` or `compare-table`. Reader-wide state ("Deeper" toggle) is a data attribute on the experience root, so deeper blocks are shown by CSS.
+- **Reason:** v0 only ever deepens prose and one table; a per-block flag would have allowed deeper interactive blocks that nothing needs and that complicate the no-JS baseline.
+- **Trade-offs:** cannot deepen an interactive block. Revisit if a real experience needs it (Q-21).
+
+## D-025 · Datasets are first-class, and illustrative data must be disclosed structurally
+- **Decision:** `Dataset` carries `illustrative` and `provenance.kind` (`illustrative-model` | `publisher-supplied` | `cited-source`). Validation fails if an illustrative dataset is used by a block and the document has no `data-note` block. Dataset values live in `datasets/*.json`, merged by the loader.
+- **Reason:** principle 7 (honesty) enforced by the schema rather than by reviewers remembering.
+- **Trade-offs:** a data-note can be present but unhelpful; the check guards absence, not quality.
+
+## D-026 · Climate: precompute from v0's own model; the renderer does no modelling
+- **Decision:** `scripts/generate-climate-dataset.mjs` extracts v0's model code from the frozen file, runs it in a Node `vm`, and writes 20 cities x 45 years x 12 months (2 d.p.) plus per-(city, year) analogue, type, warmth, warmest and coldest month. Prediction options (decoys) are precomputed with v0's `guess()` logic. The renderer draws a periodic Catmull-Rom spline through the 12 values and interpolates linearly between years while a tween runs (curves exact, stats approximate mid-tween, discrete outputs use the nearest year).
+- **Reason:** v0's behaviour was code; this proves it can be expressed as data. Parity is testable against v0's runtime values.
+- **Result:** no schema escape hatch was needed. Cost: ~150 KB JSON (Q-18); publishers cannot change the model.
+- **Verified:** 900/900 city-years identical on analogue, type, warmth and extremes; worst monthly deviation 0.005 C (rounding).
+
+## D-027 · Fonts: Fontsource variable packages, self-hosted through the bundler
+- **Decision:** `@fontsource-variable/bricolage-grotesque` and `@fontsource-variable/literata` (OFL-1.1). No font binaries are committed. Runtime makes no third-party font request.
+- **Trade-offs:** the Fontsource Bricolage build has weight and width axes but **no optical-size axis**, which v0 requested from Google Fonts; large display sizes may differ slightly. Literata keeps `opsz`.
+- **Status:** Accepted; revisit if the display type looks off at hero sizes.
+
+## D-028 · Accent text variants fix v0's dark-theme contrast
+- **Decision:** accents have a fill colour and separate light/dark **text** colours, selected with `light-dark()`. All are at least 4.5:1 on page and card surfaces in both modes.
+- **Reason:** v0 used the fill colour for text; in the dark reading theme this fell to 2.3 to 3.96:1.
+- **Intended change:** listed in the migration strategy.
+
+## D-029 · Progressive enhancement via server-rendered content and `@media (scripting: none)`
+- **Decision:** every block renders its full content in the server HTML; client components only add interaction. Under `@media (scripting: none)` deeper notes, layers, claim answers, stepper notes and the selector's options are shown, and the scrubber shows each group's final-year analogue as a list.
+- **Reason:** the reading path must work without JavaScript (reader-journey quality bar) with no extra markup duplication beyond small baselines.
+- **Trade-offs:** `scripting` media query needs a current browser; older browsers without it hide the baselines and rely on JavaScript, as v0 did.
+
+## D-030 · Reading state lives in the experience shell and is not persisted
+- **Decision:** Deeper, text size and light/dark are shell state exposed as data attributes (`data-deeper`, `data-mode`) and a CSS variable (`--fs`). The data-bound theme variable `--warm` is set by the scrubber through a small shell context. Preferences are **not** persisted (v0 did not); persistence would cause a flash on load.
+- **Status:** Accepted; see Q-19.
+
+## D-031 · The renderer is a closed `switch`; blocks fail in isolation
+- **Decision:** `BlockRenderer` switches on `block.type` with an exhaustiveness check. No dynamic imports, no component names in content. Each block sits in a client error boundary.
+- **Limitation (honest):** a client boundary catches client-side faults only; a server render error still reaches Next's error handling. Content is validated before render, so this is a second line of defence.
+
+## D-032 · Copy lives in data, not components
+- **Decision:** experience wording is in `src/content/experiences/`; platform page copy (home, About, footer, not-found) is in `src/content/site/pages.ts`; platform UI strings (buttons, status messages) are in `src/renderer/ui-strings.ts`.
+- **Reason:** CLAUDE.md forbids hard-coded content in components, and this is the seam for later localisation.
+
+## D-033 · Content loader: folder per experience, hard failure on invalid content
+- **Decision:** `src/content/experiences/<slug>/experience.json` plus optional `datasets/*.json`; the loader merges and validates and **throws** with the first 20 issues. A folder name must equal the document's `slug`. Routes are statically generated from the folder list; unknown slugs are 404.
+
+## D-034 · v0 hash aliases become permanent redirects; no deployment configuration
+- **Decision:** `/body`, `/climate`, `/explore` redirect to the clean URLs in `next.config.ts`. No Netlify, DNS or deploy files were added; production deployment is out of scope for this branch.
+
+## D-035 · Feedback behaves as in v0 (local only)
+- **Decision:** answers go to `localStorage["inscapio"]` and the clipboard; the stored record key is now the experience slug. They still reach nobody (Q-17).
+
+## D-036 · Parity is tested against the frozen file, loaded from disk
+- **Decision:** Playwright opens `prototype/v0/index.html` via `file://`, reads its own globals (`C`, `temp`, `stats`, `kind`, `feels`) for all 900 city-years, and drives both pages for displayed output. Text parity asserts every v0 text item exists in the new page (one direction; the new page adds labels such as "Going deeper" as real text). Screenshots are saved, not diffed.
+- **Trade-offs:** does not catch visual regressions or things v0 never displayed.
+
+## D-037 · Chapter 7 link fix is an intentional difference
+- **Decision:** v0's "Jump to the arguments" targeted chapter 6 ("Risk or blame?"); the label describes chapter 7 ("The arguments"), so the migrated link targets chapter 7.

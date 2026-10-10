@@ -84,3 +84,46 @@
 ### Q-15 · What are the team size, timeline and AI budget?
 - **Why it matters:** the phasing in [`product/mvp-scope.md`](./product/mvp-scope.md) assumes a small team; AI cost per experience could be material.
 - **Needed by:** before committing to Phase 2 dates.
+
+---
+
+## Raised in Phase 1
+
+### Q-16 · Is "Whose Body Is It?" safe and appropriate to publish as written?
+- **Why it matters:** chapter 5 (deeper notes) describes a real, recent criminal case involving minors, with reported details and a note not to share identities. It also names helplines. The migrated text is verbatim from v0; it has had no editorial, legal or safeguarding review, and open cases change.
+- **Leaning:** treat as unreviewed; do not promote or deploy publicly before a named reviewer signs off on the case description and on whether to keep it.
+- **Needed by:** before any public deployment of this experience.
+
+### Q-17 · Where should feedback go?
+- **Why it matters:** v0 and this branch save feedback only on the reader's device and clipboard. Nobody receives it. This is the first real reader-signal gap.
+- **Leaning:** store aggregate answers server-side in Phase 2, with a privacy statement; free-text kept minimal.
+- **Needed by:** Phase 2.
+
+### Q-18 · How are larger datasets delivered?
+- **Why it matters:** the climate dataset is ~150 KB of JSON, passed to a client component. A publisher dataset ten times that would hurt mobile performance.
+- **Leaning:** keep per-experience datasets small by contract (limits in the schema), consider fetching on demand or a compact encoding when a real case appears. Not measured on a device yet.
+- **Needed by:** before accepting outside publisher data.
+
+### Q-19 · Should reading preferences persist?
+- **Why it matters:** readers who prefer larger text or dark mode must reset on every visit. Applying stored values after hydration causes a layout flash unless done carefully.
+- **Leaning:** yes, via a cookie read on the server or an early inline-free approach; decide with the CSP work.
+- **Needed by:** Phase 2.
+
+### Q-20 · What assistive-technology and browser coverage is required?
+- **Why it matters:** only axe and Chromium were run. Real screen readers, Safari and Firefox are untested.
+- **Leaning:** manual VoiceOver and TalkBack passes plus Firefox and WebKit in CI before outside readers.
+- **Needed by:** before public launch.
+
+### Q-21 · Do we need "deeper" on interactive blocks?
+- **Why it matters:** the `deeper` container only holds paragraphs and tables (D-024). A future experience may want an optional deeper chart or quiz.
+- **Leaning:** wait for a real case.
+- **Needed by:** when a publisher needs it.
+
+### Q-22 · Content-Security-Policy and inline styles
+- **Why it matters:** the shell sets `--fs` and `--warm` as inline style properties. A strict CSP that disallows inline styles (style-src without 'unsafe-inline') would block them.
+- **Leaning:** move these two to attribute-driven classes or use a nonce-based CSP when headers are added.
+- **Needed by:** when a CSP is introduced.
+
+### Q-23 · Production deployment is intentionally separate
+- **Context:** `inscapio.in` currently shows "Page not found" after a project configuration change. This branch contains no deployment or DNS change and no Netlify configuration.
+- **Needed by:** when the owner asks to deploy the completed application.

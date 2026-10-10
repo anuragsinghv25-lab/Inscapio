@@ -46,6 +46,12 @@
   --color-on-dark-soft: #c5d6da; /* v0 climate body text */
   --color-on-dark-faint: #ffffffa6; /* v0 wall buttons (6.8:1 on tarn) */
   --color-rule-on-dark: #ffffff40;
+  --color-border-on-dark: #ffffff59;
+  --color-fill-on-dark: #ffffff14;
+  --color-fill-on-dark-strong: #ffffff26;
+  --color-on-dark-note: #ffffffb3;
+  --color-on-dark-aside: #9fb4b9; /* v0 About finale, light line */
+  --color-on-dark-hero: #e6e3fa; /* v0 experience hero body text */
   --color-control-border-on-dark: #ffffff80;
   --color-focus: var(--palette-cobalt);
   --color-focus-on-dark: var(--palette-amber);

@@ -9,7 +9,7 @@
 .opt { min-height: var(--target-comfortable); padding: 0 20px; background: none; color: inherit; border: var(--border-thin) solid var(--color-control-border-on-dark); border-radius: var(--radius-chip); font: 700 1rem var(--font-display); cursor: pointer; }
 .opt:hover { border-color: var(--color-on-dark); }
 .ok { background: var(--color-pressed-bg); border-color: var(--color-pressed-bg); color: var(--color-pressed-ink); }
-.no { background: #ffffff26; }
+.no { background: var(--color-fill-on-dark-strong); }
 .res { min-height: 1.6em; margin: 0.9em 0 0; font: 500 1rem var(--font-display); color: var(--color-on-dark-soft); }
 
 .hdr { display: grid; gap: 4px 36px; align-items: end; margin-bottom: 6px; }

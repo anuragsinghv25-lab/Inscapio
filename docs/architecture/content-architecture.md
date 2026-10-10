@@ -213,3 +213,55 @@ A block is added only when:
 ## Open content-architecture questions
 
 Whether to store `knowledgeItems` inside the document or alongside it; how to represent per-claim sources in text (inline `sourceRef` vs claim objects); how translation/variants (Future) attach to the same blocks; whether `teaser` is a block or a dedicated structure. Tracked as design spikes for Phase 1.
+
+---
+
+## Phase 1: as built
+
+> **Status:** Current on branch `phase-1/schema-renderer`. This section records what the schema actually is and how it differs from the proposal above. Decisions: D-023 to D-026, D-033.
+
+### Files
+
+```
+src/content/schema/
+  primitives.ts      Id, safeText, HttpsUrl, rich text AST, templates
+  presentation.ts    Accent (9 names), Theme (paper | tarn), reading controls
+  sources.ts         Source { id, citation, url?, accessedAt? }
+  dataset.ts         Dataset (+ shape and consistency checks)
+  blocks/            text.ts, disclosure.ts, interactive.ts, scrubber.ts, index.ts (the union)
+  experience.ts      the Experience document
+  references.ts      cross-document integrity checks
+  validate.ts        parseExperience() -> { ok, experience } | { ok: false, issues[] }
+src/content/load.ts  folder loader; merges datasets; throws on invalid content
+```
+
+### The three layers in the schema
+
+| Layer | Where it appears | Rule |
+|---|---|---|
+| **Content** | text, rich text, ids, sources, datasets | plain text only; markup-looking text rejected |
+| **Presentation** | `accent`, `theme`, `variant`, `emphasis` | closed enums; the application maps them to tokens; no colour, class or CSS value is accepted |
+| **Behaviour** | `datasetId`, `themeBinding`, `prediction`, `stats`, `changedFrom`, `yTicks` | declared parameters interpreted by renderer code; no expressions |
+
+### Cross-document checks (`references.ts`)
+
+Unique ids across sections, blocks, sources and datasets; every `sourceRef` and `sourceIds` entry resolves; every `datasetId` resolves; `initialGroupId` is a group; prediction options cover every group, each option is a group, and each group's final-step analogue is among its options; hero actions point at real sections; **an illustrative dataset in use requires a `data-note` block**.
+
+### Differences from the proposal
+
+| Proposed | Built | Why |
+|---|---|---|
+| `heading` block | none | section titles are structural; v0 has no free headings |
+| `depth` on every block | `deeper` container with paragraph/table children | D-024 |
+| `source-note` | `source-list` and `data-note` | different jobs; the data note is mandatory for illustrative data |
+| scrubber baseline = data table + summary | list of each group's final-step analogue | smaller; enough for the reading path (revisit, Q-18) |
+| `teaser`, `media`, `subtitle`, `derivedFrom`, `image`, `quote`, `timeline`, `compare-slider` | not built | nothing in v0 needs them; home's Read/Explore strip is platform-built |
+| `accordion.exclusive`, `compare-table.stickyHeader` | not built | unused by v0 |
+
+### Block parameters as built
+
+`accordion.variant` (`layers` | `bands`, presentation only), `claims` (`accent`, `label`, `hint`, `allLabel`, `themes`, `items`), `classify` (exactly two categories each with an accent, items with `answer` and `feedback`, `closing`), `selector-content` (`defaultOptionId`), `scrubber-chart` (`datasetId`, `groupSelector`, `stepControl`, `chart`, `legend`/`headline`/`prediction` templates, `stats`, `themeBinding: none | warmth`). Templates allow four tokens: `group`, `step`, `lastStep`, `match`.
+
+### Climate as the architectural test: result
+
+The climate experience was expressed **without custom code**: one dataset, one `scrubber-chart` block, two `deeper` blocks, a `fact-row` and a `data-note`. No Tier C escape hatch was required. What it does not allow: a publisher changing the model (D-026).

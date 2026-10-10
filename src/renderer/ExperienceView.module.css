@@ -6,7 +6,7 @@
 .heroInner { width: 100%; max-width: 980px; margin: 0 auto; padding: 0 20px; }
 .hero h1 { font-size: var(--text-experience-title); line-height: 0.92; letter-spacing: var(--tracking-display); margin-bottom: 0.35em; }
 :global([data-theme="tarn"]) .hero h1 { max-width: 11em; }
-.intro { max-width: 32em; font-size: 1.2rem; color: #e6e3fa; }
+.intro { max-width: 32em; font-size: 1.2rem; color: var(--color-on-dark-hero); }
 .actions { display: flex; flex-wrap: wrap; gap: 6px 8px; margin-top: 6px; }
 :global([data-theme="paper"]) .hero::after {
   content: ""; position: absolute; inset: auto 0 0 0; height: 10px;

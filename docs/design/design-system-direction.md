@@ -117,3 +117,18 @@ An experience whose idea warrants *data-bound theming* (the climate page warming
 ## What this phase does *not* do
 
 It does not build tokens, components or a gallery. Those are Phase 1+ and are scheduled in [`../product/mvp-scope.md`](../product/mvp-scope.md).
+
+---
+
+## Phase 1: as built
+
+> **Status:** Current on branch `phase-1/schema-renderer`. Decisions: D-027, D-028.
+
+- **Tokens** live in `src/design-system/tokens.css`: a raw palette (v0's), role names (`--color-page`, `--color-ink`, `--color-accent`, `--color-attention`, ...), nine accent fills with separate light and dark text variants, a fluid type scale, spacing and widths, radii, focus and motion tokens. The rule "raw values only here" holds for colours in every component CSS module (the one literal outside tokens is the `themeColor` metadata value in `layout.tsx`); it is checked by review and a grep, not by a linter. Some pixel sizes (for example 44/48/56 px control heights and chart plot margins) are still literals in components.
+- **Themes** are `paper` (light/dark) and `tarn` (dark, data-bound through `--warm` and `color-mix`). Content selects a theme and accents by **name**; it never supplies a value.
+- **Accents** are generated into `accents.css` / `accents.ts` and set `--c` (fill) and `--c-text` (text, mode-aware via `light-dark()`). All text variants are at least 4.5:1 on page and card surfaces (computed), and axe reports no contrast violations in light, dark, forced-light and warm-climate states.
+- **Fonts:** self-hosted variable fonts (OFL). Display: Bricolage Grotesque (weight and width axes; no optical size). Text: Literata (with optical size).
+- **Primitives** are deliberately few: `Chip` (toggle) and `ButtonLink`. Blocks style themselves through CSS Modules using tokens. No component library was added.
+- **Identity preserved:** flat surfaces, 2 to 4 px radii, no shadows, fluid oversized display type, saturated chapter accents, cool-to-warm climate field. Side-by-side screenshots at 375 and 1280 were reviewed by me; they are saved for human review and not pixel-diffed.
+- **Evolving without touching content or code:** a token or accent change is one CSS edit; a new accent also needs the generator and an enum entry (documented in `accents.ts`).
+- **Not done:** a component gallery, visual regression tooling, a documented token naming guide beyond the file itself.
