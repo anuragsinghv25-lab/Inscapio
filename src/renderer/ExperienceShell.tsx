@@ -86,6 +86,7 @@ export function ExperienceShell({ theme, controls, title, children }: Props) {
   return (
     <ShellContext.Provider value={api}>
       <div
+        id="experience-root"
         ref={root}
         className={s.root}
         data-theme={theme}

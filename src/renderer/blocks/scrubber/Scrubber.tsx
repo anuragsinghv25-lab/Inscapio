@@ -99,7 +99,7 @@ export function ScrubberBlock({ block, ctx }: BlockProps<"scrubber-chart">) {
       {predicted && (
         <div className={s.guess}>
           <p>{renderTemplate(predicted.question, values)}</p>
-          <div className={s.opts}>
+          <div className={s.opts} data-testid="scrubber-options">
             {(predicted.optionsByGroup[group.id] ?? []).map((id) => (
               <button
                 key={id}
@@ -122,8 +122,8 @@ export function ScrubberBlock({ block, ctx }: BlockProps<"scrubber-chart">) {
       )}
 
       <div className={s.hdr}>
-        <div className={s.year} aria-hidden="true">{step}</div>
-        <p className={s.headline} aria-live="polite">
+        <div className={s.year} aria-hidden="true" data-testid="scrubber-step">{step}</div>
+        <p className={s.headline} aria-live="polite" data-testid="scrubber-headline">
           {renderTemplate(near ? block.headline.atFirstStep : block.headline.later, values)}
         </p>
       </div>
@@ -174,7 +174,7 @@ export function ScrubberBlock({ block, ctx }: BlockProps<"scrubber-chart">) {
         {!near && <li><i className={s.keyMatch} />{renderTemplate(block.legend.match, values)}</li>}
       </ul>
 
-      <div className={s.stats}>
+      <div className={s.stats} data-testid="scrubber-stats">
         {block.stats.map((st) => {
           if (st.kind === "category") {
             const changed = here.category !== first.category;
