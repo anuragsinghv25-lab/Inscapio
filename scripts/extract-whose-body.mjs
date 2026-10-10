@@ -138,7 +138,7 @@ function classify(id) {
 function claims(id) {
   const tabs = [["women", "About women and feminism"], ["men", "About men"], ["law", "About law and society"]];
   return {
-    id, type: "claims", accent: "plum", hint: "Tap for a fair answer", allLabel: "All",
+    id, type: "claims", accent: "plum", label: "They say:", hint: "Tap for a fair answer", allLabel: "All",
     themes: tabs.map(([k, l]) => ({ id: k, label: l })),
     items: A.map(([th, q, a], i) => ({ id: `claim-${i + 1}`, theme: th, claim: q.replace(/^"|"$/g, ""), response: a })),
   };

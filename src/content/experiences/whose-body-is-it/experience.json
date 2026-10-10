@@ -724,6 +724,7 @@
           "id": "chapter-7-claims-2",
           "type": "claims",
           "accent": "plum",
+          "label": "They say:",
           "hint": "Tap for a fair answer",
           "allLabel": "All",
           "themes": [

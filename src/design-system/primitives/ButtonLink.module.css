@@ -1,0 +1,8 @@
+.btn {
+  display: inline-flex; align-items: center; min-height: var(--target-comfortable); padding: 0 22px;
+  border-radius: var(--radius-control); font: 700 1rem var(--font-display); text-decoration: none;
+}
+.primary { background: var(--color-attention); color: var(--palette-deep); }
+.secondary { background: transparent; color: var(--color-on-dark); border: 2px solid var(--color-on-dark); }
+:global([data-theme="tarn"]) .primary { background: var(--color-on-dark); color: var(--color-field-dark); min-height: 52px; padding: 0 26px; }
+:global([data-theme="tarn"]) .primary:hover { background: var(--color-attention); }

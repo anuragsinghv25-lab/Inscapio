@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { UI } from "@/renderer/ui-strings";
 import "@fontsource-variable/bricolage-grotesque/wdth.css";
 import "@fontsource-variable/literata/opsz.css";
 import "@fontsource-variable/literata/opsz-italic.css";
@@ -22,7 +23,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <a className="skip-link" href="#main">{UI.skipToContent}</a>
+        {children}
+      </body>
     </html>
   );
 }
