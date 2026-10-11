@@ -2,19 +2,22 @@
 .only-js { display: contents; }
 @media (scripting: none) { .chips { display: none; } }
 
-/* ---- claims ---- */
+/* ---- claims: a compact list; the reader opens only the claims they care about ---- */
+.claimsHint { margin: 4px 0 6px; color: var(--t-mute); font-size: 0.85em; }
+.claimList { border-top: 2px solid var(--c); }
 .flip {
-  display: block; width: 100%; margin: 12px 0; padding: 16px 18px; text-align: left; cursor: pointer;
-  background: var(--t-card); color: var(--t-ink); border: 2px solid var(--c); border-radius: var(--radius-card);
+  position: relative; display: block; width: 100%; min-height: var(--target-comfortable); margin: 0; padding: 14px 48px 14px 0; text-align: left; cursor: pointer;
+  background: none; color: var(--t-ink); border: 0; border-bottom: var(--border-thin) solid var(--t-line); border-radius: 0;
   font: 400 1em var(--font-text);
 }
+.flip::after { content: "+"; position: absolute; right: 10px; top: 8px; font: 800 1.5em / 1.2 var(--font-display); color: var(--c-text); }
+.flip[aria-expanded="true"]::after { content: "\2212"; }
+.flip[aria-expanded="true"] { background: var(--t-card); padding-left: 14px; }
 .q { display: block; font: 700 1em var(--font-text); }
 .q::before { content: attr(data-label) " "; color: var(--c-text); }
-.hint { display: block; margin-top: 6px; color: var(--t-mute); font-size: 0.8em; }
 .a { display: none; margin-top: 10px; padding-top: 10px; border-top: var(--border-thin) solid var(--t-line); }
 .flip[aria-expanded="true"] .a { display: block; }
-.flip[aria-expanded="true"] .hint { display: none; }
-@media (scripting: none) { .a { display: block; } .hint { display: none; } }
+@media (scripting: none) { .a { display: block; } .claimsHint, .flip::after { display: none; } }
 
 /* ---- classify ---- */
 .sort {

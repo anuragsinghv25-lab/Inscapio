@@ -19,8 +19,15 @@ describe("climate content", () => {
     expect(ds.steps).toHaveLength(45);
     expect(ds.periods).toHaveLength(12);
     expect(ds.illustrative).toBe(true);
-    const note = e.sections.flatMap((s) => s.blocks).find((b) => b.type === "data-note");
+    const blocks = e.sections.flatMap((s) => s.blocks);
+    const note = blocks.find((b) => b.id === "demo-data-note");
     expect(note?.type === "data-note" && note.lead).toBe("Demo data, not a forecast.");
+  });
+  it("puts the chart first and the illustrative note directly after it (Stage 2 pacing)", () => {
+    expect(e.sections.map((s) => s.id)).toEqual(["explore", "pattern", "closing"]);
+    expect(e.hero.actions[0]?.targetSectionId).toBe("explore");
+    const explore = e.sections[0]!.blocks.map((b) => b.type);
+    expect(explore.slice(0, 2)).toEqual(["scrubber-chart", "data-note"]);
   });
   it("reproduces v0's headline analogues (London→Madrid, Madrid→Tokyo in 2070)", () => {
     expect(ds.derived["london"]![last]!.match).toBe("madrid");

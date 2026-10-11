@@ -20,11 +20,11 @@ export function ClaimsBlock({ block }: BlockProps<"claims">) {
           <Chip key={t.id} pressed={filter === t.id} onClick={() => setFilter(t.id)}>{t.label}</Chip>
         ))}
       </div>
-      <div>
+      <p className={s.claimsHint}>{block.hint}</p>
+      <div className={s.claimList}>
         {shown.map((it) => (
           <button key={it.id} type="button" className={s.flip} aria-expanded={open.has(it.id)} onClick={() => toggle(it.id)}>
             <span className={s.q} data-label={block.label}>{it.claim}</span>
-            <span className={s.hint}>{block.hint}</span>
             <span className={s.a}>{it.response}</span>
           </button>
         ))}
