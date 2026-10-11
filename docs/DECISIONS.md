@@ -309,3 +309,10 @@ Status for these entries is **Proposed, pending owner review**. Nothing is imple
 - **Reason:** the Phase 1.5 review (as corrected) found the slider below the fold at 1280 px and clipped or seam-cut text at narrow widths.
 - **Trade-offs:** at narrow widths the read text is only seen by dragging back; the one-off intro animation still plays from Read to rest unless reduced motion is set.
 - **Status:** Accepted
+
+## D-043 · Reader shell: derived outline and length line, device-local preferences, platform-chosen end state
+- **Decision:** (a) every experience shows "N sections · about M min read · K interactive" and a native-disclosure section list in its hero (works without JavaScript); experiences with four or more sections also get a Sections control in the bar that marks the current section. All of it is derived from the validated document (200 words per minute on the simple path, deeper text excluded; an estimate, not a measurement). (b) Deeper, text size and theme persist in `localStorage["inscapio:prefs"]`, validated and clamped on read, applied after hydration (a returning reader may see the default for an instant), and ignored when storage is unavailable (D-041). (c) Every experience ends with an end state before the feedback form. The "next experience" is chosen by platform policy in `content/site/promotion.ts`, which holds `whose-body-is-it` back (Q-16); when nothing may be offered the end state links to the home page, not to the home page's first room.
+- **Reason:** review findings F1 to F4; none needed a schema change.
+- **Not done:** sources at the point of use. Neither experience uses inline `sourceRef`; adding them means deciding which source supports which claim, which is an editorial task, not a rendering one.
+- **Trade-offs:** the 200 wpm estimate ignores interaction time; a flash of defaults for readers with saved preferences; on screens up to 420 px the bar's home link shows only its arrow (accessible name unchanged).
+- **Status:** Accepted

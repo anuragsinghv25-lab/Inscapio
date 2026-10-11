@@ -3,6 +3,9 @@ import type { EndnoteBlock } from "@/content/schema/blocks";
 import { ButtonLink } from "@/design-system/primitives/ButtonLink";
 import { BlockRenderer } from "./BlockRenderer";
 import { ExperienceShell } from "./ExperienceShell";
+import { EndState, type NextExperience } from "./EndState";
+import { describeExperience } from "./outline";
+import { UI } from "./ui-strings";
 import { FeedbackForm } from "@/components/FeedbackForm";
 import { DataNoteBlock, ParagraphBlock, SourceListBlock } from "./blocks/text";
 import type { RenderContext } from "./types";
@@ -17,13 +20,14 @@ function Endnote({ block, ctx }: { block: EndnoteBlock; ctx: RenderContext }) {
 }
 
 /** Server component: turns one validated Experience into the page. The only entry point for rendering content. */
-export function ExperienceView({ experience: e }: { experience: Experience }) {
+export function ExperienceView({ experience: e, next = null }: { experience: Experience; next?: NextExperience | null }) {
+  const outline = describeExperience(e);
   const ctx: RenderContext = {
     sources: new Map(e.sources.map((x) => [x.id, x])),
     datasets: new Map(e.datasets.map((x) => [x.id, x])),
   };
   return (
-    <ExperienceShell theme={e.theme} controls={e.reading} title={e.shortTitle}>
+    <ExperienceShell theme={e.theme} controls={e.reading} title={e.shortTitle} outline={outline.items}>
       <main id="main" tabIndex={-1} className={s.main}>
         <header className={s.hero}>
           <div className={s.heroInner}>
@@ -36,10 +40,25 @@ export function ExperienceView({ experience: e }: { experience: Experience }) {
                 <ButtonLink key={a.label} href={`#${a.targetSectionId}`} emphasis={a.emphasis}>{a.label}</ButtonLink>
               ))}
             </div>
+            <details className={s.outline}>
+              <summary>{UI.outlineSummary(outline.items.length, outline.minutes, outline.interactive)}</summary>
+              <nav aria-label={UI.sectionsNav}>
+                <ol>
+                  {outline.items.map((it) => (
+                    <li key={it.id}>
+                      <a href={`#${it.id}`}>
+                        <span>{it.label}</span>
+                        {it.label !== it.title && <small>{it.title}</small>}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            </details>
           </div>
         </header>
         {e.sections.map((sec) => (
-          <section key={sec.id} id={sec.id} className={s.section} data-accent={sec.accent} aria-labelledby={`${sec.id}-title`}>
+          <section key={sec.id} id={sec.id} tabIndex={-1} className={s.section} data-accent={sec.accent} aria-labelledby={`${sec.id}-title`}>
             <div className={s.wrap}>
               {sec.kicker && <span className={s.tag}>{sec.kicker}</span>}
               <h2 id={`${sec.id}-title`}>{sec.title}</h2>
@@ -49,6 +68,7 @@ export function ExperienceView({ experience: e }: { experience: Experience }) {
             </div>
           </section>
         ))}
+        <EndState next={next} />
         <FeedbackForm slug={e.slug} title={e.title} />
         {e.endnotes.length > 0 && (
           <footer className={s.endnotes}>

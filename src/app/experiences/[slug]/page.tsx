@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { listExperienceSlugs, loadExperience } from "@/content/load";
+import { pickNext } from "@/content/site/promotion";
 import { ExperienceView } from "@/renderer/ExperienceView";
 
 type Params = { slug: string };
@@ -26,5 +27,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
 export default async function ExperiencePage({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
   if (!listExperienceSlugs().includes(slug)) notFound();
-  return <ExperienceView experience={loadExperience(slug)} />;
+  const nextSlug = pickNext(slug, listExperienceSlugs());
+  const n = nextSlug ? loadExperience(nextSlug) : null;
+  return <ExperienceView experience={loadExperience(slug)} next={n ? { slug: n.slug, title: n.title, summary: n.summary } : null} />;
 }
