@@ -199,7 +199,7 @@ These restate `design-principles.md` as questions that can be answered with evid
 | F5 | Interaction density is low in Whose Body and the chart sits late in Climate | Block counts; screenshot | Content + presentation | Authoring guidance; presentation variants |
 | F6 | Claims block is a long identical-card list | Screenshot | Block presentation | Design variant, no schema change |
 | F7 | Evidence is footer-only for Whose Body | Content | Schema (optional per-claim `sourceRef` exists in rich text) | Authoring + design |
-| F8 | Home first-fold at 1280 px does not demonstrate interaction (the Read/Explore panel is a narrow sliver beside text) | Screenshot at 1280 | Home | Design (see specification) |
+| F8 | **Corrected in Stage 2.** The first-fold problems on the homepage were: at 1280 × 800 the headline pushed the Read/Explore strip down so its slider sat below the fold (y ≈ 1033); at 375 the strip clipped its text with a fixed height and fade; the wipe seam cut through words at rest. (The original wording, "a narrow sliver", came from a screenshot taken before the one-off wipe animation had run, and was wrong.) | Screenshots after the animation settles; measured slider position | Home | Design; fixed in Stage 2 PR 1 |
 | F9 | No per-experience share preview | Reader-journey gap | Platform | Stage 3+ |
 | F10 | Feedback goes nowhere | Q-17 | Backend | Stage 3 |
 | F11 | Whose Body content unreviewed (real case, minors) | Q-16 | Content/safeguarding | Owner decision; gates promotion |

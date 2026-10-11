@@ -1,24 +1,29 @@
 /* Home, About, not-found. Source: prototype/v0 CSS lines 52-140. */
 .view { overflow-x: clip; }
-.opening { max-width: var(--width-page); margin: 0 auto; padding: calc(env(safe-area-inset-top, 0px) + 112px) var(--gutter) clamp(48px, 8vw, 96px); }
-.ttl { margin: 0; font-family: var(--font-display); font-size: var(--text-hero); line-height: 0.9; letter-spacing: var(--tracking-display); }
+.opening { max-width: var(--width-page); margin: 0 auto; padding: calc(env(safe-area-inset-top, 0px) + clamp(84px, 12svh, 112px)) var(--gutter) clamp(48px, 8vw, 96px); }
+/* Capped by viewport height as well as width so the headline never pushes the strip out of the first screen. */
+.ttl { margin: 0; font-family: var(--font-display); font-size: min(var(--text-hero), 17svh); line-height: 0.9; letter-spacing: var(--tracking-display); }
 .ttl span { display: block; }
 .ttlLight { font-weight: 250; font-variation-settings: "wdth" 75; color: var(--color-ink-muted); }
 .ttlStrong { font-weight: 800; font-variation-settings: "wdth" 100; }
-.sub { margin: clamp(20px, 3vw, 32px) 0 0; font: 500 var(--text-subtitle) / 1.3 var(--font-display); max-width: 24em; }
+.sub { margin: clamp(16px, 2.4svh, 28px) 0 0; font: 500 var(--text-subtitle) / 1.3 var(--font-display); max-width: 24em; }
+.count { margin: 0.5em 0 0; font: 600 1rem / 1.4 var(--font-display); color: var(--color-ink-muted); }
 
-.strip { --v: 50%; position: relative; margin-top: clamp(40px, 6vw, 80px); height: clamp(350px, 38vw, 410px); background: var(--color-surface); overflow: hidden; }
-.pane { position: absolute; inset: 0; }
-.read { padding: clamp(18px, 3vw, 36px); }
+/* The strip's height follows the reading pane's text, so nothing is clipped at any width or text size.
+   The explore pane is laid over it and revealed by --v. Narrow screens rest on the explore side (the text
+   would otherwise be cut mid-word by the seam); wide screens rest at 50 % with both halves whole. */
+.strip { --v: 100%; position: relative; margin-top: 8px; min-height: clamp(320px, 34vw, 380px); background: var(--color-surface); overflow: clip; }
+@media (min-width: 900px) { .strip { --v: 50%; } }
+.read { position: relative; padding: clamp(18px, 3vw, 36px); }
 .art { max-width: 34rem; color: var(--color-ink-muted); }
-@media (min-width: 900px) { .art { margin-left: auto; } }
+@media (min-width: 900px) { .art { width: calc(50% - clamp(18px, 3vw, 36px) * 2); margin-left: auto; } }
 .read h2 { margin: 0 0 0.6em; font: 700 clamp(1.35rem, 3vw, 1.9rem) / 1.15 var(--font-display); color: var(--color-ink); }
 .read p { margin: 0 0 0.8em; font-size: 1rem; line-height: 1.6; }
-.read::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 90px; background: linear-gradient(transparent, var(--color-surface)); }
-.exp { background: var(--color-field-dark); color: var(--color-on-dark); clip-path: inset(0 calc(100% - var(--v)) 0 0); }
+.exp { position: absolute; inset: 0; background: var(--color-field-dark); color: var(--color-on-dark); clip-path: inset(0 calc(100% - var(--v)) 0 0); }
 .hl { position: absolute; left: clamp(18px, 3vw, 36px); right: clamp(18px, 3vw, 36px); top: clamp(18px, 3vw, 32px); margin: 0; font: 800 clamp(1.45rem, 4vw, 2.7rem) / 1.02 var(--font-display); letter-spacing: var(--tracking-title); max-width: 15em; }
+@media (min-width: 900px) { .hl { right: calc(50% + clamp(18px, 3vw, 36px)); } }
 .hl b, .wans b { color: var(--color-attention); font-weight: 800; }
-.exp svg { position: absolute; left: 0; right: 0; bottom: 34px; width: 100%; height: 64%; }
+.exp svg { position: absolute; left: 0; right: 0; bottom: 34px; width: 100%; height: 56%; }
 .area { fill: var(--color-on-dark); fill-opacity: 0.1; }
 .lMatch, .lFirst, .lNow { fill: none; vector-effect: non-scaling-stroke; }
 .lMatch { stroke: var(--palette-cool); stroke-width: 2; }
@@ -30,7 +35,13 @@
 .kNow { border-color: var(--color-attention); }
 .kMatch { border-color: var(--palette-cool); }
 .rule { position: absolute; top: 0; bottom: 0; left: var(--v); width: 3px; margin-left: -1.5px; background: var(--color-attention); pointer-events: none; }
-.ctl { margin-top: 16px; max-width: var(--width-reading); }
+/* Without JavaScript the wipe cannot move: hide the control and show the two halves one after the other. */
+@media (scripting: none) {
+  .ctl, .rule { display: none; }
+  .strip { min-height: 0; }
+  .exp { position: relative; height: 340px; clip-path: none; }
+}
+.ctl { margin-top: clamp(14px, 2.4svh, 24px); max-width: var(--width-reading); }
 .ctl label { display: block; font: 600 1rem var(--font-display); }
 .row { display: flex; align-items: center; gap: 14px; }
 .row span { font: 700 0.95rem var(--font-display); flex: none; }

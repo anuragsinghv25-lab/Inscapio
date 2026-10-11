@@ -21,8 +21,7 @@ One job: **let a first-time visitor do the thing InScapio is about, within secon
 
 Today (screenshots, both widths): a headline, a Read↔Explore strip that wipes one idea from prose to chart, a "Whose Body Is It?" band with a six-layer accordion, a climate band with a city wall, an About line, and a closing call to action. The structure is right. Specific problems (F8):
 
-- At 1280 px the Read/Explore strip shows a narrow dark sliver beside a wide light text panel; the "explore" half is barely visible at its default position, so the first fold reads as an article snippet.
-- The strip is fixed-height and clips its text on a phone (the paragraph is cut mid-line at the bottom of the panel).
+- **Correction (Stage 2):** an earlier draft said the "explore" half was a narrow sliver at 1280 px; that came from a screenshot taken before the one-off wipe animation ran. Once settled, the real problems are: at 1280 × 800 the large headline pushes the strip down so its slider is below the fold; at 375 px the strip has a fixed height and fades out its text; and the wipe seam cuts through words at rest.
 - Both bands have a working in-place interaction (the accordion; the city wall, where tapping a city reveals the city it will resemble). In the 1280 px screenshot, however, the city wall reads as a list of names and the answer line is easy to miss, because nothing is selected until the visitor taps.
 - No indication of how many experiences exist, how long each takes, or what to do after finishing one.
 
