@@ -294,3 +294,18 @@ Status for these entries is **Proposed, pending owner review**. Nothing is imple
 - **Reason:** styled libraries bring a second token/styling system (Emotion or Tailwind) against D-015, and the reader surface is bespoke by identity.
 - **Trade-offs:** more own components to write; accessibility of the primitives must be verified, not assumed. Library facts are a 10 Oct 2026 snapshot; bundle impact was not measured.
 - **Status:** Proposed
+
+---
+
+# Decisions made in Stage 2 (visible design evolution)
+
+## D-041 · Stage 2 scope approved with five owner decisions
+- **Context:** the owner approved Stage 2 (see `architecture/phase-2-readiness.md`) on 11 Oct 2026 and approved the recommendations on persistence, homepage/Q-16, the promotion hold, climate changes and the claims restyle. Work ships as three PRs: homepage; reader shell; climate pacing and claims.
+- **Decision:** (1) reading preferences persist in `localStorage` and are applied after hydration (cookie and pre-hydration script rejected for now; Q-19/Q-22 stay open); (2) the homepage does not name or promote "Whose Body Is It?" above the fold; (3) a platform config list (not the schema) holds experiences back from "next" links; (4) Climate content is reordered and gains an adjacent data note, with v0's migrated strings untouched; (5) the claims block's default presentation is restyled. No schema or block-vocabulary change.
+- **Status:** Accepted (owner-approved)
+
+## D-042 · Homepage strip: height follows its text; the wipe rests where no word is cut
+- **Decision:** the Read/Explore strip's reading pane is in normal flow, so its height follows the text at any width or text size (no fixed height, no fade). The slider sits above the strip. On screens under 900 px the wipe rests on the Explore side; from 900 px it rests at 50 % with each pane's text kept on its own side of the seam. The headline size is also capped by viewport height. Without JavaScript the slider is hidden and the two halves are shown one after the other. A one-line count ("Two experiences to explore below.") states that there is more than one experience without naming any.
+- **Reason:** the Phase 1.5 review (as corrected) found the slider below the fold at 1280 px and clipped or seam-cut text at narrow widths.
+- **Trade-offs:** at narrow widths the read text is only seen by dragging back; the one-off intro animation still plays from Read to rest unless reduced motion is set.
+- **Status:** Accepted

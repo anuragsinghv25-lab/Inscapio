@@ -6,6 +6,7 @@
 export const HOME = {
   title: { light: "Don’t just read it.", strong: "Explore it." },
   sub: "Where knowledge becomes an experience.",
+  count: "Two experiences to explore below.",
   strip: {
     label: "The same idea, first as text and then as something you can explore",
     readHeading: "What will your city feel like in 2070?",

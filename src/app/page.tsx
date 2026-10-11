@@ -34,6 +34,7 @@ export default function HomePage() {
             <span className={s.ttlStrong}>{HOME.title.strong}</span>
           </h1>
           <p className={s.sub}>{HOME.sub}</p>
+          <p className={s.count}>{HOME.count}</p>
           <ReadExploreStrip
             group={label("madrid")}
             match={label(madrid.end.match)}
