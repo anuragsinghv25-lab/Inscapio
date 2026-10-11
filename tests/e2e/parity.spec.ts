@@ -172,7 +172,13 @@ test.describe("text parity: every v0 text item exists in the new page", () => {
     for (let n = 1; n <= 12; n++) {
       const v0Items = await items(`#xp1 #c${n}`, SEL)(v0);
       const ours = norm(await page.locator(`section#chapter-${n}`).evaluate((e) => e.textContent ?? ""));
-      for (const t of v0Items) { expect(ours, `chapter ${n}: "${t.slice(0, 50)}"`).toContain(norm(t)); checked++; }
+      for (const t of v0Items) {
+        // Intentional difference (D-044): the claims hint "Tap for a fair answer" appears once above the list,
+        // not inside every claim button, so it is removed from v0's per-button text before comparing.
+        const expected = norm(t).replace("Tap for a fair answer", "");
+        expect(ours, `chapter ${n}: "${t.slice(0, 50)}"`).toContain(expected);
+        checked++;
+      }
     }
     const foot = await items("#xp1 > footer", "p")(v0);
     const ourFoot = norm(await page.locator("main > footer").evaluate((e) => e.textContent ?? ""));

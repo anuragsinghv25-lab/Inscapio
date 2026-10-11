@@ -11,7 +11,7 @@ describe("describeExperience", () => {
     expect(body.interactive).toBe(6);
     expect(body.minutes).toBeGreaterThan(5);
     const climate = describeExperience(loadExperience("climate"));
-    expect(climate.items.map((i) => i.id).sort()).toEqual(["closing", "explore", "pattern"]);
+    expect(climate.items.map((i) => i.id)).toEqual(["explore", "pattern", "closing"]);
     expect(climate.interactive).toBe(1);
     expect(climate.minutes).toBeGreaterThanOrEqual(1);
   });
