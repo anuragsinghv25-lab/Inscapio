@@ -20,12 +20,16 @@ Every document carries a **Status** line. Phase 0 documents are *drafts pending 
 | **Design** | [`design/current-design-audit.md`](./design/current-design-audit.md) | What the prototype contains |
 | | [`design/design-principles.md`](./design/design-principles.md) | How we design: type, motion, interaction, accessibility |
 | | [`design/design-system-direction.md`](./design/design-system-direction.md) | Where the design system goes |
+| | [`design/phase-1-5-product-design-review.md`](./design/phase-1-5-product-design-review.md) | Is the current build the right foundation? Measurable principles |
+| | [`design/phase-1-5-experience-specification.md`](./design/phase-1-5-experience-specification.md) | Homepage, reader architecture, publisher workspace (design only) |
+| | [`design/ui-library-evaluation.md`](./design/ui-library-evaluation.md) | MUI, HeroUI, UI Lora versus real requirements |
 | **Architecture** | [`architecture/architecture-overview.md`](./architecture/architecture-overview.md) | The big picture and stack choices |
 | | [`architecture/frontend-architecture.md`](./architecture/frontend-architecture.md) | Rendering, structure, state |
 | | [`architecture/backend-architecture.md`](./architecture/backend-architecture.md) | Data, auth, jobs, security, privacy |
 | | [`architecture/ai-architecture.md`](./architecture/ai-architecture.md) | AI capabilities, guardrails, evaluation |
 | | [`architecture/content-architecture.md`](./architecture/content-architecture.md) | Schema, blocks, renderer contract |
 | | [`architecture/migration-strategy.md`](./architecture/migration-strategy.md) | Prototype → production |
+| | [`architecture/phase-2-readiness.md`](./architecture/phase-2-readiness.md) | Staged roadmap, dependencies, Supabase decisions |
 | **Engineering** | [`engineering/development-workflow.md`](./engineering/development-workflow.md) | Git, PRs, releases, definition of done |
 | | [`engineering/coding-principles.md`](./engineering/coding-principles.md) | Conventions |
 | | [`engineering/ai-development-guidelines.md`](./engineering/ai-development-guidelines.md) | How AI agents work here |
