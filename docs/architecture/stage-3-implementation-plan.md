@@ -112,9 +112,9 @@ Nothing here is a legal conclusion. The DPDP Act 2023 was flagged in Phase 0 as 
 
 ### 6.2 Q-16 "Whose Body Is It?" — a release blocker
 
-The experience concerns a real case involving minors and is unreviewed (Q-16, Q-28, D-041; D-044 is on the Stage 2 branches, not yet on `main`). **It must not be treated as resolved by hiding it in the interface.** Specifically:
+The experience concerns a real case involving minors and is unreviewed (Q-16, Q-28, D-041, D-044). **It must not be treated as resolved by hiding it in the interface.** Specifically:
 
-- The Stage 2 promotion hold (`HELD_FROM_NEXT`, in the reader-shell/Climate branches that are not yet on `main`) and the homepage omission are **presentation controls only**. The page remains reachable by its URL and exists in the repository and, later, in the database. They do not close Q-16.
+- The Stage 2 promotion hold (`HELD_FROM_NEXT`) and the homepage omission are **presentation controls only**. The page remains reachable by its URL and exists in the repository and, later, in the database. They do not close Q-16.
 - **Q-16 blocks** promoting it, any public deployment of the new app that includes it, importing it into the database as published content, and inviting outside publishers.
 - Closing it needs a substantive review (accuracy, consent and identification risks, treatment of the minors, claims and sourcing, whether to publish, revise or withdraw), by a named reviewer, with the outcome recorded in `DECISIONS.md`. The data model supports an enforceable **hold** (`experiences.held_at`; publication refused until lifted by an admin) so that a held item is blocked at the database, not just the UI; this is the mechanism intended for the first real use of takedown. Until the file-to-database import (not in Stage 3) exists, the file-based hold remains the control.
 

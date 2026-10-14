@@ -33,7 +33,7 @@ Read in full or in the relevant parts: `CLAUDE.md`, `DECISIONS.md`, `OPEN-QUESTI
 | D-018 Human approval enforced in the data layer; AI cannot write approvals/publications | Proposed | Made concrete in §7 (AI) and `supabase-data-model.md` §5. |
 | D-019 One app | Proposed | `/studio`, `/admin` stay in this Next.js app. |
 | D-022 First-party aggregate-only analytics | Proposed | `events_daily`; no per-reader rows. |
-| D-041 (on `main`); D-043, D-044 (Stage 2 PRs #5/#6, which were merged into stacked branches and were **not on `main`** when this was written, so they are not in this branch's `DECISIONS.md`) | Accepted | Unchanged. The public reader shell stays free of any auth state. |
+| D-041, D-043, D-044 (Stage 2; D-043 and D-044 were missing from `main` when PR #7 was written and are restored by the repair PR) | Accepted | Unchanged. The public reader shell stays free of any auth state. |
 | Q-16 "Whose Body Is It?" review | Open | **Release blocker** (implementation plan §6.2). |
 | Q-17, Q-23, Q-24…Q-30 | Open | Referenced where they bind this design. |
 
