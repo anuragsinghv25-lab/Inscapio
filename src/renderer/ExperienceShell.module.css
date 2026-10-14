@@ -52,3 +52,25 @@
 }
 :global([data-theme="tarn"]) .progress { top: auto; bottom: auto; background: var(--color-attention); }
 @media (max-width: 560px) { .title { display: none; } .back { flex: 1; } }
+
+/* ---- sections control ---- */
+.sectionsWrap { position: relative; display: contents; }
+.sectionsPanel {
+  position: fixed; z-index: 11; left: 12px; right: 12px;
+  top: calc(env(safe-area-inset-top, 0px) + 58px);
+  max-width: 28rem; margin-left: auto;
+  max-height: calc(100svh - env(safe-area-inset-top, 0px) - 70px); overflow-y: auto;
+  background: var(--t-card, var(--t-bg)); color: var(--t-ink);
+  border: 2px solid var(--t-line); border-radius: var(--radius-control);
+}
+:global([data-theme="tarn"]) .sectionsPanel { background: var(--t-bg); border-color: var(--color-border-on-dark); color: var(--color-on-dark); }
+.sectionsPanel[hidden] { display: none; }
+.sectionsPanel ol { margin: 0; padding: 6px; list-style: none; }
+.sectionsPanel a { display: flex; flex-direction: column; justify-content: center; min-height: var(--target-comfortable); padding: 6px 12px; color: inherit; text-decoration: none; font: 700 0.95rem / 1.25 var(--font-display); border-left: 4px solid transparent; }
+.sectionsPanel a small { font-weight: 400; opacity: 0.85; }
+.sectionsPanel a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.sectionsPanel a[aria-current] { border-left-color: var(--color-attention); background: var(--color-pressed-bg); color: var(--color-pressed-ink); }
+/* A button without a handler is worse than none: hide it when scripting is unavailable (the hero outline remains). */
+@media (scripting: none) { .sectionsWrap { display: none; } }
+/* Keep six controls on one row at 320 px: the home link shows only its arrow below 420 px. */
+@media (max-width: 420px) { .back { font-size: 0; min-width: var(--target-min); justify-content: center; } .back::before { font-size: 1.2rem; margin-right: 0; } .bar { gap: 6px; padding-inline: 8px; } }

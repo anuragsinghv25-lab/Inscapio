@@ -4,6 +4,9 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import Link from "next/link";
 import type { ReadingControl, Theme } from "@/content/schema/presentation";
 import { UI } from "./ui-strings";
+import { readPrefs, writePrefs } from "./readingPrefs";
+import { SectionsMenu } from "./SectionsMenu";
+import type { OutlineItem } from "./outline";
 import s from "./ExperienceShell.module.css";
 
 interface ShellApi {
@@ -14,12 +17,16 @@ const ShellContext = createContext<ShellApi>({ setWarm: () => {} });
 export const useShell = () => useContext(ShellContext);
 
 const FS_MIN = 15, FS_MAX = 26, FS_DEFAULT = 19, FS_STEP = 2;
+const FS_BOUNDS = { min: FS_MIN, max: FS_MAX };
+/** Experiences with at least this many sections get a Sections control in the bar. */
+const MENU_MIN_SECTIONS = 4;
 export const ORIGIN_KEY = "inscapio:origin";
 
 interface Props {
   theme: Theme;
   controls: readonly ReadingControl[];
   title: string;
+  outline: readonly OutlineItem[];
   children: ReactNode;
 }
 
@@ -28,7 +35,7 @@ interface Props {
  * Content arrives as server-rendered `children`; this component only owns presentation state,
  * which it exposes as data attributes so block styles can respond in CSS.
  */
-export function ExperienceShell({ theme, controls, title, children }: Props) {
+export function ExperienceShell({ theme, controls, title, outline, children }: Props) {
   const [deeper, setDeeper] = useState(false);
   const [fs, setFs] = useState(FS_DEFAULT);
   const [mode, setMode] = useState<"light" | "dark" | undefined>(undefined);
@@ -37,6 +44,16 @@ export function ExperienceShell({ theme, controls, title, children }: Props) {
   const progress = useRef<HTMLDivElement>(null);
   const setWarm = useCallback((v: number) => setWarmState(v), []);
   const api = useMemo(() => ({ setWarm }), [setWarm]);
+
+  // Restore this reader's saved preferences (only for the controls this experience offers).
+  useEffect(() => {
+    queueMicrotask(() => {
+      const p = readPrefs(FS_BOUNDS);
+      if (controls.includes("deeper") && p.deeper !== undefined) setDeeper(p.deeper);
+      if (controls.includes("text-size") && p.fs !== undefined) setFs(p.fs);
+      if (controls.includes("theme") && p.mode !== undefined) setMode(p.mode);
+    });
+  }, [controls]);
 
   // Circular reveal from the tap point that opened this experience (v0 behaviour); skipped for reduced motion.
   useEffect(() => {
@@ -77,7 +94,18 @@ export function ExperienceShell({ theme, controls, title, children }: Props) {
 
   const toggleTheme = () => {
     const dark = mode ? mode === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-    setMode(dark ? "light" : "dark");
+    const next = dark ? "light" : "dark";
+    setMode(next);
+    writePrefs({ mode: next }, FS_BOUNDS);
+  };
+  const changeFs = (delta: number) => {
+    const next = Math.min(FS_MAX, Math.max(FS_MIN, fs + delta));
+    setFs(next);
+    writePrefs({ fs: next }, FS_BOUNDS);
+  };
+  const toggleDeeper = () => {
+    setDeeper(!deeper);
+    writePrefs({ deeper: !deeper }, FS_BOUNDS);
   };
   const style: CSSProperties & Record<string, string> = {};
   if (controls.includes("text-size")) style["--fs"] = `${fs}px`;
@@ -99,17 +127,18 @@ export function ExperienceShell({ theme, controls, title, children }: Props) {
             {UI.siteName}
           </Link>
           <b className={s.title}>{title}</b>
+          {outline.length >= MENU_MIN_SECTIONS && <SectionsMenu items={outline} />}
           {controls.includes("deeper") && (
-            <button type="button" className={s.btn} aria-pressed={deeper} title={UI.deeperTitle} onClick={() => setDeeper((d) => !d)}>
+            <button type="button" className={s.btn} aria-pressed={deeper} title={UI.deeperTitle} onClick={toggleDeeper}>
               {deeper ? UI.simple : UI.deeper}
             </button>
           )}
           {controls.includes("text-size") && (
             <>
-              <button type="button" className={s.btn} title={UI.biggerText} aria-label={UI.biggerText} onClick={() => setFs((v) => Math.min(FS_MAX, v + FS_STEP))}>
+              <button type="button" className={s.btn} title={UI.biggerText} aria-label={UI.biggerText} onClick={() => changeFs(FS_STEP)}>
                 A+
               </button>
-              <button type="button" className={s.btn} title={UI.smallerText} aria-label={UI.smallerText} onClick={() => setFs((v) => Math.max(FS_MIN, v - FS_STEP))}>
+              <button type="button" className={s.btn} title={UI.smallerText} aria-label={UI.smallerText} onClick={() => changeFs(-FS_STEP)}>
                 A-
               </button>
             </>
