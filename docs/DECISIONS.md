@@ -310,6 +310,19 @@ Status for these entries is **Proposed, pending owner review**. Nothing is imple
 - **Trade-offs:** at narrow widths the read text is only seen by dragging back; the one-off intro animation still plays from Read to rest unless reduced motion is set.
 - **Status:** Accepted
 
+## D-043 · Reader shell: derived outline and length line, device-local preferences, platform-chosen end state
+- **Decision:** (a) every experience shows "N sections · about M min read · K interactive" and a native-disclosure section list in its hero (works without JavaScript); experiences with four or more sections also get a Sections control in the bar that marks the current section. All of it is derived from the validated document (200 words per minute on the simple path, deeper text excluded; an estimate, not a measurement). (b) Deeper, text size and theme persist in `localStorage["inscapio:prefs"]`, validated and clamped on read, applied after hydration (a returning reader may see the default for an instant), and ignored when storage is unavailable (D-041). (c) Every experience ends with an end state before the feedback form. The "next experience" is chosen by platform policy in `content/site/promotion.ts`, which holds `whose-body-is-it` back (Q-16); when nothing may be offered the end state links to the home page, not to the home page's first room.
+- **Reason:** review findings F1 to F4; none needed a schema change.
+- **Not done:** sources at the point of use. Neither experience uses inline `sourceRef`; adding them means deciding which source supports which claim, which is an editorial task, not a rendering one.
+- **Trade-offs:** the 200 wpm estimate ignores interaction time; a flash of defaults for readers with saved preferences; on screens up to 420 px the bar's home link shows only its arrow (accessible name unchanged).
+- **Status:** Accepted
+
+## D-044 · Climate: chart first with an adjacent illustrative note; claims as a compact list
+- **Decision:** (a) the Climate sections are reordered to `explore`, `pattern`, `closing` and the hero "Begin" action targets `explore`: this departs from v0's order on purpose, so the city selector and chart come first and the framing questions follow as context. (b) A `data-note` block ("A demo, not a forecast.") sits directly under the chart and says the curves come from an invented warming rule and that "feels like" is the closest match among the 20 cities in the demo. The original closing note is kept. v0's migrated strings, the dataset, the prediction logic and the scrubber block are untouched. (c) The claims block renders as a compact list (the hint once above it, a row per claim with a +/− indicator) instead of a stack of bordered cards; behaviour, filter and data are unchanged. This is the new default for any experience using the claims block.
+- **Measured (production build, main vs this branch, page y of the chart):** 2190 to 1407 px at 320 wide, 2297 to 1519 at 375, 2095 to 1414 at 430, 2224 to 1627 at 1280; the city selector moved from about 1580–1690 px to about 800–990 px. The chart is therefore roughly 0.8 to 0.9 screens earlier, and the controls start within the first screen after the hero.
+- **Known copy mismatch:** chapter 7's intro (v0 text, parity-tested) still says "Tap a card"; the rows are no longer cards. Left unchanged to avoid editing migrated text without a content decision.
+- **Status:** Accepted (owner-approved, D-041)
+
 ---
 
 # Decisions proposed in Stage 3 design (backend architecture and security)

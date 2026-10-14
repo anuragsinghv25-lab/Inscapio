@@ -19,75 +19,12 @@
     "actions": [
       {
         "label": "Begin",
-        "targetSectionId": "pattern",
+        "targetSectionId": "explore",
         "emphasis": "primary"
       }
     ]
   },
   "sections": [
-    {
-      "id": "pattern",
-      "title": "A climate is a pattern, not a day.",
-      "blocks": [
-        {
-          "id": "pattern-intro",
-          "type": "paragraph",
-          "variant": "body",
-          "content": [
-            {
-              "text": "Scientists sort climates with a few questions about a place’s year:"
-            }
-          ]
-        },
-        {
-          "id": "pattern-questions",
-          "type": "fact-row",
-          "items": [
-            {
-              "id": "question-1",
-              "title": "How hot?",
-              "text": "The warmest month"
-            },
-            {
-              "id": "question-2",
-              "title": "How cold?",
-              "text": "The coldest month"
-            },
-            {
-              "id": "question-3",
-              "title": "How dry?",
-              "text": "How much rain, and when"
-            }
-          ]
-        },
-        {
-          "id": "pattern-label",
-          "type": "paragraph",
-          "variant": "body",
-          "content": [
-            {
-              "text": "Answer those and a city gets a label. When the answers shift, the label can too, which is why a warming world changes where a city “belongs”."
-            }
-          ]
-        },
-        {
-          "id": "pattern-koppen",
-          "type": "deeper",
-          "blocks": [
-            {
-              "id": "pattern-koppen-note",
-              "type": "paragraph",
-              "variant": "body",
-              "content": [
-                {
-                  "text": "This follows the idea of the Köppen classification, drawn up in the early 1900s. This demo uses a simplified rule set with one rough dryness flag per city, so labels are approximate."
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
     {
       "id": "explore",
       "title": "Choose a city. Drag time.",
@@ -339,6 +276,16 @@
           "themeBinding": "warmth"
         },
         {
+          "id": "explore-data-note",
+          "type": "data-note",
+          "lead": "A demo, not a forecast.",
+          "content": [
+            {
+              "text": "These curves come from an invented warming rule, not from climate projections. “Feels like” names the closest match among the 20 cities in this demo. Read it as a way to picture a change, not a prediction for any real place."
+            }
+          ]
+        },
+        {
           "id": "explore-analogue",
           "type": "deeper",
           "blocks": [
@@ -349,6 +296,69 @@
               "content": [
                 {
                   "text": "Analogue matching: we compare the city’s projected yearly mean and seasonal swing with every other city’s present values, and pick the nearest. Weighted: mean temperature counts double the seasonal swing."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pattern",
+      "title": "A climate is a pattern, not a day.",
+      "blocks": [
+        {
+          "id": "pattern-intro",
+          "type": "paragraph",
+          "variant": "body",
+          "content": [
+            {
+              "text": "Scientists sort climates with a few questions about a place’s year:"
+            }
+          ]
+        },
+        {
+          "id": "pattern-questions",
+          "type": "fact-row",
+          "items": [
+            {
+              "id": "question-1",
+              "title": "How hot?",
+              "text": "The warmest month"
+            },
+            {
+              "id": "question-2",
+              "title": "How cold?",
+              "text": "The coldest month"
+            },
+            {
+              "id": "question-3",
+              "title": "How dry?",
+              "text": "How much rain, and when"
+            }
+          ]
+        },
+        {
+          "id": "pattern-label",
+          "type": "paragraph",
+          "variant": "body",
+          "content": [
+            {
+              "text": "Answer those and a city gets a label. When the answers shift, the label can too, which is why a warming world changes where a city “belongs”."
+            }
+          ]
+        },
+        {
+          "id": "pattern-koppen",
+          "type": "deeper",
+          "blocks": [
+            {
+              "id": "pattern-koppen-note",
+              "type": "paragraph",
+              "variant": "body",
+              "content": [
+                {
+                  "text": "This follows the idea of the Köppen classification, drawn up in the early 1900s. This demo uses a simplified rule set with one rough dryness flag per city, so labels are approximate."
                 }
               ]
             }
