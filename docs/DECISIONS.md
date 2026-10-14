@@ -309,3 +309,52 @@ Status for these entries is **Proposed, pending owner review**. Nothing is imple
 - **Reason:** the Phase 1.5 review (as corrected) found the slider below the fold at 1280 px and clipped or seam-cut text at narrow widths.
 - **Trade-offs:** at narrow widths the read text is only seen by dragging back; the one-off intro animation still plays from Read to rest unless reduced motion is set.
 - **Status:** Accepted
+
+---
+
+# Decisions proposed in Stage 3 design (backend architecture and security)
+
+> Source: the Stage 3 design milestone (13 Oct 2026), documentation only. **All are recommendations, Status Proposed; none is approved.** They refine, and do not replace, D-010, D-012, D-018 and D-022. Details: `architecture/identity-and-access-control.md`, `architecture/supabase-data-model.md`, `architecture/authentication-and-rls-test-plan.md`, `architecture/stage-3-implementation-plan.md`.
+
+## D-045 · Roles and ownership live in database tables, never in JWT claims or user metadata
+- **Context:** the backend docs name roles but not where they live. `user_metadata` is user-editable; a JWT claim stays valid until expiry.
+- **Options considered:** custom access-token claims; `app_metadata`; capability tables checked per query.
+- **Decision:** `admins` row and `publishers.status='active'` are checked inside Postgres on every query; ownership via `experiences.publisher_id` through helper functions (`owns_experience`, `can_edit_experience`) so organisations can be added later by changing two function bodies. One publisher per experience now.
+- **Reason:** immediate revocation; client-supplied values are never authoritative.
+- **Trade-offs:** one indexed lookup per request.
+- **Status:** Proposed
+
+## D-046 · Invite-only magic-link sign-in; the invitation is an email-bound authorisation record
+- **Decision:** Supabase Auth email magic links; public sign-ups disabled; an `invites` row (normalised email, expiry 7 days default, 30 max, one pending per email) authorises; the verified email on the session redeems it via a no-argument function; no bearer token. The confirm step is a POST button.
+- **Reason:** proves email ownership; a leaked invite is useless to others; neutral responses prevent enumeration.
+- **Trade-offs:** needs custom SMTP; some behaviours unverified (U-2, U-3).
+- **Status:** Proposed
+
+## D-047 · Authorisation in three layers; the public site is session-free
+- **Decision:** proxy (optimistic) → DAL per page/action/handler (`getClaims`, plus `getUser` for high-risk actions) → RLS/functions. Public pages never read cookies. Proxy matcher limited to `/studio`, `/admin`, `/sign-in`, `/auth`.
+- **Status:** Proposed
+
+## D-048 · Append-only revisions; human-only approval and publication functions; a separate public projection; derived lifecycle status
+- **Decision:** `revisions`, `approvals`, `audit_events` append-only; `publications.revision_id` references `approvals`; writes only through definer functions requiring a human session and ownership; privileges of `service_role` on those tables revoked; public reads only `published_experiences` (snapshot at publish); no stored `status` (amends the Phase 0 list; `in_review` dropped for the alpha); admin takedown sets a hold; full-Zod validation attested by a server-only role.
+- **Status:** Proposed
+
+## D-049 · The AI service uses a distinct Postgres role with no approval or publication privileges
+- **Decision:** `ai_service` custom role, narrow `ai_api` schema, no grants on `approvals`/`publications`; never a Supabase secret key (which has BYPASSRLS). Feasibility is unverified (U-6).
+- **Status:** Proposed (refines D-018)
+
+## D-050 · Admin is operational and does not imply content access
+- **Decision:** no admin policy on drafts, revisions or feedback; MFA (aal2) for all admin operations; re-auth, reason and confirmation for suspend and takedown; admin bootstrap by documented SQL, not an app feature; owner-level access is an acknowledged trust boundary.
+- **Status:** Proposed
+
+## D-051 · New staging and production Supabase projects; the existing project is unverified
+- **Decision:** treat the existing project as scratch until the owner records its facts; create new staging and production projects once region, org ownership and plan are decided; production on a plan with backups before outside publishers; keys use the new publishable/secret model.
+- **Status:** Proposed (refines D-012)
+
+## D-052 · RLS and authorisation tests are a merge gate, run against real roles and policies
+- **Decision:** three layers (pgTAP, API with real JWTs, application/e2e) in CI on every PR touching `supabase/` or auth code; every table needs denial tests; frontend-only tests do not count.
+- **Status:** Proposed
+
+## D-053 · Stage 3 increments and dependency timing
+- **Decision:** order 3.0–3.7 as in the implementation plan; start at 3.1 (local identity core); `@supabase/ssr` and `@supabase/supabase-js` added only at 3.3, with explicit owner approval.
+- **Status:** Proposed
+
