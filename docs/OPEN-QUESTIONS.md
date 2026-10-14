@@ -166,3 +166,62 @@ Context: [`design/phase-1-5-product-design-review.md`](./design/phase-1-5-produc
 ### Q-30 · Supabase ownership, region, plan and the start of privacy/legal advice
 - **Why it matters:** region and plan are expensive to change after data exists; see S1..S16 in `architecture/phase-2-readiness.md`.
 - **Needed by:** before Stage 3.
+
+---
+
+## Stage 3 design questions (13 Oct 2026)
+
+### Q-31 · Keep the existing Supabase project or create new staging and production projects?
+- **Why it matters:** its region, org, plan and config are unverified; region is per project (see D-051).
+- **Leaning:** new projects; existing one is scratch until the owner records its facts.
+- **Needed by:** 3.0.
+
+### Q-32 · Next.js hosting target and region (and whether a Postgres queue is acceptable for jobs later)
+- **Why it matters:** latency to the database, function limits, and where secrets live. D-012 says Vercel; production is deployed elsewhere today (Q-23).
+- **Needed by:** 3.3.
+
+### Q-33 · Custom SMTP provider and sender domain
+- **Why it matters:** the built-in sender allows 2 emails per hour; the sender domain touches `inscapio.in` DNS, which this work must not change.
+- **Needed by:** 3.3.
+
+### Q-34 · Number of administrators, Supabase organisation ownership and recovery
+- **Why it matters:** organisation owners can read all data; bootstrap and removal of admins are manual.
+- **Needed by:** 3.0.
+
+### Q-35 · Revision granularity and retention (autosave vs explicit save)
+- **Why it matters:** append-only revisions grow; free-tier size is 500 MB.
+- **Needed by:** 3.2 / Stage 4.
+
+### Q-36 · Publisher and invitation data: retention, export, deletion (needs counsel)
+- **Why it matters:** DPDP Act 2023; proposals only (invites 90 days, audit 24 months, archived drafts 12 months).
+- **Needed by:** before collecting publisher personal data.
+
+### Q-37 · Feedback: contact detail, retention, anti-automation vendor
+- **Why it matters:** extends Q-17; free text may hold personal data.
+- **Leaning:** no contact detail; owner-only read.
+- **Needed by:** 3.6.
+
+### Q-38 · Must publishers use MFA before publishing?
+- **Why it matters:** backend docs say offered, not required; MFA plan availability unverified.
+- **Needed by:** 3.3.
+
+### Q-39 · Takedown and moderation policy: who decides, notice, appeal; is a second reviewer wanted?
+- **Why it matters:** `in_review` was dropped for the alpha; takedown needs written policy.
+- **Needed by:** before outside publishers.
+
+### Q-40 · Invite delivery and lifetime: Supabase email vs manual link; 7-day default
+- **Needed by:** 3.3.
+
+### Q-41 · Acceptable stale-session window and session time limits
+- **Why it matters:** access-token lifetime and plan limits were not verified.
+- **Needed by:** 3.3.
+
+### Q-42 · Takedown visibility lag on the public site
+- **Why it matters:** static/regenerated pages may show removed content briefly.
+- **Needed by:** 3.5.
+
+### Q-43 · Accept "shape gate only" validation for a first alpha, or require server-attested validation from the start?
+- **Why it matters:** without attestation a publisher bypassing the UI could publish a shape-valid but Zod-invalid document (availability risk only; renderer fails closed).
+- **Leaning:** attestation from the start.
+- **Needed by:** 3.2.
+

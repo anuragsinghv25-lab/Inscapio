@@ -30,6 +30,10 @@ Every document carries a **Status** line. Phase 0 documents are *drafts pending 
 | | [`architecture/content-architecture.md`](./architecture/content-architecture.md) | Schema, blocks, renderer contract |
 | | [`architecture/migration-strategy.md`](./architecture/migration-strategy.md) | Prototype → production |
 | | [`architecture/phase-2-readiness.md`](./architecture/phase-2-readiness.md) | Staged roadmap, dependencies, Supabase decisions |
+| | [`architecture/identity-and-access-control.md`](./architecture/identity-and-access-control.md) | Stage 3: principals, roles, permission matrix, auth, sessions |
+| | [`architecture/supabase-data-model.md`](./architecture/supabase-data-model.md) | Stage 3: tables, RLS, lifecycle, migrations |
+| | [`architecture/authentication-and-rls-test-plan.md`](./architecture/authentication-and-rls-test-plan.md) | Stage 3: positive and negative authorisation tests |
+| | [`architecture/stage-3-implementation-plan.md`](./architecture/stage-3-implementation-plan.md) | Stage 3: increments, environments, gates |
 | **Engineering** | [`engineering/development-workflow.md`](./engineering/development-workflow.md) | Git, PRs, releases, definition of done |
 | | [`engineering/coding-principles.md`](./engineering/coding-principles.md) | Conventions |
 | | [`engineering/ai-development-guidelines.md`](./engineering/ai-development-guidelines.md) | How AI agents work here |
