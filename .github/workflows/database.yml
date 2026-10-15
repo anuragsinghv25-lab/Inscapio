@@ -88,6 +88,8 @@ jobs:
           # Run twice against the same persistent stack to prove the script is repeatable.
           bash supabase/tests/concurrency/redeem-invite-race.sh 2>&1 | tee race.log
           bash supabase/tests/concurrency/redeem-invite-race.sh 2>&1 | tee -a race.log
+          bash supabase/tests/concurrency/lifecycle-races.sh 2>&1 | tee -a race.log
+          bash supabase/tests/concurrency/lifecycle-races.sh 2>&1 | tee -a race.log
 
       - name: "L2 API (real GoTrue + PostgREST + TOTP MFA)"
         run: |
@@ -96,7 +98,7 @@ jobs:
           eval "$(pnpm exec supabase status -o env | grep -E '^(API_URL|DB_URL|ANON_KEY|SERVICE_ROLE_KEY)=')"
           set +a
           export API_URL DB_URL ANON_KEY SERVICE_ROLE_KEY
-          node --test --test-reporter=tap supabase/tests/api/identity.api.test.mjs 2>&1 | tee api.log
+          node --test --test-reporter=tap supabase/tests/api/identity.api.test.mjs supabase/tests/api/experience.api.test.mjs 2>&1 | tee api.log
 
       - name: Report results as annotations
         if: always()
@@ -109,7 +111,7 @@ jobs:
             echo "::error title=pgTAP failure detail::$body"
           fi
           echo "::notice::L1 pgTAP: ok=$ok not_ok=$notok; $(grep -E '^(Files=|Result:)' pgtap.log 2>/dev/null | tr '\n' ' ')"
-          grep -E 'T-I07|FAIL' race.log 2>/dev/null | sed 's/^/::notice::L1c /' || true
+          grep -E '^ok|FAIL' race.log 2>/dev/null | sed 's/^/::notice::L1c /' || true
           if [ -f api.log ]; then
             echo "::notice::L2 API: $(grep -E '^# (tests|pass|fail|skipped)' api.log | tr '\n' ' ')"
             grep -E '^\s*(not ok|ok) [0-9]+' api.log | sed -E 's/^\s*//' | while read -r l; do echo "::notice::L2 $l"; done
