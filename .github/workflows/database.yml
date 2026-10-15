@@ -111,10 +111,10 @@ jobs:
             echo "::error title=pgTAP failure detail::$body"
           fi
           echo "::notice::L1 pgTAP: ok=$ok not_ok=$notok; $(grep -E '^(Files=|Result:)' pgtap.log 2>/dev/null | tr '\n' ' ')"
-          grep -E '^ok|FAIL' race.log 2>/dev/null | sed 's/^/::notice::L1c /' || true
+          echo "::notice::L1c $(grep -cE '^ok' race.log 2>/dev/null) ok lines, $(grep -cE '^FAIL' race.log 2>/dev/null) FAIL lines: $(grep -E '^ok' race.log 2>/dev/null | sed -E 's/^ok - ([A-Za-z0-9-]+).*/\1/' | sort | uniq -c | tr -s ' ' | tr '\n' ';')"
           if [ -f api.log ]; then
             echo "::notice::L2 API: $(grep -E '^# (tests|pass|fail|skipped)' api.log | tr '\n' ' ')"
-            grep -E '^\s*(not ok|ok) [0-9]+' api.log | sed -E 's/^\s*//' | while read -r l; do echo "::notice::L2 $l"; done
+            echo "::notice::L2 tests: $(grep -E '^\s*(not ok|ok) [0-9]+' api.log | sed -E 's/^\s*//' | cut -c1-70 | awk 'BEGIN{ORS=" | "}{print}')"
             if grep -qE '^\s*not ok' api.log; then
               body=$(grep -vE '^\s*(duration_ms|type:|stack:|at |\.\.\.|---)' api.log | head -150 | sed -E 's/eyJ[A-Za-z0-9_.-]{20,}/[jwt]/g' | awk 'BEGIN{ORS="%0A"}{print}')
               echo "::error title=L2 API failure detail::$body"
