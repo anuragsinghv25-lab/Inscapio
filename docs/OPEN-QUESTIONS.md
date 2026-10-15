@@ -171,7 +171,7 @@ Context: [`design/phase-1-5-product-design-review.md`](./design/phase-1-5-produc
 
 ## Stage 3 design questions (13 Oct 2026)
 
-> 15 Oct 2026: none of Q-31…Q-43 blocks the local-only increment 3.1. Classification in `architecture/stage-3-implementation-plan.md` §4.1. All remained open then; Q-43 was answered on 15 Oct 2026 (below).
+> 15 Oct 2026: none of Q-31…Q-43 blocks the local-only increment 3.1. Classification in `architecture/stage-3-implementation-plan.md` §4.1. All remained open then; Q-43 was answered on 15 Oct 2026 (below). 3.1 and 3.2 are now merged (local only). Q-30, Q-31, Q-32, Q-33, Q-34, Q-38 and Q-40 remain **open** and are laid out for the owner, with options and the facts to obtain, in [`architecture/stage-3-0-decision-brief.md`](./architecture/stage-3-0-decision-brief.md).
 
 ### Q-31 · Keep the existing Supabase project or create new staging and production projects?
 - **Why it matters:** its region, org, plan and config are unverified; region is per project (see D-051).
