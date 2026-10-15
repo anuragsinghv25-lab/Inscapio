@@ -4,7 +4,7 @@
 
 InScapio is an early-stage product exploring an **AI-native publishing platform for interactive knowledge experiences**: a place where a publisher's expertise becomes something a reader can explore, not just scroll.
 
-**Status: Phase 1 (schema, renderer, design system) is merged; Phase 1.5 (product design review, documentation only) is in review.** There is a frozen HTML prototype, a set of planning documents, and a small Next.js application that renders both prototype experiences from validated, versioned content. There is no database, auth, publisher studio or AI yet, and nothing here is deployed.
+**Status: Phase 1 (schema, renderer, design system), Phase 1.5 (product design review) and the Stage 2 reader shell are merged. Stage 3 backend foundations are in progress, local database only: increment 3.1 (identity core, PR #9) and 3.2 (experience core, PR #10, merge commit `ed97603`) are merged; the Stage 3.0 owner decision gate for hosted work and authentication (3.3) is open.** There is a frozen HTML prototype, a set of planning documents, a small Next.js application that renders both prototype experiences from validated, versioned content files, and a Supabase schema (migrations, RLS, lifecycle functions) that exists **only as local migrations tested in CI**. The application has no database client, sign-in, publisher studio or AI yet, the public site does not read the database, no hosted Supabase project is connected, and nothing here is deployed.
 
 ## Labels used in this repository
 
@@ -33,7 +33,7 @@ It is deliberately **not** an AI article writer, a Medium/Substack clone, a CMS 
   - To view it, open the file in a browser. Fonts load from Google Fonts; it works without them.
   - What it contains in detail: [`docs/design/current-design-audit.md`](docs/design/current-design-audit.md).
 - **Phase 0 documentation** (this repository's `/docs`).
-- **Phase 1 application** (this branch; see [Phase 1 implementation note](#phase-1-implementation-note)): a Next.js app with a versioned content schema, a block renderer, a design-token system, and both v0 experiences migrated to data. Routes: `/`, `/about`, `/experiences/whose-body-is-it`, `/experiences/climate`.
+- **Phase 1 application** (merged; see [Phase 1 implementation note](#phase-1-implementation-note)): a Next.js app with a versioned content schema, a block renderer, a design-token system, and both v0 experiences migrated to data. Routes: `/`, `/about`, `/experiences/whose-body-is-it`, `/experiences/climate`.
 
 ## Planned
 
@@ -42,7 +42,7 @@ Phasing is a proposal in [`docs/product/mvp-scope.md`](docs/product/mvp-scope.md
 | Phase | Goal |
 |---|---|
 | **0** | Product, design and technical foundation (done) |
-| **1** | Content schema + renderer spike: express both prototype experiences as data, render them in a Next.js app, prove parity with v0 (**this branch; see the implementation note for what was and was not verified**) |
+| **1** | Content schema + renderer spike: express both prototype experiences as data, render them in a Next.js app, prove parity with v0 (**merged; see the implementation note for what was and was not verified**) |
 | **2** | Platform: database, publisher auth, publish pipeline, public reader site, stored feedback |
 | **3** | AI interview, structuring and structured editing |
 | **4** | AI QA, human approval flow, revisions, analytics; invite the first outside publishers (closed alpha) |
@@ -88,6 +88,8 @@ docs/
   design/                  current-design audit, design principles, design-system direction
   architecture/            overview, frontend, backend, AI, content, migration strategy
   engineering/             workflow, coding principles, AI development guidelines
+  runbooks/                operational procedures (bootstrap of the first administrator)
+supabase/                  local-only database: migrations, config, pgTAP / concurrency / API tests (Stage 3.1, 3.2)
 .github/                   pull request template
 ```
 
@@ -119,6 +121,16 @@ pnpm test                # unit and component tests (Vitest)
 pnpm test:e2e            # Playwright: builds, serves on :3100, runs desktop (1280) and mobile (375)
 ```
 
+Database (local only; needs a container runtime for the Supabase local stack, which the cloud workspace used for authoring does not provide; CI runs it in the `Database` workflow):
+
+```bash
+pnpm run db:start        # Supabase local stack (CLI is a devDependency)
+pnpm run db:test         # pgTAP: supabase/tests/database/
+pnpm run db:reset        # re-apply supabase/migrations/ from scratch
+pnpm run db:stop
+# plus supabase/tests/concurrency/*.sh and supabase/tests/api/*.test.mjs; exact CI invocation: .github/workflows/database.yml
+```
+
 Playwright uses the Chromium that is already installed (`PLAYWRIGHT_BROWSERS_PATH`); do not run `playwright install` in the cloud workspace. Fonts are self-hosted from npm packages, so no network is needed at runtime.
 
 Regenerate migrated content from the frozen prototype (only needed if the extractors change):
@@ -130,11 +142,24 @@ pnpm generate:climate      # prototype/v0 -> src/content/experiences/climate/{ex
 
 Deployment is deliberately not configured in this branch. `inscapio.in` is managed separately and is not touched by this work.
 
+## Stage 3 backend status
+
+Plan, gates and decisions: [`docs/architecture/stage-3-implementation-plan.md`](docs/architecture/stage-3-implementation-plan.md) and [`docs/DECISIONS.md`](docs/DECISIONS.md). Everything below ran against a **local** Supabase stack only.
+
+| Increment | State | What exists |
+|---|---|---|
+| 3.1 Identity core | merged (PR #9, `a7f3572`) | `admins`, `publishers`, `invites`, `audit_events`; invitation and publisher-status functions; forced RLS; admin bootstrap runbook |
+| 3.2 Experience core | merged (PR #10, `ed97603`) | `topics`, `experiences`, `experience_topics`, `revisions`, `revision_validations`, `approvals`, `publications`, `published_experiences`; append-only revisions, validator attestation, human-only approval and publication, takedown; roles `validator_service` and `ai_service` (no privileges) |
+| 3.0 Decision and environment gate | **open, awaiting owner answers** (Q-30, Q-31, Q-32, Q-33, Q-34, Q-38, Q-40) | decision brief: [`docs/architecture/stage-3-0-decision-brief.md`](docs/architecture/stage-3-0-decision-brief.md) |
+| 3.3 Auth integration | not started; blocked on 3.0 | needs a hosted staging project, SMTP, and approval of `@supabase/ssr` and `@supabase/supabase-js` |
+
+**Last verified on `main` at `ed97603`** (post-merge `Database` workflow, run 38711613840: success): pgTAP 14 files / 651 assertions pass; concurrency scripts (each run twice) pass; API tests on real GoTrue and PostgREST 28 of 28 pass. Application checks on the same code (`pnpm test`: 54 Vitest tests in 6 files pass; `pnpm test:e2e`: 137 Playwright tests pass, 45 skipped by design). The browser and application-level (L3) auth tests do not exist yet. The hosted Supabase project's state is unverified. See plan §4.1 and §4.2 for the exact scope and what is not claimed.
+
 ## Phase 1 implementation note
 
 **What exists.** A strict, versioned Zod schema (`schemaVersion: 1`) with a closed vocabulary of 15 blocks; a renderer that is a compile-time-checked `switch` over block type (content never selects a component); both v0 experiences expressed as data; a precomputed climate dataset generated by running v0's own model code; and home, About, experience and not-found routes with real URLs.
 
-**What was actually run and passed** (on this branch, Chromium only):
+**What was actually run and passed at the time of Phase 1** (Chromium only; a historical snapshot, current counts are in [Stage 3 backend status](#stage-3-backend-status)):
 
 | Check | Result |
 |---|---|

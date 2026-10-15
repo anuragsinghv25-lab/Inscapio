@@ -366,3 +366,4 @@ Each fact was read from the vendor's current documentation page named here. Docs
 | U-8 | MFA availability on the plan in use | Pricing/plan docs. |
 | U-9 | Owner-access audit logging for the Supabase organisation | Account security docs. |
 | U-10 | Storage RLS and public/private bucket behaviour for media | Verify at the media increment. |
+| U-11 | How to reset or unenrol an administrator's MFA factor if the authenticator is lost, and whether the SQL bootstrap helps (it creates an administrator row; it does not reset a factor) | Spike in 3.3; raised in the Stage 3.0 decision brief (Q-34). |

@@ -1,6 +1,6 @@
 # Stage 3 implementation plan
 
-> **Status:** Stage 3 design · **Proposed**, except where §4.1 records an owner approval. Increment 3.1 (local-only identity core) is merged; 3.2 (local-only experience core) is implemented on its own branch and PR (§4.2); later increments have not started. No hosted Supabase resource was created or connected and the production domain and deployment were not touched.
+> **Status:** Stage 3 design · **Proposed**, except where §4.1 records an owner approval. Increments 3.1 (local-only identity core, PR #9, `a7f3572`) and 3.2 (local-only experience core, PR #10, `ed97603`) are **merged** (§4.1, §4.2). The 3.0 decision gate for hosted work is open: see [`stage-3-0-decision-brief.md`](./stage-3-0-decision-brief.md). 3.3 and later have not started. No hosted Supabase resource was created or connected and the production domain and deployment were not touched.
 > **Companions:** [`identity-and-access-control.md`](./identity-and-access-control.md), [`supabase-data-model.md`](./supabase-data-model.md), [`authentication-and-rls-test-plan.md`](./authentication-and-rls-test-plan.md). Labels (V-n, U-n, Rec D-nnn, Q-nn) are defined in the identity document §0. Roadmap position: Stage 3 of the five-stage roadmap in [`phase-2-readiness.md`](./phase-2-readiness.md); the publisher workspace UI is Stage 4.
 
 ## 1. Recommended starting point
@@ -93,6 +93,8 @@ Open questions to answer: Q-30…Q-43 in `OPEN-QUESTIONS.md`.
 
 ### 4.1 Increment 3.1 reconciliation (15 Oct 2026)
 
+> Historical record as written for the 3.1 PR (merged as `a7f3572`). Counts below are the 3.1 counts at that time; the approvals listed here were extended by the 3.2 approvals in §4.2.
+
 **Approvals (3.1 portions only).** The owner approved: D-045; the invitation portion of D-046; the 3.1 portion of D-050; D-052; the 3.1 portion of D-053. D-047, D-048, D-049, D-051 and the remaining parts of D-046/D-050/D-053 are **not** approved. See `DECISIONS.md`.
 
 **3.0 versus 3.1.** 3.0 gates hosted work. The 3.1 build is local only, so only the items below block it; everything else in 3.0 waits for staging (3.3).
@@ -132,6 +134,8 @@ L3 (application/e2e) is **not implemented** and not claimed: there is no Next.js
 **Invitation expiry semantics.** Expiry is determined by `expires_at`, evaluated whenever an invitation is used. The stored status `expired` is **not** set automatically or by a scheduled job. It is written only when `create_invite` runs for the same email and finds a lapsed `pending` row. `redeem_invite` refuses a lapsed invitation (`expires_at <= now()`) without changing its status, so a lapsed invitation can remain stored as `pending`. Any reporting must therefore treat `pending AND expires_at <= now()` as expired. A scheduled sweep, if wanted, is later work.
 
 ### 4.2 Increment 3.2 reconciliation (15 Oct 2026)
+
+> **Merged** as PR #10, merge commit `ed97603746b94780da78fec5871e5fc0ba0dec5a` (15 Oct 2026). Post-merge `Database` workflow on `main`: run 38711613840, success. Final results at merge: pgTAP 14 files / 651 assertions; API tests 28 of 28; concurrency scripts (each run twice) pass. Text below was written before the merge and is kept as the record of what was built.
 
 **Scope.** The eight tables of the data model (`topics`, `experiences`, `experience_topics`, `revisions`, `revision_validations`, `approvals`, `publications`, `published_experiences`), the lifecycle functions, and the roles `validator_service` and `ai_service`. Local database only; no application code, no hosted project, no public-site change. The 3.1 migrations are untouched; 3.2 adds four forward-only migrations (`20261016000100`–`400`).
 

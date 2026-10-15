@@ -33,7 +33,9 @@ Every document carries a **Status** line. Phase 0 documents are *drafts pending 
 | | [`architecture/identity-and-access-control.md`](./architecture/identity-and-access-control.md) | Stage 3: principals, roles, permission matrix, auth, sessions |
 | | [`architecture/supabase-data-model.md`](./architecture/supabase-data-model.md) | Stage 3: tables, RLS, lifecycle, migrations |
 | | [`architecture/authentication-and-rls-test-plan.md`](./architecture/authentication-and-rls-test-plan.md) | Stage 3: positive and negative authorisation tests |
+| | [`runbooks/bootstrap-first-admin.md`](./runbooks/bootstrap-first-admin.md) | Stage 3.1: how the owner creates the first administrator (local first) |
 | | [`architecture/stage-3-implementation-plan.md`](./architecture/stage-3-implementation-plan.md) | Stage 3: increments, environments, gates |
+| | [`architecture/stage-3-0-decision-brief.md`](./architecture/stage-3-0-decision-brief.md) | Stage 3.0: owner decisions needed before 3.3 (Q-30…Q-40) |
 | **Engineering** | [`engineering/development-workflow.md`](./engineering/development-workflow.md) | Git, PRs, releases, definition of done |
 | | [`engineering/coding-principles.md`](./engineering/coding-principles.md) | Conventions |
 | | [`engineering/ai-development-guidelines.md`](./engineering/ai-development-guidelines.md) | How AI agents work here |
