@@ -178,7 +178,7 @@ test('a publisher cannot read another publisher\'s row (second redeemed publishe
   assert.deepEqual(own1.json, [{ id: state.pubId }], 'valid: an active publisher reads only their own row');
   const other = await rest('GET', `publishers?select=id&id=eq.${state.pub2Id}`, state.pubToken);
   assert.deepEqual(other.json, [], 'denied: publisher 1 cannot read publisher 2');
-  const asAdmin = await rest('GET', 'publishers?select=id,status', state.adminAal2);
+  const asAdmin = await rest('GET', `publishers?select=id,status&id=in.(${state.pubId},${state.pub2Id})`, state.adminAal2);
   assert.equal(asAdmin.json.length, 2, 'valid: an administrator at aal2 inspects all publisher rows');
 });
 
