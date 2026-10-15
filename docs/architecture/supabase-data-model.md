@@ -1,6 +1,6 @@
 # Supabase data model
 
-> **Status:** Stage 3 design · **Proposed** (no table, migration, policy or function exists; nothing was run against any database) · written 13 Oct 2026.
+> **Status:** Stage 3 design · **Proposed** (design text; the 3.1 and 3.2 parts are implemented in local migrations, see the implementation notes below; nothing was run against a hosted database) · written 13 Oct 2026.
 > **Companions:** [`identity-and-access-control.md`](./identity-and-access-control.md) (principals, permission matrix P-xx, labels, verified facts V-n / unverified U-n), [`authentication-and-rls-test-plan.md`](./authentication-and-rls-test-plan.md) (T-xx tests), [`stage-3-implementation-plan.md`](./stage-3-implementation-plan.md).
 > **Provenance labels** are defined in the identity document §0. In short: *Accepted/Proposed D-xxx* = already in the decision log; *Rec D-045…D-053* = new recommendation, Proposed only; *V-n* = verified vendor fact; *U-n* = unverified.
 

@@ -349,11 +349,11 @@ Status for these entries is **Proposed, pending owner review**. Nothing is imple
 
 ## D-048 · Append-only revisions; human-only approval and publication functions; a separate public projection; derived lifecycle status
 - **Decision:** `revisions`, `approvals`, `audit_events` append-only; `publications.revision_id` references `approvals`; writes only through definer functions requiring a human session and ownership; privileges of `service_role` on those tables revoked; public reads only `published_experiences` (snapshot at publish); no stored `status` (amends the Phase 0 list; `in_review` dropped for the alpha); admin takedown sets a hold; full-Zod validation attested by a server-only role.
-- **Status:** Proposed
+- **Status:** Accepted by the owner (15 Oct 2026) for the **Stage 3.2 experience lifecycle as implemented** in PR #10: append-only revisions, human-only approval and publication, the separate public projection, and administrative takedown. The attestation part is settled by Q-43 (D-055 item 1). Admin re-auth and takedown confirmation details remain under D-050 (Proposed).
 
 ## D-049 · The AI service uses a distinct Postgres role with no approval or publication privileges
 - **Decision:** `ai_service` custom role, narrow `ai_api` schema, no grants on `approvals`/`publications`; never a Supabase secret key (which has BYPASSRLS). Feasibility is unverified (U-6).
-- **Status:** Proposed (refines D-018)
+- **Status:** Accepted by the owner (15 Oct 2026) for **Stage 3.2: `ai_service` exists as a separate NOLOGIN role with no privileges** (no table grants, no EXECUTE, no memberships; tested). Any future AI permission, including an `ai_api` schema, must be granted narrowly in a later increment and approved then. Hosted creation and connection of such a role remain unverified (U-4, U-6). (Refines D-018.)
 
 ## D-050 · Admin is operational and does not imply content access
 - **Decision:** no admin policy on drafts, revisions or feedback; MFA (aal2) for all admin operations; re-auth, reason and confirmation for suspend and takedown; admin bootstrap by documented SQL, not an app feature; owner-level access is an acknowledged trust boundary.
@@ -385,7 +385,7 @@ Status for these entries is **Proposed, pending owner review**. Nothing is imple
 
 ## D-055 · Increment 3.2 implementation clarifications (experience core)
 - **Context:** the data model leaves a few contract points open. 3.2 had to choose to implement them; none changes the security model.
-- **Decision (all Proposed, none individually approved):**
+- **Decision (approved by the owner as a set on 15 Oct 2026, including items 8 and 8a):**
   1. **Q-43:** attestation from the start. Only `validator_service` can write `revision_validations`, through `record_validation`; the database copies the hash from the stored revision; approval requires the latest attestation for that exact content to be a pass (a tie fails closed). The SQL shape gate is structural only.
   2. `public.get_revision_for_validation(uuid)` is added so the validator can read the document it attests; it and `record_validation` check the caller inside the function as well as by EXECUTE grant.
   3. Approval, attestation and publication are bound by composite foreign keys to the revision's `content_hash` and experience; the head pointer is bound to its own experience. The hash is always computed by a trigger.
@@ -393,9 +393,13 @@ Status for these entries is **Proposed, pending owner review**. Nothing is imple
   5. Edit conflict is SQLSTATE 23505. `save_revision` is refused when archived but allowed while held; a hold blocks approval and publication; a hold cannot be set on a live publication (use `admin_takedown`); a published experience cannot be archived.
   6. Approve, publish and unpublish require a human session (`private.is_human_session`: verified subject, role `authenticated`, caller not a machine role).
   7. `validator_service` and `ai_service` are created NOLOGIN by migration with no privileges; a login role and its password are a later, out-of-repo step.
-  8. Reserved slugs: the two existing file-based slugs plus route words (a proposal; the list is easy to change in a new migration).
-  8a. **Retry contract for attestations:** `UNIQUE (revision_id, validator_version)` makes one version's verdict on one revision final. An attempt that is refused or interrupted before commit records nothing (row and audit event are one transaction), so the same version can retry. After a verdict is recorded, a changed verdict needs a new `validator_version` (the earlier row stays; the latest attestation governs; a tie fails closed). Rationale: the revision is immutable, so a same-version re-run should give the same answer; a different answer is a validator change worth a new version, and the constraint stops a validator from silently flipping its own recorded verdict. Cost: a validator that wrongly records a transient fault as a failure must bump its version to correct it, so it should record only completed verdicts. Not changed in this PR.
+  8. Reserved slugs: the two existing file-based slugs plus route words. Approved as the **initial policy**; it is updated deliberately, in a new migration, whenever an application route is added.
+  8a. **Retry contract for attestations (approved; the constraint is kept):** `UNIQUE (revision_id, validator_version)` makes one version's verdict on one revision final. An attempt that is refused or interrupted before commit records nothing (row and audit event are one transaction), so the same version can retry. After a verdict is recorded, a changed verdict needs a new `validator_version` (the earlier row stays; the latest attestation governs; a tie fails closed). Rationale: the revision is immutable, so a same-version re-run should give the same answer; a different answer is a validator change worth a new version, and the constraint stops a validator from silently flipping its own recorded verdict. Cost: a validator that wrongly records a transient fault as a failure must bump its version to correct it, so it should record only completed verdicts. Not changed in this PR. A completed verdict is immutable.
   9. Projection: title, summary and language come from the approved revision; topic slugs are copied at publish time. Topic writes are direct DML by an aal2 administrator with an audit trigger. `approve_revision` has no note parameter.
-- **Not decided here:** D-048 and D-049 as wholes remain Proposed; hosted behaviour of role creation and the `postgres` role's BYPASSRLS attribute (U-4/U-6) is unverified.
-- **Status:** Proposed
+- **Not decided here:** hosted behaviour of role creation and the `postgres` role's BYPASSRLS attribute (U-4/U-6) is unverified.
+- **Status:** Accepted (15 Oct 2026)
 
+## D-056 · The validator service has its own minimal-privilege identity (Stage 3.3 requirement)
+- **Decision:** in Stage 3.3 the trusted validator service connects as a **dedicated identity** that is a member of `validator_service` and holds nothing else. Its credentials are never exposed to publishers or to the AI service, and a generic privileged credential (the Supabase secret / `service_role` key, or any BYPASSRLS role) must **not** be used as a substitute. The SQL shape gate stays explicitly structural; the validator performs the full Zod validation and attests the exact stored revision (`get_revision_for_validation`, then `record_validation`).
+- **Consequence:** creating that login role, its credential handling and connection path (including hosted/pooled behaviour, U-6) are 3.3 work and need their own tests on the real stack. Nothing is created in 3.2.
+- **Status:** Accepted (15 Oct 2026)
