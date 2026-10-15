@@ -107,7 +107,10 @@ jobs:
           if [ -f api.log ]; then
             echo "::notice::L2 API: $(grep -E '^# (tests|pass|fail|skipped)' api.log | tr '\n' ' ')"
             grep -E '^\s*(not ok|ok) [0-9]+' api.log | sed -E 's/^\s*//' | while read -r l; do echo "::notice::L2 $l"; done
-            grep -E '^\s*(error:|message:|expected:|actual:|code:)|AssertionError' api.log | sed -E 's/^\s*//' | head -40 | while read -r l; do echo "::error::L2 detail: $l"; done
+            if grep -qE '^\s*not ok' api.log; then
+              body=$(grep -vE '^\s*(duration_ms|type:|stack:|at |\.\.\.|---)' api.log | head -150 | sed -E 's/eyJ[A-Za-z0-9_.-]{20,}/[jwt]/g' | awk 'BEGIN{ORS="%0A"}{print}')
+              echo "::error title=L2 API failure detail::$body"
+            fi
           fi
 
       - name: Stack logs on failure

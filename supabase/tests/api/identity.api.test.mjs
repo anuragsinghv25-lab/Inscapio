@@ -95,9 +95,14 @@ test('setup: synthetic users exist and the admin is bootstrapped by the owner pr
 });
 
 test('T-A09 / T-A05 anon cannot call identity functions or read identity tables through the API', async () => {
-  for (const fn of ['create_invite', 'revoke_invite', 'redeem_invite', 'set_publisher_status']) {
-    denied(await rpc(fn, {}), `anon rpc ${fn}`);
-  }
+  const nil = '00000000-0000-0000-0000-000000000000';
+  const calls = {
+    create_invite: { p_email: email('anon') },
+    revoke_invite: { p_invite_id: nil },
+    redeem_invite: {},
+    set_publisher_status: { p_publisher_id: nil, p_status: 'suspended', p_reason: 'x' },
+  };
+  for (const [fn, args] of Object.entries(calls)) denied(await rpc(fn, args), `anon rpc ${fn}`);
   for (const table of ['admins', 'publishers', 'invites', 'audit_events']) {
     denied(await rest('GET', table), `anon select ${table}`);
   }
