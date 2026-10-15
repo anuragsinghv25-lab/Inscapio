@@ -3,7 +3,7 @@
 -- `set local role` + request.jwt.claims is how PostgREST presents a caller to Postgres.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(16);
+select plan(18);
 create schema t;
 grant usage on schema t to public;
 create function t.as_user(p_uid uuid, p_aal text default 'aal1', p_extra jsonb default '{}'::jsonb)
@@ -51,6 +51,10 @@ select set_eq($$select tablename::text from pg_tables where schemaname = 'public
   'T-M01 public contains exactly the four 3.1 tables (a new table must be added to this test with its policy tests)');
 select is_empty($$select tablename from pg_tables where schemaname = 'public' and not rowsecurity$$,
   'T-M01 RLS is enabled on every public table');
+select is_empty($$select c.relname from pg_class c join pg_namespace n on n.oid = c.relnamespace where n.nspname = 'public' and c.relkind in ('r','p') and not (c.relrowsecurity and c.relforcerowsecurity)$$,
+  'T-M01 RLS is enabled AND forced on every public table (relrowsecurity and relforcerowsecurity)');
+select is_empty($$select p.oid::regprocedure::text from pg_proc p join pg_namespace n on n.oid = p.pronamespace join pg_roles r on r.oid = p.proowner where n.nspname in ('public','private') and p.prosecdef and not r.rolbypassrls$$,
+  'FORCE RLS dependency: every SECURITY DEFINER function is owned by a role with BYPASSRLS, so forced RLS does not block it');
 select is_empty($$select viewname from pg_views where schemaname = 'public'$$,
   'T-M04 no views in the exposed schema');
 

@@ -91,6 +91,7 @@ test('setup: synthetic users exist and the admin is bootstrapped by the owner pr
   state.adminId = await createUser('admin');
   state.pubId = await createUser('publisher');
   state.plainId = await createUser('plain');
+  state.pub2Id = await createUser('publisher2');
   owner(`select private.bootstrap_admin('${state.adminId}')`);
 });
 
@@ -167,21 +168,58 @@ test('T-I04 / T-S04 redemption: valid for the invited verified user, refused the
   assert.ok(again.status >= 400 && again.json?.code === '55000', `second redemption refused: ${again.text}`);
 });
 
+test('a publisher cannot read another publisher\'s row (second redeemed publisher)', async () => {
+  const inv = await rpc('create_invite', { p_email: email('publisher2') }, state.adminAal2);
+  assert.equal(inv.status, 200, `invite for publisher2: ${inv.text}`);
+  state.pub2Token = await signIn('publisher2');
+  const red = await rpc('redeem_invite', {}, state.pub2Token);
+  assert.equal(red.status, 200, `publisher2 redeem: ${red.text}`);
+  const own1 = await rest('GET', 'publishers?select=id', state.pubToken);
+  assert.deepEqual(own1.json, [{ id: state.pubId }], 'valid: an active publisher reads only their own row');
+  const other = await rest('GET', `publishers?select=id&id=eq.${state.pub2Id}`, state.pubToken);
+  assert.deepEqual(other.json, [], 'denied: publisher 1 cannot read publisher 2');
+  const asAdmin = await rest('GET', 'publishers?select=id,status', state.adminAal2);
+  assert.equal(asAdmin.json.length, 2, 'valid: an administrator at aal2 inspects all publisher rows');
+});
+
 test('T-I01 a publisher cannot issue invitations or promote themselves', async () => {
   denied(await rpc('create_invite', { p_email: email('z') }, state.pubToken), 'publisher create_invite');
   denied(await rest('POST', 'admins', state.pubToken, { user_id: state.pubId }), 'publisher insert admins');
 });
 
-test('T-S02 a suspended publisher loses access immediately, with the SAME token', async () => {
-  const before = await rest('PATCH', `publishers?id=eq.${state.pubId}`, state.pubToken, { display_name: 'Synthetic' }, { Prefer: 'return=representation' });
-  assert.equal(before.status, 200);
+const patch = (token, id, body) => rest('PATCH', `publishers?id=eq.${id}`, token, body, { Prefer: 'return=representation' });
+const setStatus = (status) => rpc('set_publisher_status', { p_publisher_id: state.pubId, p_status: status, p_reason: `synthetic ${status}` }, state.adminAal2);
+
+async function assertLockedOut(label) {
+  const read = await rest('GET', 'publishers?select=id,status', state.pubToken);
+  assert.deepEqual(read.json, [], `${label}: the same token can no longer read the protected row`);
+  const write = await patch(state.pubToken, state.pubId, { display_name: `After ${label}` });
+  assert.deepEqual(write.json, [], `${label}: the same token can no longer update it`);
+  const selfReactivate = await patch(state.pubToken, state.pubId, { status: 'active' });
+  assert.ok(selfReactivate.status >= 400, `${label}: a publisher cannot self-reactivate (${selfReactivate.text})`);
+  assert.equal(selfReactivate.json?.code, '42501');
+  const admin = await rest('GET', `publishers?select=id,status&id=eq.${state.pubId}`, state.adminAal2);
+  assert.equal(admin.json.length, 1, `${label}: an administrator at aal2 can still inspect the row`);
+  assert.equal(admin.json[0].status, label);
+}
+
+test('T-S02 / T-S03 suspension, revocation and reinstatement take effect on the very next request, same token', async () => {
+  const before = await patch(state.pubToken, state.pubId, { display_name: 'Synthetic' });
   assert.equal(before.json.length, 1, 'valid: an active publisher can edit their profile');
-  const sus = await rpc('set_publisher_status', { p_publisher_id: state.pubId, p_status: 'suspended', p_reason: 'synthetic test' }, state.adminAal2);
-  assert.equal(sus.status, 204 , `suspend: ${sus.text}`);
-  const after = await rest('PATCH', `publishers?id=eq.${state.pubId}`, state.pubToken, { display_name: 'After' }, { Prefer: 'return=representation' });
-  assert.deepEqual(after.json, [], 'denied: the stale-session publisher can no longer edit');
-  const own = await rest('GET', 'publishers?select=status', state.pubToken);
-  assert.deepEqual(own.json, [{ status: 'suspended' }]);
+  const readBefore = await rest('GET', 'publishers?select=id', state.pubToken);
+  assert.equal(readBefore.json.length, 1, 'valid: an active publisher can read their row');
+
+  assert.equal((await setStatus('suspended')).status, 204);
+  await assertLockedOut('suspended');
+
+  assert.equal((await setStatus('active')).status, 204);
+  const back = await rest('GET', 'publishers?select=id,status', state.pubToken);
+  assert.deepEqual(back.json, [{ id: state.pubId, status: 'active' }], 'valid: reinstatement restores read access to the same token');
+  const edit = await patch(state.pubToken, state.pubId, { display_name: 'Reinstated' });
+  assert.equal(edit.json.length, 1, 'valid: reinstatement restores update access');
+
+  assert.equal((await setStatus('revoked')).status, 204);
+  await assertLockedOut('revoked');
 });
 
 test('T-S05 a token with altered claims is rejected', async () => {

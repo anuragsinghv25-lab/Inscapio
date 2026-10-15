@@ -3,7 +3,7 @@
 -- `set local role` + request.jwt.claims is how PostgREST presents a caller to Postgres.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(48);
+select plan(56);
 create schema t;
 grant usage on schema t to public;
 create function t.as_user(p_uid uuid, p_aal text default 'aal1', p_extra jsonb default '{}'::jsonb)
@@ -84,10 +84,14 @@ select t.as_user('00000000-0000-4000-8000-0000000000b3', 'aal1');
 select is((select private.is_active_publisher()), false, 'T-S02 denied: a suspended publisher is not an active publisher');
 select is((select private.current_publisher_id()), null, 'denied: a suspended publisher has no current publisher id');
 with u as (update public.publishers set bio = 'still here' where id = '00000000-0000-4000-8000-0000000000b3' returning 1) select is((select count(*) from u), 0::bigint, 'T-S02 denied: a suspended publisher cannot edit their own profile');
-select is((select status from public.publishers where id = '00000000-0000-4000-8000-0000000000b3'), 'suspended', 'a suspended publisher can still read their own status');
+select is((select count(*) from public.publishers where id = '00000000-0000-4000-8000-0000000000b3'), 0::bigint, 'T-S02 denied: a suspended publisher can no longer read their own row');
+select throws_ok($q$update public.publishers set status = 'active' where id = '00000000-0000-4000-8000-0000000000b3'$q$, '42501'::char(5), null::text, $d$T-S02 denied: a suspended publisher cannot self-reactivate$d$);
 select t.as_user('00000000-0000-4000-8000-0000000000b4', 'aal1');
 select is((select private.is_active_publisher()), false, 'T-S03 denied: a revoked publisher is not an active publisher');
 with u as (update public.publishers set bio = 'still here' where id = '00000000-0000-4000-8000-0000000000b4' returning 1) select is((select count(*) from u), 0::bigint, 'T-S03 denied: a revoked publisher cannot edit their own profile');
+select is((select count(*) from public.publishers where id = '00000000-0000-4000-8000-0000000000b4'), 0::bigint, 'T-S03 denied: a revoked publisher can no longer read their own row');
+select t.as_user('00000000-0000-4000-8000-0000000000a1', 'aal2');
+select is((select count(*) from public.publishers where id in ('00000000-0000-4000-8000-0000000000b3','00000000-0000-4000-8000-0000000000b4')), 2::bigint, 'valid: an administrator at aal2 can still inspect suspended and revoked publisher rows');
 
 -- ============ set_publisher_status
 select t.as_user('00000000-0000-4000-8000-0000000000b1', 'aal2');
@@ -110,6 +114,8 @@ select lives_ok($q$select public.set_publisher_status('00000000-0000-4000-8000-0
 select t.as_user('00000000-0000-4000-8000-0000000000b2', 'aal1');
 select is((select private.is_active_publisher()), false, 'T-S02 denied: with the very same claims the publisher is inactive immediately after suspension');
 with u as (update public.publishers set bio = 'after suspension' where id = '00000000-0000-4000-8000-0000000000b2' returning 1) select is((select count(*) from u), 0::bigint, 'T-S02 denied: the stale-session publisher can no longer edit');
+select is((select count(*) from public.publishers where id = '00000000-0000-4000-8000-0000000000b2'), 0::bigint, 'T-S02 denied: with the same claims the suspended publisher can no longer read their row');
+select throws_ok($q$update public.publishers set status = 'active' where id = '00000000-0000-4000-8000-0000000000b2'$q$, '42501'::char(5), null::text, $d$T-S02 denied: the suspended publisher cannot self-reactivate$d$);
 select t.as_owner();
 select is((select status_reason from public.publishers where id = '00000000-0000-4000-8000-0000000000b2'), 'synthetic reason', 'the reason is recorded');
 select is((select status_changed_by from public.publishers where id = '00000000-0000-4000-8000-0000000000b2'), '00000000-0000-4000-8000-0000000000a1'::uuid, 'the acting administrator is recorded');
@@ -119,10 +125,14 @@ select lives_ok($q$select public.set_publisher_status('00000000-0000-4000-8000-0
 select t.as_user('00000000-0000-4000-8000-0000000000b2', 'aal1');
 select is((select private.is_active_publisher()), true, 'valid: a reinstated publisher is active again');
 select lives_ok($q$update public.publishers set bio = 'after reinstatement' where id = '00000000-0000-4000-8000-0000000000b2'$q$, 'valid: a reinstated publisher can edit again');
+select is((select count(*) from public.publishers where id = '00000000-0000-4000-8000-0000000000b2'), 1::bigint, 'valid: a reinstated publisher can read their own row again');
 select t.as_user('00000000-0000-4000-8000-0000000000a1', 'aal2');
 select lives_ok($q$select public.set_publisher_status('00000000-0000-4000-8000-0000000000b2', 'revoked', 'synthetic revocation')$q$, 'T-D04 valid: an administrator can revoke a publisher');
 select t.as_user('00000000-0000-4000-8000-0000000000b2', 'aal1');
 select is((select private.is_active_publisher()), false, 'T-S03 denied: a revoked publisher is inactive');
+select is((select count(*) from public.publishers where id = '00000000-0000-4000-8000-0000000000b2'), 0::bigint, 'T-S03 denied: with the same claims the revoked publisher can no longer read their row');
+with u as (update public.publishers set bio = 'after revocation' where id = '00000000-0000-4000-8000-0000000000b2' returning 1) select is((select count(*) from u), 0::bigint, 'T-S03 denied: the revoked publisher can no longer edit');
+select throws_ok($q$update public.publishers set status = 'active' where id = '00000000-0000-4000-8000-0000000000b2'$q$, '42501'::char(5), null::text, $d$T-S03 denied: the revoked publisher cannot self-reactivate$d$);
 select t.as_owner();
 select is((select count(*) from public.audit_events where action in ('publisher.suspended','publisher.reinstated','publisher.revoked') and subject_id = '00000000-0000-4000-8000-0000000000b2'::uuid), 3::bigint, 'each status change wrote exactly one audit event');
 select t.as_user('00000000-0000-4000-8000-0000000000b1', 'aal2', '{"app_metadata":{"role":"admin"},"user_metadata":{"role":"admin"}}'::jsonb);
