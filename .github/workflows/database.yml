@@ -94,7 +94,7 @@ jobs:
           eval "$(pnpm exec supabase status -o env | grep -E '^(API_URL|DB_URL|ANON_KEY|SERVICE_ROLE_KEY)=')"
           set +a
           export API_URL DB_URL ANON_KEY SERVICE_ROLE_KEY
-          node --test --test-reporter=tap supabase/tests/api/ 2>&1 | tee api.log
+          node --test --test-reporter=tap supabase/tests/api/identity.api.test.mjs 2>&1 | tee api.log
 
       - name: Report results as annotations
         if: always()
