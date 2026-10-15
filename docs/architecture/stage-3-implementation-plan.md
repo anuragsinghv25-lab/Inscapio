@@ -1,6 +1,6 @@
 # Stage 3 implementation plan
 
-> **Status:** Stage 3 design · **Proposed**. Nothing in this plan has started. This milestone is documentation only: no Supabase resource was created or connected, no table, migration, auth configuration, dependency, credential or application code was added, and the production domain and deployment were not touched.
+> **Status:** Stage 3 design · **Proposed**, except where §4.1 records an owner approval. Increment 3.1 (local-only identity core) is implemented on its own branch; later increments have not started. No hosted Supabase resource was created or connected and the production domain and deployment were not touched.
 > **Companions:** [`identity-and-access-control.md`](./identity-and-access-control.md), [`supabase-data-model.md`](./supabase-data-model.md), [`authentication-and-rls-test-plan.md`](./authentication-and-rls-test-plan.md). Labels (V-n, U-n, Rec D-nnn, Q-nn) are defined in the identity document §0. Roadmap position: Stage 3 of the five-stage roadmap in [`phase-2-readiness.md`](./phase-2-readiness.md); the publisher workspace UI is Stage 4.
 
 ## 1. Recommended starting point
@@ -90,6 +90,46 @@ These are recommendations in `DECISIONS.md` as **Proposed**; none is approved by
 | D-053 increment order; start at 3.1; add `@supabase/ssr` and `@supabase/supabase-js` only at 3.3 with approval | 3.0 |
 
 Open questions to answer: Q-30…Q-43 in `OPEN-QUESTIONS.md`.
+
+### 4.1 Increment 3.1 reconciliation (15 Oct 2026)
+
+**Approvals (3.1 portions only).** The owner approved: D-045; the invitation portion of D-046; the 3.1 portion of D-050; D-052; the 3.1 portion of D-053. D-047, D-048, D-049, D-051 and the remaining parts of D-046/D-050/D-053 are **not** approved. See `DECISIONS.md`.
+
+**3.0 versus 3.1.** 3.0 gates hosted work. The 3.1 build is local only, so only the items below block it; everything else in 3.0 waits for staging (3.3).
+
+| Question | Blocks local-only 3.1? | Where it is needed |
+|---|---|---|
+| Q-30, Q-31, Q-32, Q-33, Q-34 (hosting, project, SMTP, admin count) | No | 3.3 staging; before outside publishers |
+| Q-38 (publisher MFA) | No (admin aal2 is approved in D-050) | 3.3 |
+| Q-40 (invite delivery, 7-day default) | No: the default is a function parameter bounded 1–30 days and can change | 3.3 |
+| Q-43, Q-35, Q-36, Q-37, Q-39, Q-41, Q-42 | No | 3.2 and later |
+
+**Test layers required for 3.1, and the merge gate.** The gate is the `Database` workflow, which runs on the real Supabase local stack (CLI 2.120.0, local Postgres 17; hosted version unverified, U-4):
+
+| Layer | Command | Covers |
+|---|---|---|
+| L1 pgTAP | `supabase test db` (six files, 222 assertions, `supabase/tests/database/`) | catalogue/grant/RLS/policy inventory (T-M01–T-M06, T-A05 for these tables), roles and every denied operation with a positive counterpart (T-I01, T-D01, T-D02, T-D04, T-D06, T-P11, T-S01), invitation rules at SQL level (unverified email, mismatched email, expired, revoked, redeemed, success, no partial records), audit append-only |
+| L1c concurrency | `supabase/tests/concurrency/redeem-invite-race.sh` (two real sessions; unique data per run; CI runs it twice on one stack) | T-I07 and the audit append-only invariant |
+| L2 API | `node --test supabase/tests/api/` against real GoTrue and PostgREST | anon RPC/table denial, private schema not exposed, aal1 versus aal2 with real TOTP (T-I02, T-I03), metadata tamper (T-S04), same-token suspension (T-S02), forged token (T-S05) |
+
+L3 (application/e2e) is **not implemented** and not claimed: there is no Next.js auth in 3.1. It is added to the gate before the application functionality that needs it (3.3). Tests for later increments stay in the inventory, marked deferred.
+
+**Recorded deviations from the design documents.** Each is narrower or stricter than the design; none is individually approved (D-054 stays Proposed). The tests listed are those that prove the implemented behaviour on the real stack.
+
+| Deviation | Reason | Proved by |
+|---|---|---|
+| `text` + lowercase/trim CHECK instead of `citext` for email | no extension dependency; same normalisation guarantee | `020_invites` (normalisation, CHECK) |
+| `publishers.handle` nullable, set-once by trigger | `redeem_invite()` takes no arguments, so no handle is known at redemption | `030_publishers` (set-once, format, reserved, duplicate) |
+| invites gain status `expired` | lets a lapsed invitation stop blocking a new one for the same email | `020_invites` |
+| no `anon` access to `publishers` in 3.1 | public profile belongs with the public projection in 3.2 | `050_anon_and_service_role`, API anon test |
+| no `owns_experience` helpers | need the `experiences` table (3.2) | not applicable in 3.1 |
+| audit `details` allow-list `invite_id, ttl_days, from, to`; `request_id` column exists but is unset | prevents free-form personal data in the log; request ids arrive with the application layer | `040_audit` |
+
+**Not a deviation any more.** RLS is now `ENABLE` **and** `FORCE` on all four tables (T-M01), verified on the real local stack: the catalogue test checks `relrowsecurity` and `relforcerowsecurity`, and every function and API test passes with FORCE on. The SECURITY DEFINER functions still write because they are owned by the migration role, which has `BYPASSRLS` in the Supabase local stack; `001_catalogue` asserts that every definer function's owner has `BYPASSRLS`. Whether the hosted `postgres` role has the same attribute is **unverified** and must be checked before any hosted migration (U-4/Q-31).
+
+**Own-row read (T-S02 / T-S03).** `publishers_select_own` requires `private.is_active_publisher()`. A suspended or revoked publisher with a still-valid token can neither read nor update their row (no status-visibility exception in 3.1); an administrator at aal2 can still inspect every publisher row; a publisher cannot change `status` (no column grant) and cannot self-reactivate; reinstatement by an administrator restores access to the same token. Proved by `030_publishers` and the API test "T-S02 / T-S03".
+
+**Invitation expiry semantics.** Expiry is determined by `expires_at`, evaluated whenever an invitation is used. The stored status `expired` is **not** set automatically or by a scheduled job. It is written only when `create_invite` runs for the same email and finds a lapsed `pending` row. `redeem_invite` refuses a lapsed invitation (`expires_at <= now()`) without changing its status, so a lapsed invitation can remain stored as `pending`. Any reporting must therefore treat `pending AND expires_at <= now()` as expired. A scheduled sweep, if wanted, is later work.
 
 ## 5. Out of scope for Stage 3
 

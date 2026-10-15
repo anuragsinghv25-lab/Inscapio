@@ -335,13 +335,13 @@ Status for these entries is **Proposed, pending owner review**. Nothing is imple
 - **Decision:** `admins` row and `publishers.status='active'` are checked inside Postgres on every query; ownership via `experiences.publisher_id` through helper functions (`owns_experience`, `can_edit_experience`) so organisations can be added later by changing two function bodies. One publisher per experience now.
 - **Reason:** immediate revocation; client-supplied values are never authoritative.
 - **Trade-offs:** one indexed lookup per request.
-- **Status:** Proposed
+- **Status:** Accepted for 3.1 by the owner (15 Oct 2026). Ownership helper functions follow with the `experiences` table in 3.2.
 
 ## D-046 · Invite-only magic-link sign-in; the invitation is an email-bound authorisation record
 - **Decision:** Supabase Auth email magic links; public sign-ups disabled; an `invites` row (normalised email, expiry 7 days default, 30 max, one pending per email) authorises; the verified email on the session redeems it via a no-argument function; no bearer token. The confirm step is a POST button.
 - **Reason:** proves email ownership; a leaked invite is useless to others; neutral responses prevent enumeration.
 - **Trade-offs:** needs custom SMTP; some behaviours unverified (U-2, U-3).
-- **Status:** Proposed
+- **Status:** Proposed; **invitation portion only** accepted for 3.1 by the owner (15 Oct 2026): email-bound authorisation record, no independent token (none is required by a documented security requirement). Magic-link delivery, SMTP and confirm-page parts remain Proposed.
 
 ## D-047 · Authorisation in three layers; the public site is session-free
 - **Decision:** proxy (optimistic) → DAL per page/action/handler (`getClaims`, plus `getUser` for high-risk actions) → RLS/functions. Public pages never read cookies. Proxy matcher limited to `/studio`, `/admin`, `/sign-in`, `/auth`.
@@ -357,7 +357,7 @@ Status for these entries is **Proposed, pending owner review**. Nothing is imple
 
 ## D-050 · Admin is operational and does not imply content access
 - **Decision:** no admin policy on drafts, revisions or feedback; MFA (aal2) for all admin operations; re-auth, reason and confirmation for suspend and takedown; admin bootstrap by documented SQL, not an app feature; owner-level access is an acknowledged trust boundary.
-- **Status:** Proposed
+- **Status:** Proposed; **3.1 portion only** accepted by the owner (15 Oct 2026): separate `admins` record, authorisation requires aal2, first admin bootstrapped by documented SQL (`docs/runbooks/bootstrap-first-admin.md`). Re-auth, reason/confirmation for takedown and the rest remain Proposed.
 
 ## D-051 · New staging and production Supabase projects; the existing project is unverified
 - **Decision:** treat the existing project as scratch until the owner records its facts; create new staging and production projects once region, org ownership and plan are decided; production on a plan with backups before outside publishers; keys use the new publishable/secret model.
@@ -365,9 +365,20 @@ Status for these entries is **Proposed, pending owner review**. Nothing is imple
 
 ## D-052 · RLS and authorisation tests are a merge gate, run against real roles and policies
 - **Decision:** three layers (pgTAP, API with real JWTs, application/e2e) in CI on every PR touching `supabase/` or auth code; every table needs denial tests; frontend-only tests do not count.
-- **Status:** Proposed
+- **Status:** Accepted by the owner (15 Oct 2026). For 3.1 the gate is L1 pgTAP + L1c concurrency + L2 API on the real local stack (plan §4.1). L3 is not implemented and is added to the gate before the functionality that needs it.
 
 ## D-053 · Stage 3 increments and dependency timing
 - **Decision:** order 3.0–3.7 as in the implementation plan; start at 3.1 (local identity core); `@supabase/ssr` and `@supabase/supabase-js` added only at 3.3, with explicit owner approval.
-- **Status:** Proposed
+- **Status:** Proposed; **3.1 portion only** accepted by the owner (15 Oct 2026). No 3.2/3.3 scope; no Supabase JS dependency.
 
+## D-054 · Increment 3.1 implementation choices (deviations from the design documents)
+- **Decision:** the deviations below were implemented in 3.1. None is individually approved by the owner. Detail, technical reasons and proving tests: `architecture/stage-3-implementation-plan.md` §4.1.
+  1. lowercase-CHECKed `text` emails instead of `citext`;
+  2. `publishers.handle` nullable and set-once;
+  3. invite status `expired`, stored lazily (only when `create_invite` meets a lapsed pending invite for the same email; `redeem_invite` refuses lapsed invites without changing status; no scheduled expiry);
+  4. no `anon` access to `publishers` in 3.1;
+  5. audit `details` allow-list `invite_id, ttl_days, from, to`; `request_id` unset;
+  6. the Supabase CLI 2.120.0 is a pinned dev dependency, and acceptance runs on the real local stack in GitHub Actions, never an emulated `auth` schema.
+- **No longer a deviation:** RLS is enabled **and forced** (T-M01). It depends on the definer-function owner having `BYPASSRLS`, true on the local stack and unverified on the hosted project.
+- **Reason:** smallest surface for 3.1; each is narrower or stricter than the design.
+- **Status:** Proposed (owner approval, if any, is per deviation)

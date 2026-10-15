@@ -3,6 +3,8 @@
 > **Status:** Stage 3 design · **Proposed** (nothing here is built, connected or tested) · written 13 Oct 2026.
 > **Scope:** who the principals are, what each may do, how identity and ownership are established and enforced, and what is deliberately left out. Companion documents: [`supabase-data-model.md`](./supabase-data-model.md) (tables, RLS), [`authentication-and-rls-test-plan.md`](./authentication-and-rls-test-plan.md) (tests), [`stage-3-implementation-plan.md`](./stage-3-implementation-plan.md) (order of work, environments, gates).
 
+> **3.1 implementation note (15 Oct 2026):** where this document differs from the migrations, the migrations and `stage-3-implementation-plan.md` §4.1 (deviations, FORCE RLS, own-row read, invitation expiry) are authoritative for the local identity core. Deviations remain Proposed (D-054).
+
 ## 0. How to read the labels
 
 Every material statement carries one of these provenance labels. This document never silently replaces an existing decision.

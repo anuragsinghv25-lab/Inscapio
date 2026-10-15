@@ -1,0 +1,130 @@
+name: Database (real Supabase local stack)
+
+# Runs the identity migrations and authorization tests against the REAL Supabase
+# local stack (Docker images pulled on the runner). Local only: this workflow never
+# links to, inspects, migrates, or authenticates against a hosted Supabase project,
+# and it needs no secrets. Keys come from the throwaway local stack at run time.
+
+on:
+  pull_request:
+    paths:
+      - "supabase/**"
+      - ".github/workflows/database.yml"
+      - "package.json"
+      - "pnpm-lock.yaml"
+  push:
+    branches: [main]
+    paths:
+      - "supabase/**"
+      - ".github/workflows/database.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: database-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  database:
+    name: Local stack + authorization tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Tool versions
+        run: |
+          pnpm exec supabase --version
+          docker --version
+          psql --version || (sudo apt-get update && sudo apt-get install -y postgresql-client && psql --version)
+
+      - name: Start the real local Supabase stack (image pull + startup)
+        run: |
+          set -o pipefail
+          pnpm run db:start 2>&1 | tee start.log
+          docker images --format '{{.Repository}}:{{.Tag}}' | sort
+
+      - name: Stack status
+        run: pnpm exec supabase status
+
+      - name: "L1 pgTAP (supabase test db)"
+        run: |
+          set -o pipefail
+          pnpm run db:test 2>&1 | tee pgtap.log
+        # Failure annotations/summary are emitted by the next step (always runs).
+
+      - name: Report pgTAP result
+        if: always()
+        run: |
+          [ -f pgtap.log ] || exit 0
+          ok=$(grep -cE '^\s*ok [0-9]+' pgtap.log || true)
+          notok=$(grep -cE '^\s*not ok [0-9]+' pgtap.log || true)
+          grep -E '^\s*not ok [0-9]+' pgtap.log | while read -r l; do echo "::error::pgTAP $l"; done
+          {
+            echo "### L1 pgTAP (real local stack)"
+            echo "- passed assertions: $ok"
+            echo "- failed assertions: $notok"
+            grep -E '^(Files=|Result:)' pgtap.log | sed 's/^/- /'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: "L1c concurrency (two real database sessions)"
+        run: |
+          set -o pipefail
+          eval "$(pnpm exec supabase status -o env | grep -E '^DB_URL=')"
+          export DB_URL
+          # Run twice against the same persistent stack to prove the script is repeatable.
+          bash supabase/tests/concurrency/redeem-invite-race.sh 2>&1 | tee race.log
+          bash supabase/tests/concurrency/redeem-invite-race.sh 2>&1 | tee -a race.log
+
+      - name: "L2 API (real GoTrue + PostgREST + TOTP MFA)"
+        run: |
+          set -o pipefail
+          set -a
+          eval "$(pnpm exec supabase status -o env | grep -E '^(API_URL|DB_URL|ANON_KEY|SERVICE_ROLE_KEY)=')"
+          set +a
+          export API_URL DB_URL ANON_KEY SERVICE_ROLE_KEY
+          node --test --test-reporter=tap supabase/tests/api/identity.api.test.mjs 2>&1 | tee api.log
+
+      - name: Report results as annotations
+        if: always()
+        run: |
+          # Job logs may not be downloadable via the API, so surface results as annotations.
+          ok=$(grep -cE '^\s*ok [0-9]+' pgtap.log 2>/dev/null || true)
+          notok=$(grep -cE '^\s*not ok [0-9]+' pgtap.log 2>/dev/null || true)
+          if [ -f pgtap.log ] && ! grep -q 'Result: PASS' pgtap.log; then
+            body=$(grep -vE '^\s*$' pgtap.log | head -120 | sed -E 's/eyJ[A-Za-z0-9_.-]{20,}/[jwt]/g' | awk 'BEGIN{ORS="%0A"}{print}')
+            echo "::error title=pgTAP failure detail::$body"
+          fi
+          echo "::notice::L1 pgTAP: ok=$ok not_ok=$notok; $(grep -E '^(Files=|Result:)' pgtap.log 2>/dev/null | tr '\n' ' ')"
+          grep -E 'T-I07|FAIL' race.log 2>/dev/null | sed 's/^/::notice::L1c /' || true
+          if [ -f api.log ]; then
+            echo "::notice::L2 API: $(grep -E '^# (tests|pass|fail|skipped)' api.log | tr '\n' ' ')"
+            grep -E '^\s*(not ok|ok) [0-9]+' api.log | sed -E 's/^\s*//' | while read -r l; do echo "::notice::L2 $l"; done
+            if grep -qE '^\s*not ok' api.log; then
+              body=$(grep -vE '^\s*(duration_ms|type:|stack:|at |\.\.\.|---)' api.log | head -150 | sed -E 's/eyJ[A-Za-z0-9_.-]{20,}/[jwt]/g' | awk 'BEGIN{ORS="%0A"}{print}')
+              echo "::error title=L2 API failure detail::$body"
+            fi
+          fi
+
+      - name: Stack logs on failure
+        if: failure()
+        run: |
+          docker ps -a --format '{{.Names}}\t{{.Status}}'
+          for c in $(docker ps -a --format '{{.Names}}' | grep -E 'auth|rest|db' ); do echo "::group::$c"; docker logs --tail 60 "$c" 2>&1 | sed -E 's/(eyJ[A-Za-z0-9_-]{20,})/[redacted-jwt]/g'; echo "::endgroup::"; done
+
+      - name: Stop stack
+        if: always()
+        run: pnpm run db:stop || true
