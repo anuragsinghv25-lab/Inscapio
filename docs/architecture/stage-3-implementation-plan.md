@@ -108,13 +108,28 @@ Open questions to answer: Q-30…Q-43 in `OPEN-QUESTIONS.md`.
 
 | Layer | Command | Covers |
 |---|---|---|
-| L1 pgTAP | `supabase test db` (six files, `supabase/tests/database/`) | catalogue/grant/RLS/policy inventory (T-M01–T-M06, T-A05 for these tables), roles and every denied operation with a positive counterpart (T-I01, T-D01, T-D02, T-D04, T-D06, T-P11, T-S01), invitation rules at SQL level (unverified email, mismatched email, expired, revoked, redeemed, success, no partial records), audit append-only |
-| L1c concurrency | `supabase/tests/concurrency/redeem-invite-race.sh` (two real sessions) | T-I07 |
+| L1 pgTAP | `supabase test db` (six files, 222 assertions, `supabase/tests/database/`) | catalogue/grant/RLS/policy inventory (T-M01–T-M06, T-A05 for these tables), roles and every denied operation with a positive counterpart (T-I01, T-D01, T-D02, T-D04, T-D06, T-P11, T-S01), invitation rules at SQL level (unverified email, mismatched email, expired, revoked, redeemed, success, no partial records), audit append-only |
+| L1c concurrency | `supabase/tests/concurrency/redeem-invite-race.sh` (two real sessions; unique data per run; CI runs it twice on one stack) | T-I07 and the audit append-only invariant |
 | L2 API | `node --test supabase/tests/api/` against real GoTrue and PostgREST | anon RPC/table denial, private schema not exposed, aal1 versus aal2 with real TOTP (T-I02, T-I03), metadata tamper (T-S04), same-token suspension (T-S02), forged token (T-S05) |
 
 L3 (application/e2e) is **not implemented** and not claimed: there is no Next.js auth in 3.1. It is added to the gate before the application functionality that needs it (3.3). Tests for later increments stay in the inventory, marked deferred.
 
-**Recorded deviations from the design documents** (all narrower or stricter): `text` + lowercase CHECK instead of `citext`; `publishers.handle` nullable and set-once (because `redeem_invite()` takes no arguments); invites gain status `expired`; no `anon` access to `publishers` in 3.1 (public profile moves to 3.2); RLS is ENABLE, not FORCE, so definer functions owned by the table owner can write; no `owns_experience` helpers (need `experiences`, 3.2); audit `details` limited to keys `invite_id, ttl_days, from, to`; `audit_events.request_id` exists but is unset.
+**Recorded deviations from the design documents.** Each is narrower or stricter than the design; none is individually approved (D-054 stays Proposed). The tests listed are those that prove the implemented behaviour on the real stack.
+
+| Deviation | Reason | Proved by |
+|---|---|---|
+| `text` + lowercase/trim CHECK instead of `citext` for email | no extension dependency; same normalisation guarantee | `020_invites` (normalisation, CHECK) |
+| `publishers.handle` nullable, set-once by trigger | `redeem_invite()` takes no arguments, so no handle is known at redemption | `030_publishers` (set-once, format, reserved, duplicate) |
+| invites gain status `expired` | lets a lapsed invitation stop blocking a new one for the same email | `020_invites` |
+| no `anon` access to `publishers` in 3.1 | public profile belongs with the public projection in 3.2 | `050_anon_and_service_role`, API anon test |
+| no `owns_experience` helpers | need the `experiences` table (3.2) | not applicable in 3.1 |
+| audit `details` allow-list `invite_id, ttl_days, from, to`; `request_id` column exists but is unset | prevents free-form personal data in the log; request ids arrive with the application layer | `040_audit` |
+
+**Not a deviation any more.** RLS is now `ENABLE` **and** `FORCE` on all four tables (T-M01), verified on the real local stack: the catalogue test checks `relrowsecurity` and `relforcerowsecurity`, and every function and API test passes with FORCE on. The SECURITY DEFINER functions still write because they are owned by the migration role, which has `BYPASSRLS` in the Supabase local stack; `001_catalogue` asserts that every definer function's owner has `BYPASSRLS`. Whether the hosted `postgres` role has the same attribute is **unverified** and must be checked before any hosted migration (U-4/Q-31).
+
+**Own-row read (T-S02 / T-S03).** `publishers_select_own` requires `private.is_active_publisher()`. A suspended or revoked publisher with a still-valid token can neither read nor update their row (no status-visibility exception in 3.1); an administrator at aal2 can still inspect every publisher row; a publisher cannot change `status` (no column grant) and cannot self-reactivate; reinstatement by an administrator restores access to the same token. Proved by `030_publishers` and the API test "T-S02 / T-S03".
+
+**Invitation expiry semantics.** Expiry is determined by `expires_at`, evaluated whenever an invitation is used. The stored status `expired` is **not** set automatically or by a scheduled job. It is written only when `create_invite` runs for the same email and finds a lapsed `pending` row. `redeem_invite` refuses a lapsed invitation (`expires_at <= now()`) without changing its status, so a lapsed invitation can remain stored as `pending`. Any reporting must therefore treat `pending AND expires_at <= now()` as expired. A scheduled sweep, if wanted, is later work.
 
 ## 5. Out of scope for Stage 3
 

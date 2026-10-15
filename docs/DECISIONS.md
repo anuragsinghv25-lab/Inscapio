@@ -372,6 +372,13 @@ Status for these entries is **Proposed, pending owner review**. Nothing is imple
 - **Status:** Proposed; **3.1 portion only** accepted by the owner (15 Oct 2026). No 3.2/3.3 scope; no Supabase JS dependency.
 
 ## D-054 · Increment 3.1 implementation choices (deviations from the design documents)
-- **Decision:** lowercase-CHECKed `text` emails instead of `citext`; `publishers.handle` nullable and set-once; invite status `expired` added; no `anon` access to `publishers` in 3.1; RLS ENABLE (not FORCE) with definer functions; audit `details` allow-list `invite_id, ttl_days, from, to`; the Supabase CLI 2.120.0 is a pinned dev dependency; acceptance runs on the real local stack in GitHub Actions, never an emulated `auth` schema.
-- **Reason:** smallest surface for 3.1; each choice is narrower or stricter than the design.
-- **Status:** Proposed (recorded by the 3.1 PR for owner review)
+- **Decision:** the deviations below were implemented in 3.1. None is individually approved by the owner. Detail, technical reasons and proving tests: `architecture/stage-3-implementation-plan.md` §4.1.
+  1. lowercase-CHECKed `text` emails instead of `citext`;
+  2. `publishers.handle` nullable and set-once;
+  3. invite status `expired`, stored lazily (only when `create_invite` meets a lapsed pending invite for the same email; `redeem_invite` refuses lapsed invites without changing status; no scheduled expiry);
+  4. no `anon` access to `publishers` in 3.1;
+  5. audit `details` allow-list `invite_id, ttl_days, from, to`; `request_id` unset;
+  6. the Supabase CLI 2.120.0 is a pinned dev dependency, and acceptance runs on the real local stack in GitHub Actions, never an emulated `auth` schema.
+- **No longer a deviation:** RLS is enabled **and forced** (T-M01). It depends on the definer-function owner having `BYPASSRLS`, true on the local stack and unverified on the hosted project.
+- **Reason:** smallest surface for 3.1; each is narrower or stricter than the design.
+- **Status:** Proposed (owner approval, if any, is per deviation)
