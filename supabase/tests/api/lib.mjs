@@ -87,8 +87,12 @@ export const denied = (r, msg) => {
 
 // The validator is a database role with no login in this increment. A future validator service will
 // connect as a member of it; here the test stands in for that service by switching to the role in a
-// local session. Membership is granted and revoked around the call so no standing grant is left behind.
+// local session. Membership exists only inside one transaction and is never committed (see below).
 export const asValidator = (sql) =>
   execFileSync('psql', [DB_URL, '-X', '-q', '-At', '-v', 'ON_ERROR_STOP=1'], {
-    input: `grant validator_service to postgres;\nset role validator_service;\n${sql};\nreset role;\nrevoke validator_service from postgres;\n`,
+    // Everything is one transaction, and the membership is granted AND revoked inside it. Role
+    // membership changes are transactional, so the grant is never committed: if the statement fails,
+    // psql stops, the connection closes and the transaction (grant included) rolls back; if it
+    // succeeds, the revoke commits together with the work. No cleanup step can be skipped.
+    input: `begin;\ngrant validator_service to postgres;\nset local role validator_service;\n${sql};\nreset role;\nrevoke validator_service from postgres;\ncommit;\n`,
   }).toString().trim();

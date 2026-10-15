@@ -116,6 +116,26 @@ test('the secret key (service_role) cannot forge approvals, publications, the pr
   refused(await http('POST', `${API}/rest/v1/rpc/record_validation`, { headers: sk, body: { p_revision_id: state.climateRev1, p_passed: true, p_validator_version: 'forged' } }), '42501', 'service record_validation');
 });
 
+test('administrator (aal2), anon and a non-publisher user cannot attest or read for validation; the validator can, and the hash comes from the stored revision', async () => {
+  const h = state.climateRev1;
+  const args = { p_revision_id: h, p_passed: true, p_validator_version: 'forged' };
+  for (const [who, token] of [['administrator aal2', state.admin], ['non-publisher user', state.none], ['anon', undefined]]) {
+    refused(await rpc('record_validation', args, token), '42501', `${who} record_validation`);
+    refused(await rpc('get_revision_for_validation', { p_revision_id: h }, token), '42501', `${who} get_revision_for_validation`);
+    refused(await rest('POST', 'revision_validations', token, { revision_id: h, content_hash: 'x', validator_version: 'forged', passed: true }), '42501', `${who} direct attestation insert`);
+    refused(await rest('PATCH', `revision_validations?revision_id=eq.${h}`, token, { passed: true }), '42501', `${who} attestation update`);
+  }
+  // a client cannot supply a content hash: no such parameter exists, so PostgREST finds no matching function
+  const withHash = await rpc('record_validation', { ...args, p_content_hash: 'a'.repeat(64) }, state.admin);
+  assert.ok(withHash.status >= 400 && withHash.json?.code !== undefined, `a hash argument must not be accepted: ${withHash.text}`);
+  // positive counterpart: the validator reads exactly the stored revision and its hash
+  const stored = (await rest('GET', `revisions?select=content_hash&id=eq.${h}`, state.a)).json[0].content_hash;
+  const got = asValidator(`select content_hash from public.get_revision_for_validation('${h}')`);
+  assert.equal(got, stored, 'valid: the validator receives the stored hash');
+  // and the zero attestations written by all of the above denials
+  assert.equal(owner(`select count(*) from public.revision_validations where validator_version = 'forged'`), '0');
+});
+
 test('publish, public read, drafts do not leak, unpublish removes the public row', async () => {
   const pub = await rpc('publish_revision', { p_revision_id: state.climateRev1 }, state.a);
   assert.equal(pub.status, 200, `publish: ${pub.text}`);
@@ -185,4 +205,8 @@ test('T-S05 a token with altered claims is rejected on the new functions too', a
   const bad = `${parts[0]}.${Buffer.from(JSON.stringify(forged)).toString('base64url')}.${parts[2]}`;
   const r = await rpc('create_experience', { p_slug: `forged-${run}`, p_kind: 'explainer', p_document: withSlug(loadDoc('whose-body-is-it'), `forged-${run}`) }, bad);
   assert.equal(r.status, 401, `forged token must be rejected: ${r.text}`);
+});
+
+test('sentinel: no validator_service or ai_service membership was left behind by any test in this file', () => {
+  assert.equal(owner(`select count(*) from pg_auth_members m join pg_roles r on r.oid = m.roleid where r.rolname in ('validator_service','ai_service')`), '0');
 });

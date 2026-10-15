@@ -3,7 +3,7 @@
 -- `set local role` + request.jwt.claims is how PostgREST presents a caller to Postgres.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(53);
+select plan(59);
 create schema t;
 grant usage on schema t to public;
 create function t.as_user(p_uid uuid, p_aal text default 'aal1', p_extra jsonb default '{}'::jsonb)
@@ -104,6 +104,16 @@ select throws_ok($q$select public.record_validation(t.id('r1'), false, 'zod-1', 
 select throws_ok($q$select public.record_validation(t.id('r1'), false, 'zod-1', '{"path":"a"}')$q$, '22023'::char(5), null::text, 'denied: errors must be an array');
 select lives_ok($q$select public.record_validation(t.id('r1'), false, 'zod-1', '[{"path":"sections.0.title","code":"too_big"}]')$q$, 'valid: a failure with paths and codes is recorded');
 select throws_ok($q$select public.record_validation(t.id('r1'), false, 'zod-1', '[{"path":"a","code":"b"}]')$q$, '23505'::char(5), null::text, 'denied: the same validator version cannot attest the same revision twice');
+-- retry contract: a refused or interrupted attempt leaves nothing, so the same version may simply retry;
+-- once a verdict is recorded the version is spent and a changed verdict needs a new validator version
+select throws_ok($q$select public.record_validation(t.id('rb1'), true, 'zod-1', '[{"path":"a","code":"c"}]')$q$, '22023'::char(5), null::text, 'retry contract: an attempt refused for bad input is not recorded');
+select lives_ok($q$select public.record_validation(t.id('rb1'), true, 'zod-1')$q$, 'retry contract valid: the same validator version can retry after a refused attempt');
+select throws_ok($q$select public.record_validation(t.id('rb1'), false, 'zod-1', '[{"path":"a","code":"c"}]')$q$, '23505'::char(5), null::text, 'retry contract: a recorded verdict cannot be replaced under the same version, in either direction');
+select lives_ok($q$select public.record_validation(t.id('rb1'), true, 'zod-2')$q$, 'retry contract valid: a new validator version can attest again (the earlier row stays)');
+select t.as_owner();
+select is((select count(*) from public.revision_validations where revision_id = t.id('rb1')), 2::bigint, 'retry contract: exactly the two accepted attestations exist; the refused attempts left no rows');
+select is((select count(*) from public.audit_events where action = 'revision.validated' and subject_id = t.id('rb1')), 2::bigint, 'retry contract: exactly two audit events; refused attempts left none');
+select t.as_validator();
 select t.as_owner();
 select is((select content_hash = (select content_hash from public.revisions where id = t.id('r1')) from public.revision_validations where revision_id = t.id('r1')), true, 'the attestation''s hash was copied by the database from the stored revision');
 select is((select count(*) from public.audit_events where action = 'revision.validated' and subject_id = t.id('r1')), 1::bigint, 'the attestation wrote exactly one audit event');
@@ -144,7 +154,7 @@ select t.as_user('00000000-0000-4000-8000-0000000000b1', 'aal1');
 select throws_ok($q$select public.approve_revision(t.id('r1'))$q$, '55000'::char(5), null::text, 'denied: a revision cannot be approved twice');
 -- T-P06: ownership and state gates on approval
 select t.as_validator();
-select public.record_validation(t.id('rb1'), true, 'zod-1');
+select public.record_validation(t.id('rb1'), true, 'zod-3');
 select t.as_user('00000000-0000-4000-8000-0000000000b1', 'aal1');
 select throws_ok($q$select public.approve_revision(t.id('rb1'))$q$, '42501'::char(5), null::text, 'T-P06 denied: A cannot approve B''s attested revision');
 select throws_ok($q$select public.approve_revision(gen_random_uuid())$q$, '42501'::char(5), null::text, 'denied: an unknown revision id is indistinguishable from someone else''s');
