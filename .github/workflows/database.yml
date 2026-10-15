@@ -88,6 +88,8 @@ jobs:
           # Run twice against the same persistent stack to prove the script is repeatable.
           bash supabase/tests/concurrency/redeem-invite-race.sh 2>&1 | tee race.log
           bash supabase/tests/concurrency/redeem-invite-race.sh 2>&1 | tee -a race.log
+          bash supabase/tests/concurrency/lifecycle-races.sh 2>&1 | tee -a race.log
+          bash supabase/tests/concurrency/lifecycle-races.sh 2>&1 | tee -a race.log
 
       - name: "L2 API (real GoTrue + PostgREST + TOTP MFA)"
         run: |
@@ -96,7 +98,8 @@ jobs:
           eval "$(pnpm exec supabase status -o env | grep -E '^(API_URL|DB_URL|ANON_KEY|SERVICE_ROLE_KEY)=')"
           set +a
           export API_URL DB_URL ANON_KEY SERVICE_ROLE_KEY
-          node --test --test-reporter=tap supabase/tests/api/identity.api.test.mjs 2>&1 | tee api.log
+          echo "::notice::service-role membership baseline (role>member): $(psql "$DB_URL" -X -At -c "select coalesce(string_agg(r.rolname || '>' || g.rolname || ' admin=' || m.admin_option || ' inherit=' || m.inherit_option || ' set=' || m.set_option, '; '), 'none') from pg_auth_members m join pg_roles r on r.oid = m.roleid join pg_roles g on g.oid = m.member where r.rolname in ('validator_service','ai_service')")"
+          node --test --test-reporter=tap supabase/tests/api/identity.api.test.mjs supabase/tests/api/experience.api.test.mjs supabase/tests/api/harness.api.test.mjs 2>&1 | tee api.log
 
       - name: Report results as annotations
         if: always()
@@ -109,10 +112,10 @@ jobs:
             echo "::error title=pgTAP failure detail::$body"
           fi
           echo "::notice::L1 pgTAP: ok=$ok not_ok=$notok; $(grep -E '^(Files=|Result:)' pgtap.log 2>/dev/null | tr '\n' ' ')"
-          grep -E 'T-I07|FAIL' race.log 2>/dev/null | sed 's/^/::notice::L1c /' || true
+          echo "::notice::L1c $(grep -cE '^ok' race.log 2>/dev/null) ok lines, $(grep -cE '^FAIL' race.log 2>/dev/null) FAIL lines: $(grep -E '^ok' race.log 2>/dev/null | sed -E 's/^ok - ([A-Za-z0-9-]+).*/\1/' | sort | uniq -c | tr -s ' ' | tr '\n' ';')"
           if [ -f api.log ]; then
             echo "::notice::L2 API: $(grep -E '^# (tests|pass|fail|skipped)' api.log | tr '\n' ' ')"
-            grep -E '^\s*(not ok|ok) [0-9]+' api.log | sed -E 's/^\s*//' | while read -r l; do echo "::notice::L2 $l"; done
+            echo "::notice::L2 tests: $(grep -E '^\s*(not ok|ok) [0-9]+' api.log | sed -E 's/^\s*//' | cut -c1-70 | awk 'BEGIN{ORS=" | "}{print}')"
             if grep -qE '^\s*not ok' api.log; then
               body=$(grep -vE '^\s*(duration_ms|type:|stack:|at |\.\.\.|---)' api.log | head -150 | sed -E 's/eyJ[A-Za-z0-9_.-]{20,}/[jwt]/g' | awk 'BEGIN{ORS="%0A"}{print}')
               echo "::error title=L2 API failure detail::$body"

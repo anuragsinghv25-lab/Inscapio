@@ -1,6 +1,6 @@
 # Authentication and RLS test plan
 
-> **Status:** Stage 3 design · **Proposed**. **Only the 3.1 subset exists** (L1 pgTAP, L1c concurrency, L2 API; inventory and results in `stage-3-implementation-plan.md` §4.1 and the `Database` workflow). Every other test described here does not exist yet and no property it covers is verified. The plan says what must be proved, against which real roles, before each increment can merge.
+> **Status:** Stage 3 design · **Proposed**. **Only the 3.1 and 3.2 subsets exist** (L1 pgTAP, L1c concurrency, L2 API, plus a unit drift test; inventory in `stage-3-implementation-plan.md` §4.1 and §4.2, results in the `Database` workflow). Every other test described here does not exist yet and no property it covers is verified. The plan says what must be proved, against which real roles, before each increment can merge.
 > **Companions:** [`identity-and-access-control.md`](./identity-and-access-control.md) (permission matrix P-xx), [`supabase-data-model.md`](./supabase-data-model.md) (tables, functions), [`stage-3-implementation-plan.md`](./stage-3-implementation-plan.md). Labels (V-n verified vendor fact, U-n unverified, Rec D-nnn recommendation) are defined in the identity document §0.
 
 > **3.1 implementation note (15 Oct 2026):** where this document differs from the migrations, the migrations and `stage-3-implementation-plan.md` §4.1 (deviations, FORCE RLS, own-row read, invitation expiry) are authoritative for the local identity core. Deviations remain Proposed (D-054).

@@ -1,10 +1,12 @@
 # Supabase data model
 
-> **Status:** Stage 3 design · **Proposed** (no table, migration, policy or function exists; nothing was run against any database) · written 13 Oct 2026.
+> **Status:** Stage 3 design · **Proposed** (design text; the 3.1 and 3.2 parts are implemented in local migrations, see the implementation notes below; nothing was run against a hosted database) · written 13 Oct 2026.
 > **Companions:** [`identity-and-access-control.md`](./identity-and-access-control.md) (principals, permission matrix P-xx, labels, verified facts V-n / unverified U-n), [`authentication-and-rls-test-plan.md`](./authentication-and-rls-test-plan.md) (T-xx tests), [`stage-3-implementation-plan.md`](./stage-3-implementation-plan.md).
 > **Provenance labels** are defined in the identity document §0. In short: *Accepted/Proposed D-xxx* = already in the decision log; *Rec D-045…D-053* = new recommendation, Proposed only; *V-n* = verified vendor fact; *U-n* = unverified.
 
 > **3.1 implementation note (15 Oct 2026):** where this document differs from the migrations, the migrations and `stage-3-implementation-plan.md` §4.1 (deviations, FORCE RLS, own-row read, invitation expiry) are authoritative for the local identity core. Deviations remain Proposed (D-054).
+
+> **3.2 implementation note (15 Oct 2026):** the experience-core tables and functions now exist (migrations `20261016000100`–`400`). Where this document differs, the migrations and `stage-3-implementation-plan.md` §4.2 / D-055 are authoritative for the local database: composite foreign keys bind approvals, attestations and publications to the revision's hash; slugs are `text` with a CHECK; `get_revision_for_validation` is added; the other clarifications are listed in D-055 (Proposed).
 
 ## 1. Starting point and what changes
 

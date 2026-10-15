@@ -46,9 +46,9 @@ insert into public.publishers (id, status, status_reason) values
   ('00000000-0000-4000-8000-0000000000b4', 'revoked', 'synthetic fixture');
 
 -- T-M01 / T-M06: structure, RLS and policy hygiene (catalogue checks)
-select set_eq($$select tablename::text from pg_tables where schemaname = 'public'$$,
+select set_eq($$select tablename::text from pg_tables where schemaname = 'public' and tablename in ('admins','audit_events','invites','publishers')$$,
   $$values ('admins'), ('audit_events'), ('invites'), ('publishers')$$,
-  'T-M01 public contains exactly the four 3.1 tables (a new table must be added to this test with its policy tests)');
+  'T-M01 the four 3.1 identity tables exist (the exact set of all public tables is asserted in 100_experience_catalogue)');
 select is_empty($$select tablename from pg_tables where schemaname = 'public' and not rowsecurity$$,
   'T-M01 RLS is enabled on every public table');
 select is_empty($$select c.relname from pg_class c join pg_namespace n on n.oid = c.relnamespace where n.nspname = 'public' and c.relkind in ('r','p') and not (c.relrowsecurity and c.relforcerowsecurity)$$,
@@ -64,6 +64,7 @@ select set_eq($$
   from pg_class c join pg_namespace n on n.oid = c.relnamespace
   cross join lateral aclexplode(coalesce(c.relacl, acldefault('r', c.relowner))) a
   where n.nspname in ('public','private') and c.relkind in ('r','v','m','S','p') and a.grantee <> c.relowner
+    and c.relname in ('admins','publishers','invites','audit_events')
 $$, $$values ('admins','authenticated','SELECT'), ('audit_events','authenticated','SELECT'),
             ('invites','authenticated','SELECT'), ('publishers','authenticated','SELECT')$$,
   'T-M02 table grants: anon and service_role hold none; authenticated holds SELECT only (plus column UPDATE below)');
@@ -72,6 +73,7 @@ select set_eq($$
   from pg_attribute a join pg_class c on c.oid = a.attrelid join pg_namespace n on n.oid = c.relnamespace
   cross join lateral aclexplode(a.attacl) x
   where n.nspname = 'public' and a.attacl is not null and x.grantee <> c.relowner
+    and c.relname in ('admins','publishers','invites','audit_events')
 $$, $$values ('publishers','handle','authenticated','UPDATE'), ('publishers','display_name','authenticated','UPDATE'),
             ('publishers','bio','authenticated','UPDATE')$$,
   'T-M02 column grants: authenticated may update only handle, display_name, bio on publishers');
@@ -86,6 +88,7 @@ select set_eq($$
   from pg_proc p join pg_namespace n on n.oid = p.pronamespace
   cross join lateral aclexplode(coalesce(p.proacl, acldefault('f', p.proowner))) x
   where n.nspname in ('public','private') and x.grantee <> p.proowner
+    and p.proname in ('current_publisher_id','is_active_publisher','is_admin','create_invite','revoke_invite','redeem_invite','set_publisher_status','write_audit','bootstrap_admin','remove_admin','audit_details_ok','forbid_modification','publishers_before_update')
 $$, $$values ('private.current_publisher_id','authenticated'), ('private.is_active_publisher','authenticated'),
             ('private.is_admin','authenticated'), ('public.create_invite','authenticated'),
             ('public.revoke_invite','authenticated'), ('public.redeem_invite','authenticated'),
@@ -93,7 +96,7 @@ $$, $$values ('private.current_publisher_id','authenticated'), ('private.is_acti
   'T-M03 EXECUTE grants: nothing to PUBLIC or anon; owner-only for audit writer, bootstrap and trigger functions');
 
 -- T-M06: policies
-select set_eq($$select tablename::text, policyname::text, cmd::text, array_to_string(roles, ',') from pg_policies where schemaname = 'public'$$,
+select set_eq($$select tablename::text, policyname::text, cmd::text, array_to_string(roles, ',') from pg_policies where schemaname = 'public' and tablename in ('admins','publishers','invites','audit_events')$$,
   $$values ('admins','admins_select_admin','SELECT','authenticated'),
            ('publishers','publishers_select_own','SELECT','authenticated'),
            ('publishers','publishers_select_admin','SELECT','authenticated'),
@@ -103,7 +106,7 @@ select set_eq($$select tablename::text, policyname::text, cmd::text, array_to_st
   'T-M06 exactly the designed policies exist, each with an explicit TO authenticated');
 select is_empty($$select policyname from pg_policies where schemaname = 'public' and 'public' = any(roles)$$,
   'T-M06 no policy applies to PUBLIC');
-select is_empty($$select policyname from pg_policies where schemaname = 'public' and cmd in ('INSERT','DELETE','ALL')$$,
+select is_empty($$select policyname from pg_policies where schemaname = 'public' and cmd in ('INSERT','DELETE','ALL') and tablename in ('admins','publishers','invites','audit_events')$$,
   'T-M06 no INSERT, DELETE or ALL policy: writes exist only through the definer functions');
 
 -- structural design rules

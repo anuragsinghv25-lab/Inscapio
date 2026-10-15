@@ -171,7 +171,7 @@ Context: [`design/phase-1-5-product-design-review.md`](./design/phase-1-5-produc
 
 ## Stage 3 design questions (13 Oct 2026)
 
-> 15 Oct 2026: none of Q-31…Q-43 blocks the local-only increment 3.1. Classification in `architecture/stage-3-implementation-plan.md` §4.1. All remain open.
+> 15 Oct 2026: none of Q-31…Q-43 blocks the local-only increment 3.1. Classification in `architecture/stage-3-implementation-plan.md` §4.1. All remained open then; Q-43 was answered on 15 Oct 2026 (below).
 
 ### Q-31 · Keep the existing Supabase project or create new staging and production projects?
 - **Why it matters:** its region, org, plan and config are unverified; region is per project (see D-051).
@@ -222,8 +222,6 @@ Context: [`design/phase-1-5-product-design-review.md`](./design/phase-1-5-produc
 - **Why it matters:** static/regenerated pages may show removed content briefly.
 - **Needed by:** 3.5.
 
-### Q-43 · Accept "shape gate only" validation for a first alpha, or require server-attested validation from the start?
-- **Why it matters:** without attestation a publisher bypassing the UI could publish a shape-valid but Zod-invalid document (availability risk only; renderer fails closed).
-- **Leaning:** attestation from the start.
-- **Needed by:** 3.2.
+### Q-43 · ~~Accept "shape gate only" validation, or require server-attested validation?~~ Answered (15 Oct 2026)
+- **Answer:** attestation from the start. The SQL shape gate stays explicitly structural and is never full Zod validation; a trusted validator service performs the full validation and attests the exact stored revision. Recorded in `DECISIONS.md` D-048, D-055 item 1 and D-056.
 
