@@ -108,6 +108,14 @@ test('T-A09 / T-A05 anon cannot call identity functions or read identity tables 
   }
 });
 
+test('public sign-up is refused (invite-only), while admin-created users can sign in', async () => {
+  const r = await http('POST', `${API}/auth/v1/signup`, { headers: { apikey: ANON }, body: { email: email('stranger'), password: PASSWORD } });
+  assert.ok(r.status >= 400 && r.status < 500, `sign-up must be refused, got ${r.status} ${r.text}`);
+  const row = owner(`select count(*) from auth.users where email = '${email('stranger')}'`);
+  assert.equal(row, '0', 'no Auth user was created by the refused sign-up');
+  assert.ok(await signIn('plain'), 'valid counterpart: an admin-created user can sign in');
+});
+
 test('the private schema is not exposed through the API', async () => {
   const r = await rest('POST', 'rpc/is_admin', undefined, {}, { 'Content-Profile': 'private' });
   assert.ok(r.status >= 400 && r.status < 500, `private schema must not be reachable, got ${r.status}`);
