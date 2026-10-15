@@ -3,7 +3,7 @@
 -- `set local role` + request.jwt.claims is how PostgREST presents a caller to Postgres.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(56);
+select plan(57);
 create schema t;
 grant usage on schema t to public;
 create function t.as_user(p_uid uuid, p_aal text default 'aal1', p_extra jsonb default '{}'::jsonb)
