@@ -1,6 +1,6 @@
 # Stage 3 implementation plan
 
-> **Status:** Stage 3 design · **Proposed**, except where §4.1 records an owner approval. Increment 3.1 (local-only identity core) is implemented on its own branch; later increments have not started. No hosted Supabase resource was created or connected and the production domain and deployment were not touched.
+> **Status:** Stage 3 design · **Proposed**, except where §4.1 records an owner approval. Increment 3.1 (local-only identity core) is merged; 3.2 (local-only experience core) is implemented on its own branch and PR (§4.2); later increments have not started. No hosted Supabase resource was created or connected and the production domain and deployment were not touched.
 > **Companions:** [`identity-and-access-control.md`](./identity-and-access-control.md), [`supabase-data-model.md`](./supabase-data-model.md), [`authentication-and-rls-test-plan.md`](./authentication-and-rls-test-plan.md). Labels (V-n, U-n, Rec D-nnn, Q-nn) are defined in the identity document §0. Roadmap position: Stage 3 of the five-stage roadmap in [`phase-2-readiness.md`](./phase-2-readiness.md); the publisher workspace UI is Stage 4.
 
 ## 1. Recommended starting point
@@ -130,6 +130,31 @@ L3 (application/e2e) is **not implemented** and not claimed: there is no Next.js
 **Own-row read (T-S02 / T-S03).** `publishers_select_own` requires `private.is_active_publisher()`. A suspended or revoked publisher with a still-valid token can neither read nor update their row (no status-visibility exception in 3.1); an administrator at aal2 can still inspect every publisher row; a publisher cannot change `status` (no column grant) and cannot self-reactivate; reinstatement by an administrator restores access to the same token. Proved by `030_publishers` and the API test "T-S02 / T-S03".
 
 **Invitation expiry semantics.** Expiry is determined by `expires_at`, evaluated whenever an invitation is used. The stored status `expired` is **not** set automatically or by a scheduled job. It is written only when `create_invite` runs for the same email and finds a lapsed `pending` row. `redeem_invite` refuses a lapsed invitation (`expires_at <= now()`) without changing its status, so a lapsed invitation can remain stored as `pending`. Any reporting must therefore treat `pending AND expires_at <= now()` as expired. A scheduled sweep, if wanted, is later work.
+
+### 4.2 Increment 3.2 reconciliation (15 Oct 2026)
+
+**Scope.** The eight tables of the data model (`topics`, `experiences`, `experience_topics`, `revisions`, `revision_validations`, `approvals`, `publications`, `published_experiences`), the lifecycle functions, and the roles `validator_service` and `ai_service`. Local database only; no application code, no hosted project, no public-site change. The 3.1 migrations are untouched; 3.2 adds four forward-only migrations (`20261016000100`–`400`).
+
+**Approval status.** The owner instructed this implementation on 15 Oct 2026. That instruction is **not** recorded as acceptance of D-048 or D-049, or of Q-43: those stay Proposed/open until the owner confirms them (see D-055). Nothing is merged by the PR.
+
+**Q-43 (needed by 3.2).** Implemented as **attestation from the start**: `revision_validations` is writable only through `record_validation`, callable only by `validator_service`; the database copies the content hash from the stored revision; approval requires the *latest* attestation for the exact content to be a pass. The database cannot run Zod, so the SQL "shape gate" is a structural check only. It is not described, anywhere, as full validation; the full Zod gate is run by the future validator service and is unit-tested separately in the repository (`tests/unit/shape-gate-drift.test.ts` ties the SQL vocabulary to the Zod schema and checks both existing experiences against it).
+
+**U-6 (custom Postgres roles).** Verified on the real local stack: migrations can create NOLOGIN roles that hold no table privilege, that cannot be superuser/BYPASSRLS, that are members of no other role; EXECUTE grants to them work; they are denied everything else (110_service_roles). **Not verified:** role creation by migration on a hosted project, a login role and pooled/direct connection from the chosen host, and password handling (a later increment; no credential is created here).
+
+**Test inventory and merge gate for 3.2** (the `Database` workflow, real Supabase local stack, Postgres 17):
+
+| Layer | Files / command | Covers |
+|---|---|---|
+| L1 pgTAP | `supabase test db`: 14 files, 645 assertions | `001`/`100` exact catalogue (tables, grants, column grants, EXECUTE grants, policies, FORCE RLS, triggers, FKs, role attributes); `110` service roles T-X01–X07 incl. in-function re-checks; `120` isolation T-P01–P08, P12–P15, P18, T-A01–A03, T-D03, T-S02; `130` revisions T-L06, L07, L13, T-P14, T-M05; `140` validation and approval T-L02, L03, L04, T-P06; `150` publication T-L01, L03, L05, L08, L09, L11, L12, T-A04, T-P07/P08; `160` topics T-D05; `170` audit |
+| L1c concurrency | `lifecycle-races.sh` (two real sessions, run twice), `redeem-invite-race.sh` | T-L06, T-L05, T-L10, T-I07 |
+| L2 API | `node --test` on `identity.api.test.mjs` and `experience.api.test.mjs`: 21 tests | real GoTrue/PostgREST/aal2: ownership isolation, validator and secret-key denial, publish/unpublish/takedown/hold, same-token suspension, forged token, both real experience documents through the shape gate |
+| Unit | `pnpm test` (Vitest) | drift between the SQL shape gate and the Zod schema; both existing experiences satisfy the structural gate |
+
+Not implemented, not claimed: L3 browser/application tests; T-S01–S10 at L3; anything needing Next.js auth (3.3); T-D06; publisher public profile (T-A01 `publishers` columns); the admin audit-log view.
+
+**Recorded clarifications and deviations from the data model** (all in D-055, Proposed; none individually approved): `text` + CHECK slug instead of `citext`; composite foreign keys (approval and attestation bound to the revision's hash; publication bound to approval and experience; head bound to its experience) in place of the single-column keys; `get_revision_for_validation` added so the validator can read what it attests; a revision's document slug and kind must equal the stored columns; `save_revision` is refused on an archived experience but allowed during a hold, and a hold blocks approval and publication; a hold cannot be set on a live publication (takedown is the atomic path) and an experience with a live publication cannot be archived; the latest attestation governs and a tie fails closed; only schema version 1 is accepted; a proposed reserved-slug list (the two existing file-based slugs plus route words); `approve_revision` takes no note parameter; topic writes are direct DML by an aal2 administrator with a same-transaction audit trigger; the audit-detail allow-list gains `experience_id, revision_id, publication_id, topic_id, seq, reason_code, validator_version, passed, held`. The published projection takes title, summary and language from the **approved revision's** document and the topic slugs as they are at publish time; changing topics later needs a republish.
+
+**Owner decisions needed:** confirm D-048 (3.2 portion) and D-049 (the `ai_service` role, created with no privileges); confirm Q-43 (attestation from the start); review the D-055 clarifications; supply the reserved-slug list; decide whether `validator_service` becomes a separate login role in 3.3.
 
 ## 5. Out of scope for Stage 3
 

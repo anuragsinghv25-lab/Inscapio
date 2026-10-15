@@ -6,6 +6,8 @@
 
 > **3.1 implementation note (15 Oct 2026):** where this document differs from the migrations, the migrations and `stage-3-implementation-plan.md` §4.1 (deviations, FORCE RLS, own-row read, invitation expiry) are authoritative for the local identity core. Deviations remain Proposed (D-054).
 
+> **3.2 implementation note (15 Oct 2026):** the experience-core tables and functions now exist (migrations `20261016000100`–`400`). Where this document differs, the migrations and `stage-3-implementation-plan.md` §4.2 / D-055 are authoritative for the local database: composite foreign keys bind approvals, attestations and publications to the revision's hash; slugs are `text` with a CHECK; `get_revision_for_validation` is added; the other clarifications are listed in D-055 (Proposed).
+
 ## 1. Starting point and what changes
 
 `backend-architecture.md` (Phase 0, Proposed) lists conceptual tables: `publishers, topics, experiences, experience_topics, revisions, approvals, publications, interview_sessions, interview_turns, knowledge_items, sources, media, feedback, events_daily, invites, jobs, ai_calls`, with later `readers, follows, subscriptions, saved, notifications, entitlements, organisations, members`. This document evaluates each against "is it needed for the Stage 3 foundation?".

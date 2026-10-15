@@ -382,3 +382,19 @@ Status for these entries is **Proposed, pending owner review**. Nothing is imple
 - **No longer a deviation:** RLS is enabled **and forced** (T-M01). It depends on the definer-function owner having `BYPASSRLS`, true on the local stack and unverified on the hosted project.
 - **Reason:** smallest surface for 3.1; each is narrower or stricter than the design.
 - **Status:** Proposed (owner approval, if any, is per deviation)
+
+## D-055 · Increment 3.2 implementation clarifications (experience core)
+- **Context:** the data model leaves a few contract points open. 3.2 had to choose to implement them; none changes the security model.
+- **Decision (all Proposed, none individually approved):**
+  1. **Q-43:** attestation from the start. Only `validator_service` can write `revision_validations`, through `record_validation`; the database copies the hash from the stored revision; approval requires the latest attestation for that exact content to be a pass (a tie fails closed). The SQL shape gate is structural only.
+  2. `public.get_revision_for_validation(uuid)` is added so the validator can read the document it attests; it and `record_validation` check the caller inside the function as well as by EXECUTE grant.
+  3. Approval, attestation and publication are bound by composite foreign keys to the revision's `content_hash` and experience; the head pointer is bound to its own experience. The hash is always computed by a trigger.
+  4. A document's `slug` and `kind` must equal the stored columns; only schema version 1 is accepted.
+  5. Edit conflict is SQLSTATE 23505. `save_revision` is refused when archived but allowed while held; a hold blocks approval and publication; a hold cannot be set on a live publication (use `admin_takedown`); a published experience cannot be archived.
+  6. Approve, publish and unpublish require a human session (`private.is_human_session`: verified subject, role `authenticated`, caller not a machine role).
+  7. `validator_service` and `ai_service` are created NOLOGIN by migration with no privileges; a login role and its password are a later, out-of-repo step.
+  8. Reserved slugs: the two existing file-based slugs plus route words (a proposal; the list is easy to change in a new migration).
+  9. Projection: title, summary and language come from the approved revision; topic slugs are copied at publish time. Topic writes are direct DML by an aal2 administrator with an audit trigger. `approve_revision` has no note parameter.
+- **Not decided here:** D-048 and D-049 as wholes remain Proposed; hosted behaviour of role creation and the `postgres` role's BYPASSRLS attribute (U-4/U-6) is unverified.
+- **Status:** Proposed
+

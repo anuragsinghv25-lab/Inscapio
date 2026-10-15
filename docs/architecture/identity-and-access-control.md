@@ -361,7 +361,7 @@ Each fact was read from the vendor's current documentation page named here. Docs
 | U-3 | Whether `inviteUserByEmail` works while "Allow new users to sign up" is off; whether an invited, unconfirmed user can later request a fresh magic link with `shouldCreateUser: false` | Spike in 3.3. If not, use an admin-generated link or leave sign-ups on with a database gate that denies uninvited users (the design already denies them). |
 | U-4 | Postgres major version of the project (needed for `security_invoker` views, V-4) | Check in the local stack and the hosted project. |
 | U-5 | Default access-token lifetime and whether session time-box or inactivity timeout is available on the plan | Dashboard session settings; plan docs. |
-| U-6 | Custom Postgres roles (`ai_service`, `validator_service`), their grants, and a direct/pooled connection from the chosen host | Spike in 3.2. |
+| U-6 | Custom Postgres roles (`ai_service`, `validator_service`), their grants, and a direct/pooled connection from the chosen host | Spike in 3.2. **Partly resolved 15 Oct 2026:** creation, zero-privilege and EXECUTE-grant behaviour verified on the local stack (plan §4.2); hosted creation, login roles and pooled connections remain unverified. |
 | U-7 | Exact API to end all sessions of a banned user | Spike in 3.3. |
 | U-8 | MFA availability on the plan in use | Pricing/plan docs. |
 | U-9 | Owner-access audit logging for the Supabase organisation | Account security docs. |

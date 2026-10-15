@@ -226,4 +226,5 @@ Context: [`design/phase-1-5-product-design-review.md`](./design/phase-1-5-produc
 - **Why it matters:** without attestation a publisher bypassing the UI could publish a shape-valid but Zod-invalid document (availability risk only; renderer fails closed).
 - **Leaning:** attestation from the start.
 - **Needed by:** 3.2.
+- **15 Oct 2026:** implemented in the 3.2 PR as attestation from the start (D-055 item 1). Still open until the owner confirms it.
 
