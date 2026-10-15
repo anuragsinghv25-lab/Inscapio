@@ -1,6 +1,6 @@
 # Stage 3 implementation plan
 
-> **Status:** Stage 3 design · **Proposed**. Nothing in this plan has started. This milestone is documentation only: no Supabase resource was created or connected, no table, migration, auth configuration, dependency, credential or application code was added, and the production domain and deployment were not touched.
+> **Status:** Stage 3 design · **Proposed**, except where §4.1 records an owner approval. Increment 3.1 (local-only identity core) is implemented on its own branch; later increments have not started. No hosted Supabase resource was created or connected and the production domain and deployment were not touched.
 > **Companions:** [`identity-and-access-control.md`](./identity-and-access-control.md), [`supabase-data-model.md`](./supabase-data-model.md), [`authentication-and-rls-test-plan.md`](./authentication-and-rls-test-plan.md). Labels (V-n, U-n, Rec D-nnn, Q-nn) are defined in the identity document §0. Roadmap position: Stage 3 of the five-stage roadmap in [`phase-2-readiness.md`](./phase-2-readiness.md); the publisher workspace UI is Stage 4.
 
 ## 1. Recommended starting point
@@ -90,6 +90,31 @@ These are recommendations in `DECISIONS.md` as **Proposed**; none is approved by
 | D-053 increment order; start at 3.1; add `@supabase/ssr` and `@supabase/supabase-js` only at 3.3 with approval | 3.0 |
 
 Open questions to answer: Q-30…Q-43 in `OPEN-QUESTIONS.md`.
+
+### 4.1 Increment 3.1 reconciliation (15 Oct 2026)
+
+**Approvals (3.1 portions only).** The owner approved: D-045; the invitation portion of D-046; the 3.1 portion of D-050; D-052; the 3.1 portion of D-053. D-047, D-048, D-049, D-051 and the remaining parts of D-046/D-050/D-053 are **not** approved. See `DECISIONS.md`.
+
+**3.0 versus 3.1.** 3.0 gates hosted work. The 3.1 build is local only, so only the items below block it; everything else in 3.0 waits for staging (3.3).
+
+| Question | Blocks local-only 3.1? | Where it is needed |
+|---|---|---|
+| Q-30, Q-31, Q-32, Q-33, Q-34 (hosting, project, SMTP, admin count) | No | 3.3 staging; before outside publishers |
+| Q-38 (publisher MFA) | No (admin aal2 is approved in D-050) | 3.3 |
+| Q-40 (invite delivery, 7-day default) | No: the default is a function parameter bounded 1–30 days and can change | 3.3 |
+| Q-43, Q-35, Q-36, Q-37, Q-39, Q-41, Q-42 | No | 3.2 and later |
+
+**Test layers required for 3.1, and the merge gate.** The gate is the `Database` workflow, which runs on the real Supabase local stack (CLI 2.120.0, local Postgres 17; hosted version unverified, U-4):
+
+| Layer | Command | Covers |
+|---|---|---|
+| L1 pgTAP | `supabase test db` (six files, `supabase/tests/database/`) | catalogue/grant/RLS/policy inventory (T-M01–T-M06, T-A05 for these tables), roles and every denied operation with a positive counterpart (T-I01, T-D01, T-D02, T-D04, T-D06, T-P11, T-S01), invitation rules at SQL level (unverified email, mismatched email, expired, revoked, redeemed, success, no partial records), audit append-only |
+| L1c concurrency | `supabase/tests/concurrency/redeem-invite-race.sh` (two real sessions) | T-I07 |
+| L2 API | `node --test supabase/tests/api/` against real GoTrue and PostgREST | anon RPC/table denial, private schema not exposed, aal1 versus aal2 with real TOTP (T-I02, T-I03), metadata tamper (T-S04), same-token suspension (T-S02), forged token (T-S05) |
+
+L3 (application/e2e) is **not implemented** and not claimed: there is no Next.js auth in 3.1. It is added to the gate before the application functionality that needs it (3.3). Tests for later increments stay in the inventory, marked deferred.
+
+**Recorded deviations from the design documents** (all narrower or stricter): `text` + lowercase CHECK instead of `citext`; `publishers.handle` nullable and set-once (because `redeem_invite()` takes no arguments); invites gain status `expired`; no `anon` access to `publishers` in 3.1 (public profile moves to 3.2); RLS is ENABLE, not FORCE, so definer functions owned by the table owner can write; no `owns_experience` helpers (need `experiences`, 3.2); audit `details` limited to keys `invite_id, ttl_days, from, to`; `audit_events.request_id` exists but is unset.
 
 ## 5. Out of scope for Stage 3
 
