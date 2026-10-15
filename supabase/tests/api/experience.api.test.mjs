@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
-  SERVICE, keyHeaders, http, API, rest, rpc, createUser, signIn, claims, elevateToAal2, owner, asValidator, run,
+  SERVICE, keyHeaders, http, API, rest, rpc, createUser, signIn, claims, elevateToAal2, owner, asValidator, serviceRoleMemberships, actingMemberships, run,
 } from './lib.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../src/content/experiences');
@@ -207,6 +207,6 @@ test('T-S05 a token with altered claims is rejected on the new functions too', a
   assert.equal(r.status, 401, `forged token must be rejected: ${r.text}`);
 });
 
-test('sentinel: no validator_service or ai_service membership was left behind by any test in this file', () => {
-  assert.equal(owner(`select count(*) from pg_auth_members m join pg_roles r on r.oid = m.roleid where r.rolname in ('validator_service','ai_service')`), '0');
+test('sentinel: no test in this file left any session able to act as validator_service or ai_service', () => {
+  assert.equal(actingMemberships(), '0', `memberships: ${serviceRoleMemberships()}`);
 });

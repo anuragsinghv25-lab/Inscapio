@@ -98,6 +98,7 @@ jobs:
           eval "$(pnpm exec supabase status -o env | grep -E '^(API_URL|DB_URL|ANON_KEY|SERVICE_ROLE_KEY)=')"
           set +a
           export API_URL DB_URL ANON_KEY SERVICE_ROLE_KEY
+          echo "::notice::service-role membership baseline (role>member): $(psql "$DB_URL" -X -At -c "select coalesce(string_agg(r.rolname || '>' || g.rolname || ' admin=' || m.admin_option || ' inherit=' || m.inherit_option || ' set=' || m.set_option, '; '), 'none') from pg_auth_members m join pg_roles r on r.oid = m.roleid join pg_roles g on g.oid = m.member where r.rolname in ('validator_service','ai_service')")"
           node --test --test-reporter=tap supabase/tests/api/identity.api.test.mjs supabase/tests/api/experience.api.test.mjs supabase/tests/api/harness.api.test.mjs 2>&1 | tee api.log
 
       - name: Report results as annotations

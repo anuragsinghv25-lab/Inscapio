@@ -96,3 +96,12 @@ export const asValidator = (sql) =>
     // succeeds, the revoke commits together with the work. No cleanup step can be skipped.
     input: `begin;\ngrant validator_service to postgres;\nset local role validator_service;\n${sql};\nreset role;\nrevoke validator_service from postgres;\ncommit;\n`,
   }).toString().trim();
+
+// Every membership row whose ROLE is a service role, as text. On a hosted-like stack the role creator may
+// hold a baseline row (PostgreSQL 16+ gives a non-superuser creator ADMIN OPTION on a role it creates),
+// so tests compare snapshots taken before and after rather than assuming zero rows.
+export const serviceRoleMemberships = () =>
+  owner(`select coalesce(string_agg(r.rolname || '>' || g.rolname || ' admin=' || m.admin_option || ' inherit=' || m.inherit_option || ' set=' || m.set_option, ';' order by r.rolname, g.rolname), '') from pg_auth_members m join pg_roles r on r.oid = m.roleid join pg_roles g on g.oid = m.member where r.rolname in ('validator_service','ai_service')`);
+// A row that would let a session act as a service role: it can SET ROLE to it or inherits its privileges.
+export const actingMemberships = () =>
+  owner(`select count(*) from pg_auth_members m join pg_roles r on r.oid = m.roleid where r.rolname in ('validator_service','ai_service') and (m.set_option or m.inherit_option)`);
