@@ -3,6 +3,10 @@
 > **Status:** for owner review · **Proposed** · written 15 Oct 2026. Nothing here is decided. No hosted Supabase project, hosting dashboard, DNS record, SMTP account or domain registrar was inspected; **the repository records none of their current state, and this brief does not guess it.** No secret was requested or written.
 > **Companions:** [`stage-3-implementation-plan.md`](./stage-3-implementation-plan.md) (§2 increments, §3 environments, §4 decisions), [`identity-and-access-control.md`](./identity-and-access-control.md), [`../DECISIONS.md`](../DECISIONS.md), [`../OPEN-QUESTIONS.md`](../OPEN-QUESTIONS.md). Labels V-n, U-n, Rec D-nnn are defined in the identity document §0.
 
+## 0. Owner responses (20 Oct 2026)
+
+The owner has answered part of this brief. See `DECISIONS.md` D-057 to D-061, `OPEN-QUESTIONS.md` and plan §4.3 for the authoritative record. In short: new staging project and no production project now (Q-31 answered); sole administrator with MFA (Q-34 partly); Vercel account and preview deployments in principle, no DNS or production change without approval (Q-32 partly); both Supabase libraries approved for 3.3; publisher MFA optional and manual invitations recorded as recommendations awaiting confirmation (Q-38, Q-40); Q-33 deliberately unresolved. A new question, Q-44, arose from manual invitations. The step-by-step guide for the owner is [`../runbooks/supabase-staging-setup.md`](../runbooks/supabase-staging-setup.md). The tables below are the original brief and were not rewritten.
+
 ## 1. Where things stand
 
 Stage 3.1 (identity core) and 3.2 (experience core) are merged and tested against a **local** Supabase stack only. Stage 3.3 (sign-in, sessions, proxy, first server-side Supabase clients in the Next.js app) is the first increment that needs a **hosted staging project**, real email, a decided host and two new dependencies. Those need the answers below. Two further gates are not questions: owner approval of `@supabase/ssr` and `@supabase/supabase-js` (D-053), and the validator-identity requirement already accepted as D-056.
@@ -92,10 +96,10 @@ An invitation in this design is an **email-bound database record, not a bearer t
 | Option | Trade-offs |
 |---|---|
 | **A. Supabase `inviteUserByEmail` from a server action** | One step for the admin. Uses the secret key on the invite path (server-only, one module); creates an unconfirmed user; errors if the email is already confirmed; the emailed link follows the OTP expiry (default 1 hour, over 24 hours discouraged), which is much shorter than a 7-day invitation [V-1, V-2]. Whether it works with public sign-ups off is unverified (U-3). |
-| **B. The admin tells the invitee, who then requests a normal magic link** | No secret key and no extra email flow on the invite path; no link-lifetime mismatch. The admin sends a short message by their own channel. Depends on the admin; no tracking. |
+| **B. The admin tells the invitee, who then requests a normal magic link** | No invite email and no link-lifetime mismatch. The admin sends a short message by their own channel. Depends on the admin; no tracking. **Correction (20 Oct 2026): the invitee still needs an Auth account.** With public sign-ups off it must be created for them (for example by the owner in the dashboard, or by a server action using the secret key); with sign-ups on, the database gate denies the uninvited but anyone can create an account (spam, email volume). This is Q-44. |
 | **C. The app sends its own invitation email pointing at the sign-in page (no token)** | Smooth for the invitee, no secret key for the link. Needs the SMTP choice (Q-33) and a template; still no bearer token. |
 
-**Lifetime.** The function takes 1 to 30 days with a 7-day default; changing the default is a small, safe change. Shorter windows limit stale invitations; longer windows suit a slow alpha. **Recorded:** 7 days. **My view, not recorded in the repository:** B or C avoids the U-3 spike and the secret key on the invite path; I would start with B for the closed alpha. Treat that as an opinion for you to accept or reject.
+**Lifetime.** The function takes 1 to 30 days with a 7-day default; changing the default is a small, safe change. Shorter windows limit stale invitations; longer windows suit a slow alpha. **Recorded:** 7 days. **My view, not recorded in the repository:** B or C avoids the invite email and the link-lifetime mismatch; I would start with B for the closed alpha. (An earlier version of this sentence said B avoids the U-3 spike and the secret key; that was incomplete, see the correction in option B and Q-44.) Treat that as an opinion for you to accept or reject.
 
 ## 4. What I need from you, in order
 

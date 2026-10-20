@@ -357,11 +357,11 @@ Status for these entries is **Proposed, pending owner review**. Nothing is imple
 
 ## D-050 · Admin is operational and does not imply content access
 - **Decision:** no admin policy on drafts, revisions or feedback; MFA (aal2) for all admin operations; re-auth, reason and confirmation for suspend and takedown; admin bootstrap by documented SQL, not an app feature; owner-level access is an acknowledged trust boundary.
-- **Status:** Proposed; **3.1 portion only** accepted by the owner (15 Oct 2026): separate `admins` record, authorisation requires aal2, first admin bootstrapped by documented SQL (`docs/runbooks/bootstrap-first-admin.md`). Re-auth, reason/confirmation for takedown and the rest remain Proposed.
+- **Status:** Proposed; **3.1 portion only** accepted by the owner (15 Oct 2026): separate `admins` record, authorisation requires aal2, first admin bootstrapped by documented SQL (`docs/runbooks/bootstrap-first-admin.md`). Re-auth, reason/confirmation for takedown and the rest remain Proposed. On 20 Oct 2026 the owner also accepted that MFA is required for every administrator operation and that there is one initial administrator (D-058).
 
 ## D-051 · New staging and production Supabase projects; the existing project is unverified
 - **Decision:** treat the existing project as scratch until the owner records its facts; create new staging and production projects once region, org ownership and plan are decided; production on a plan with backups before outside publishers; keys use the new publishable/secret model.
-- **Status:** Proposed (refines D-012)
+- **Status:** Proposed (refines D-012); **staging portion accepted** by the owner (20 Oct 2026, D-057): a new, separate staging project; the existing project is scratch until its configuration is verified. Creating a production project, the production plan and the backups requirement remain Proposed and are deferred.
 
 ## D-052 · RLS and authorisation tests are a merge gate, run against real roles and policies
 - **Decision:** three layers (pgTAP, API with real JWTs, application/e2e) in CI on every PR touching `supabase/` or auth code; every table needs denial tests; frontend-only tests do not count.
@@ -369,7 +369,7 @@ Status for these entries is **Proposed, pending owner review**. Nothing is imple
 
 ## D-053 · Stage 3 increments and dependency timing
 - **Decision:** order 3.0–3.7 as in the implementation plan; start at 3.1 (local identity core); `@supabase/ssr` and `@supabase/supabase-js` added only at 3.3, with explicit owner approval.
-- **Status:** Proposed; **3.1 portion only** accepted by the owner (15 Oct 2026). No 3.2/3.3 scope; no Supabase JS dependency.
+- **Status:** Proposed; **3.1 portion only** accepted by the owner (15 Oct 2026). No 3.2/3.3 scope; no Supabase JS dependency. **Dependency gate for 3.3 accepted** by the owner on 20 Oct 2026 (D-060): `@supabase/supabase-js` and `@supabase/ssr` may be added in the 3.3 PR. Nothing has been added yet.
 
 ## D-054 · Increment 3.1 implementation choices (deviations from the design documents)
 - **Decision:** the deviations below were implemented in 3.1. None is individually approved by the owner. Detail, technical reasons and proving tests: `architecture/stage-3-implementation-plan.md` §4.1.
@@ -403,3 +403,40 @@ Status for these entries is **Proposed, pending owner review**. Nothing is imple
 - **Decision:** in Stage 3.3 the trusted validator service connects as a **dedicated identity** that is a member of `validator_service` and holds nothing else. Its credentials are never exposed to publishers or to the AI service, and a generic privileged credential (the Supabase secret / `service_role` key, or any BYPASSRLS role) must **not** be used as a substitute. The SQL shape gate stays explicitly structural; the validator performs the full Zod validation and attests the exact stored revision (`get_revision_for_validation`, then `record_validation`).
 - **Consequence:** creating that login role, its credential handling and connection path (including hosted/pooled behaviour, U-6) are 3.3 work and need their own tests on the real stack. Nothing is created in 3.2.
 - **Status:** Accepted (15 Oct 2026)
+
+## D-057 · Supabase environment for Stage 3.3: a new, separate staging project; the existing project is scratch
+- **Context:** Stage 3.0 decision brief, Q-30 and Q-31. The existing project's configuration is unverified (U-1).
+- **Accepted (owner, 20 Oct 2026):**
+  1. Create a **new, separate staging** project for InScapio (the owner creates it; no AI session creates or connects a hosted project).
+  2. The existing project is a **scratch** environment until its configuration is verified. It is not modified, and no migration is applied to it.
+  3. **No production Supabase project is created at this stage.**
+  4. **Hard gate:** no hosted Supabase project is connected, and no migration is applied to any hosted project, until the owner confirms in writing that the staging project is ready. Preparing the checklist and setup guide is allowed; applying anything is not.
+- **Proposed, still to verify:** Mumbai (`ap-south-1`) as the staging region. The Supabase regions page lists "South Asia (Mumbai) `ap-south-1`" as selectable (read 20 Oct 2026); it does not say a region can be changed afterwards. The plan, its price and the features needed (Auth email settings, MFA, backups, project pausing) must be checked by the owner at creation time. Whether data residency matters is a legal question for counsel (plan §6).
+- **Unresolved:** production region, production plan, backups before outside publishers, and what happens to the scratch project (keep, pause or delete).
+- **Status:** Accepted for items 1–4; region and plan Proposed pending verification
+
+## D-058 · One initial administrator, with MFA required; recovery is documented but not implemented
+- **Accepted (owner, 20 Oct 2026):** the owner is the **sole initial InScapio administrator**. MFA (aal2) is required for every administrator operation (consistent with D-050).
+- **Risk recorded:** one administrator is a single point of failure. If the authenticator or the account is lost, administration (invitations, suspension, takedown) stops and nothing else can perform it. The only break-glass path is the Supabase project owner acting through direct database access.
+- **Recovery:** the procedure and what is and is not verified are in [`docs/runbooks/admin-recovery.md`](./runbooks/admin-recovery.md). **No recovery feature is implemented in the application, and the Auth-level steps (resetting an MFA factor, recovery codes) are unverified** (U-11).
+- **Not decided:** a second administrator or second organisation owner (the owner chose a sole administrator for now; the brief's options B and C remain available later).
+- **Status:** Accepted (sole administrator, MFA required); recovery procedure Proposed until U-11 is verified
+
+## D-059 · Hosting: Vercel preview deployments for staging; no production hosting or DNS change without explicit approval
+- **Accepted (owner, 20 Oct 2026):** the owner is willing to create a Vercel account and integrate it through GitHub. **No DNS change, no connection of the production domain and no replacement of the current production hosting without the owner's separate, explicit approval.**
+- **Proposed direction:** use Vercel **preview deployments** for staging and testing (consistent with D-012). Production hosting stays a separate decision (Q-23, Q-32).
+- **To verify before the account is created:** Vercel's Hobby plan "restricts users to non-commercial, personal use only" (Vercel plans page and fair-use guidelines, read 20 Oct 2026). Whether staging for a product the owner intends to operate commercially is within that, or needs the Pro plan (about $20 per developer seat per month at the time of reading), is for the owner to decide from Vercel's current terms. Preview URLs differ from `inscapio.in`; Supabase redirect URLs must list them (V-1). The preview protection setting and which branch becomes Vercel's "Production" deployment must be set so nothing is served on `inscapio.in`.
+- **Status:** Accepted (willingness, DNS/production prohibition); preview-deployment approach Proposed; plan suitability unverified
+
+## D-060 · Authentication libraries approved for Stage 3.3
+- **Accepted (owner, 20 Oct 2026):** `@supabase/supabase-js` and `@supabase/ssr` may be added in the Stage 3.3 PR, using the existing package manager (pnpm) and lockfile. Exact versions are chosen then and checked against the current documentation (V-3: Next.js 16 uses `proxy.ts`; `getClaims()` for token checks).
+- **Credential rules (accepted):** credentials never enter source control. **No AI session requests or handles the owner's account password, a Supabase secret key or a `service_role` key.** The owner configures real values himself in the Vercel and local environment settings; the repository holds names only (`.env.example`).
+- **Consequence:** the application uses only the project URL and the publishable key in 3.3. The secret key is needed only for the Auth admin API (ending a suspended user's sessions, U-7) and is **not** needed for 3.3 if invitees' Auth accounts are created by the owner in the dashboard or sign-ups stay on behind the database gate (Q-44, D-061); it can stay unset in staging until 3.4.
+- **Status:** Accepted
+
+## D-061 · Publisher MFA optional at first; manual invitations for the closed alpha (recommendation)
+- **Owner preference (20 Oct 2026), recorded as a recommendation pending the owner's explicit confirmation:**
+  1. Publisher MFA is **optional** initially; administrator MFA is **required** (D-058). Because publishers' sessions can approve and publish, making MFA mandatory for them later needs a new migration adding an aal2 condition (not part of 3.2) and a UI flow; MFA plan availability is unverified (U-8).
+  2. Invitations are **manual** for the closed alpha: the administrator creates the invitation record (`create_invite`, seven-day default, bounded 1–30 days) and tells the invitee himself; the invitee then requests an ordinary sign-in link with that email. This avoids `inviteUserByEmail`, the invite email and the mismatch between the 7-day invitation and the roughly one-hour emailed link. **It does not by itself solve how the invitee's Auth account comes to exist** (Q-44): with public sign-ups off, the account must be created for them (for example by the owner in the Supabase dashboard); with sign-ups on, anyone can create an account but the database gate (a `publishers` row exists only after `redeem_invite`) denies the uninvited. U-3 stays open until tested in 3.3.
+  3. The **production email provider and sender-domain configuration remain unresolved** (Q-33). **No DNS change.** Staging email needs are reviewed first.
+- **Status:** Proposed (owner-preferred; becomes Accepted when confirmed)
