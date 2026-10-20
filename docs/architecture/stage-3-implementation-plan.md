@@ -1,6 +1,6 @@
 # Stage 3 implementation plan
 
-> **Status:** Stage 3 design · **Proposed**, except where §4.1 records an owner approval. Increments 3.1 (local-only identity core, PR #9, `a7f3572`) and 3.2 (local-only experience core, PR #10, `ed97603`) are **merged** (§4.1, §4.2). The 3.0 decision gate for hosted work is open: see [`stage-3-0-decision-brief.md`](./stage-3-0-decision-brief.md). 3.3 and later have not started. No hosted Supabase resource was created or connected and the production domain and deployment were not touched.
+> **Status:** Stage 3 design · **Proposed**, except where §4.1 records an owner approval. Increments 3.1 (local-only identity core, PR #9, `a7f3572`) and 3.2 (local-only experience core, PR #10, `ed97603`) are **merged** (§4.1, §4.2). The 3.0 decision gate is **partly answered** (owner preferences of 20 Oct 2026, §4.3); the owner still has to create and confirm the staging project before any hosted step. See [`stage-3-0-decision-brief.md`](./stage-3-0-decision-brief.md). 3.3 and later have not started. No hosted Supabase resource was created or connected and the production domain and deployment were not touched.
 > **Companions:** [`identity-and-access-control.md`](./identity-and-access-control.md), [`supabase-data-model.md`](./supabase-data-model.md), [`authentication-and-rls-test-plan.md`](./authentication-and-rls-test-plan.md). Labels (V-n, U-n, Rec D-nnn, Q-nn) are defined in the identity document §0. Roadmap position: Stage 3 of the five-stage roadmap in [`phase-2-readiness.md`](./phase-2-readiness.md); the publisher workspace UI is Stage 4.
 
 ## 1. Recommended starting point
@@ -163,6 +163,29 @@ Not implemented, not claimed: L3 browser/application tests; T-S01–S10 at L3; a
 **Recorded clarifications and deviations from the data model** (all in D-055, approved by the owner as a set on 15 Oct 2026): `text` + CHECK slug instead of `citext`; composite foreign keys (approval and attestation bound to the revision's hash; publication bound to approval and experience; head bound to its experience) in place of the single-column keys; `get_revision_for_validation` added so the validator can read what it attests; a revision's document slug and kind must equal the stored columns; `save_revision` is refused on an archived experience but allowed during a hold, and a hold blocks approval and publication; a hold cannot be set on a live publication (takedown is the atomic path) and an experience with a live publication cannot be archived; the latest attestation governs and a tie fails closed; only schema version 1 is accepted; a proposed reserved-slug list (the two existing file-based slugs plus route words); `approve_revision` takes no note parameter; topic writes are direct DML by an aal2 administrator with a same-transaction audit trigger; the audit-detail allow-list gains `experience_id, revision_id, publication_id, topic_id, seq, reason_code, validator_version, passed, held`. The published projection takes title, summary and language from the **approved revision's** document and the topic slugs as they are at publish time; changing topics later needs a republish.
 
 **Owner decisions:** all taken on 15 Oct 2026 (see Approval status). **Stage 3.3 requirement (D-056):** the validator service gets its own minimal-privilege identity, a member of `validator_service` only; its credentials are not exposed to publishers or the AI service, and a generic `service_role`/secret credential is not a substitute. Still open for later: hosted role creation and pooled login (U-4, U-6), retention (Q-35, Q-36).
+
+### 4.3 Stage 3.0 owner decisions (20 Oct 2026) and prerequisites for 3.3
+
+Recorded in `DECISIONS.md` D-057 to D-061 and `OPEN-QUESTIONS.md`. **Accepted** unless marked otherwise.
+
+| Topic | Accepted | Proposed or unverified |
+|---|---|---|
+| Supabase | New, separate **staging** project; existing project is scratch and untouched; **no production project now**; nothing hosted connected and no migration applied until the owner confirms staging is ready (D-057) | Region Mumbai (`ap-south-1`) considered; plan, price and features to verify by the owner; production region/plan; fate of the scratch project |
+| Administrator | One initial administrator (the owner); MFA required for administrator operations (D-058) | Recovery: documented in [`../runbooks/admin-recovery.md`](../runbooks/admin-recovery.md); **no recovery feature implemented; Auth-level steps unverified (U-11)**; second administrator or owner deferred |
+| Hosting | Owner will create a Vercel account and integrate through GitHub; **no DNS change, no production-domain connection, no replacement of current hosting without explicit approval** (D-059) | Preview deployments for staging (direction); whether the Hobby plan is allowed (it is for non-commercial personal use); what serves `inscapio.in` today; production hosting (Q-23, Q-32) |
+| Libraries | `@supabase/supabase-js` and `@supabase/ssr` approved for the 3.3 PR; pnpm and the existing lockfile; no credentials in source; no AI handling of passwords, secret or `service_role` keys (D-060) | Exact versions and `proxy.ts` details are checked against current docs in the 3.3 PR |
+| Publisher MFA and invitations | none yet | Recommendation: publisher MFA optional first, administrator MFA required; manual invitations with the seven-day default (D-061); needs the owner's confirmation |
+| Email | none | Production provider and sender domain unresolved (Q-33); no DNS change; staging SMTP to be reviewed |
+
+**Prerequisites before any 3.3 code or hosted step** (all must be true; the first two are the owner's):
+
+1. The owner has created the staging project and the Vercel account by following [`../runbooks/supabase-staging-setup.md`](../runbooks/supabase-staging-setup.md) and has said "staging is ready", with the non-secret facts listed there.
+2. The owner has confirmed D-061 (publisher MFA, manual invitations) or chosen otherwise.
+3. Q-44 (how an invitee's Auth account exists) is chosen after a local-stack spike, and U-3 and U-11 are tested.
+4. A reviewed PR provides the redirect URL list and a staging migration job; migrations are applied only after the owner approves it and sets the GitHub secrets himself.
+5. The first 3.3 PR adds the two libraries to `package.json` and `pnpm-lock.yaml` and nothing else outside the 3.3 scope; the L3 tests required by D-052 are added to the gate in that PR.
+
+**Still unresolved:** Q-30 (plan, production region and plan, legal advice start), Q-32 (production hosting), Q-33 (SMTP), Q-34 (organisation structure and recovery), Q-38 and Q-40 (until confirmed), and new Q-44.
 
 ## 5. Out of scope for Stage 3
 

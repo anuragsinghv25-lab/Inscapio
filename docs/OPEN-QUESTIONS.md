@@ -166,6 +166,7 @@ Context: [`design/phase-1-5-product-design-review.md`](./design/phase-1-5-produc
 ### Q-30 · Supabase ownership, region, plan and the start of privacy/legal advice
 - **Why it matters:** region and plan are expensive to change after data exists; see S1..S16 in `architecture/phase-2-readiness.md`.
 - **Needed by:** before Stage 3.
+- **20 Oct 2026 (partly answered, D-057):** staging region Mumbai `ap-south-1` is **considered, not decided**; it is listed as selectable on Supabase's regions page. **Still open:** the staging plan and price, required features on that plan, production region and plan, and when legal advice starts. The owner verifies plan and price at creation time.
 
 ---
 
@@ -173,22 +174,23 @@ Context: [`design/phase-1-5-product-design-review.md`](./design/phase-1-5-produc
 
 > 15 Oct 2026: none of Q-31…Q-43 blocks the local-only increment 3.1. Classification in `architecture/stage-3-implementation-plan.md` §4.1. All remained open then; Q-43 was answered on 15 Oct 2026 (below). 3.1 and 3.2 are now merged (local only). Q-30, Q-31, Q-32, Q-33, Q-34, Q-38 and Q-40 remain **open** and are laid out for the owner, with options and the facts to obtain, in [`architecture/stage-3-0-decision-brief.md`](./architecture/stage-3-0-decision-brief.md).
 
-### Q-31 · Keep the existing Supabase project or create new staging and production projects?
-- **Why it matters:** its region, org, plan and config are unverified; region is per project (see D-051).
-- **Leaning:** new projects; existing one is scratch until the owner records its facts.
-- **Needed by:** 3.0.
+### Q-31 · ~~Keep the existing Supabase project or create new staging and production projects?~~ Answered (20 Oct 2026)
+- **Answer:** create a **new, separate staging project**; the existing project is **scratch** until verified and is not modified; **no production project yet**; nothing hosted is connected and no migration applied until the owner confirms staging is ready. Recorded in `DECISIONS.md` D-057 and D-051 (staging portion). **Still unverified:** the existing project's configuration (U-1) and its eventual fate.
 
 ### Q-32 · Next.js hosting target and region (and whether a Postgres queue is acceptable for jobs later)
 - **Why it matters:** latency to the database, function limits, and where secrets live. D-012 says Vercel; production is deployed elsewhere today (Q-23).
 - **Needed by:** 3.3.
+- **20 Oct 2026 (partly answered, D-059):** the owner will create a Vercel account and integrate through GitHub; **preview deployments for staging** are the proposed direction; no DNS change, production-domain connection or hosting replacement without separate explicit approval. **Still open:** production hosting and region, what serves `inscapio.in` today, whether the Vercel Hobby plan is suitable (it is limited to non-commercial personal use), the preview-protection setting, and the job-queue question.
 
 ### Q-33 · Custom SMTP provider and sender domain
 - **Why it matters:** the built-in sender allows 2 emails per hour; the sender domain touches `inscapio.in` DNS, which this work must not change.
 - **Needed by:** 3.3.
+- **20 Oct 2026:** deliberately **unresolved** (D-061 item 3). Production provider and sender domain wait for review of staging needs. No DNS change. Staging may need some SMTP to test sign-in end to end; its provider is to be chosen then.
 
 ### Q-34 · Number of administrators, Supabase organisation ownership and recovery
 - **Why it matters:** organisation owners can read all data; bootstrap and removal of admins are manual.
 - **Needed by:** 3.0.
+- **20 Oct 2026 (partly answered, D-058):** **one initial administrator (the owner); MFA required.** **Still open:** Supabase organisation structure and owner recovery, and the unverified recovery steps (U-11); see `runbooks/admin-recovery.md`.
 
 ### Q-35 · Revision granularity and retention (autosave vs explicit save)
 - **Why it matters:** append-only revisions grow; free-tier size is 500 MB.
@@ -206,6 +208,7 @@ Context: [`design/phase-1-5-product-design-review.md`](./design/phase-1-5-produc
 ### Q-38 · Must publishers use MFA before publishing?
 - **Why it matters:** backend docs say offered, not required; MFA plan availability unverified.
 - **Needed by:** 3.3.
+- **20 Oct 2026:** owner-preferred answer recorded as a **recommendation, not yet confirmed** (D-061): publisher MFA optional at first; administrator MFA required. Stays open until the owner confirms.
 
 ### Q-39 · Takedown and moderation policy: who decides, notice, appeal; is a second reviewer wanted?
 - **Why it matters:** `in_review` was dropped for the alpha; takedown needs written policy.
@@ -213,6 +216,7 @@ Context: [`design/phase-1-5-product-design-review.md`](./design/phase-1-5-produc
 
 ### Q-40 · Invite delivery and lifetime: Supabase email vs manual link; 7-day default
 - **Needed by:** 3.3.
+- **20 Oct 2026:** owner-preferred answer recorded as a **recommendation, not yet confirmed** (D-061): manual invitations for the closed alpha with the seven-day default. Raises Q-44. Stays open until the owner confirms.
 
 ### Q-41 · Acceptable stale-session window and session time limits
 - **Why it matters:** access-token lifetime and plan limits were not verified.
@@ -224,4 +228,9 @@ Context: [`design/phase-1-5-product-design-review.md`](./design/phase-1-5-produc
 
 ### Q-43 · ~~Accept "shape gate only" validation, or require server-attested validation?~~ Answered (15 Oct 2026)
 - **Answer:** attestation from the start. The SQL shape gate stays explicitly structural and is never full Zod validation; a trusted validator service performs the full validation and attests the exact stored revision. Recorded in `DECISIONS.md` D-048, D-055 item 1 and D-056.
+
+### Q-44 · Under manual invitations, how does the invitee's Auth account come to exist?
+- **Why it matters:** public sign-ups are off in the design, so a sign-in link request from an email with no Auth account does not work. Options: (a) the owner creates the Auth user in the Supabase dashboard; (b) sign-ups stay on and the database gate (a `publishers` row exists only after `redeem_invite`) denies the uninvited, at the cost of spam accounts and email volume; (c) a server action creates the user with the secret key (needs the secret key in the app). Related to U-3.
+- **Leaning:** none recorded. To be tested on the local stack in 3.3 and decided by the owner.
+- **Needed by:** 3.3.
 

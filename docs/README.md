@@ -34,6 +34,8 @@ Every document carries a **Status** line. Phase 0 documents are *drafts pending 
 | | [`architecture/supabase-data-model.md`](./architecture/supabase-data-model.md) | Stage 3: tables, RLS, lifecycle, migrations |
 | | [`architecture/authentication-and-rls-test-plan.md`](./architecture/authentication-and-rls-test-plan.md) | Stage 3: positive and negative authorisation tests |
 | | [`runbooks/bootstrap-first-admin.md`](./runbooks/bootstrap-first-admin.md) | Stage 3.1: how the owner creates the first administrator (local first) |
+| | [`runbooks/admin-recovery.md`](./runbooks/admin-recovery.md) | Sole-administrator lockout risk and recovery (mostly unverified) |
+| | [`runbooks/supabase-staging-setup.md`](./runbooks/supabase-staging-setup.md) | Owner guide: create the Supabase staging project, Vercel previews, environment variables |
 | | [`architecture/stage-3-implementation-plan.md`](./architecture/stage-3-implementation-plan.md) | Stage 3: increments, environments, gates |
 | | [`architecture/stage-3-0-decision-brief.md`](./architecture/stage-3-0-decision-brief.md) | Stage 3.0: owner decisions needed before 3.3 (Q-30…Q-40) |
 | **Engineering** | [`engineering/development-workflow.md`](./engineering/development-workflow.md) | Git, PRs, releases, definition of done |
