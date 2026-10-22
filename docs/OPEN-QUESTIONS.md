@@ -234,3 +234,35 @@ Context: [`design/phase-1-5-product-design-review.md`](./design/phase-1-5-produc
 - **Leaning:** none recorded. To be tested on the local stack in 3.3 and decided by the owner.
 - **Needed by:** 3.3.
 
+
+## Editorial design phase (proposed 22 Oct 2026; see [`design/editorial/06-decisions-assumptions-risks.md`](./design/editorial/06-decisions-assumptions-risks.md))
+
+### Q-45 · Does a daily edition contradict "timeless understanding rather than timely reporting"?
+- **Why it matters:** public promise, homepage, legal framing. **Leaning:** keep the promise and add an Edition layer linked to timeless explainers. **Needed by:** before any editorial implementation.
+
+### Q-46 · Headline rail: manual or auto-scrolling?
+- **Why it matters:** the Phase 1.5 spec and design principles rule out auto-playing and auto-advancing elements; WCAG 2.2.2 applies to moving content. **Leaning:** manual rail. **Needed by:** before the public Edition is built.
+
+### Q-47 · Does the public site link to sign-in?
+- **Leaning:** no; the studio address is given to invited people directly. **Needed by:** before the 3.3 UI.
+
+### Q-48 · One publish confirmation or separate approve and publish steps?
+- **Leaning:** one explicit confirmation recorded as both, keeping two steps available for future publishers. **Needed by:** before the studio.
+
+### Q-49 · Editorial and legal policy for publishing news (corrections, AI-use disclosure, quotation limits, defamation, applicable Indian rules)
+- **Why it matters:** legal exposure. Needs counsel; not legal advice. **Needed by:** before any public pilot.
+
+### Q-50 · Topic taxonomy
+- **Leaning:** six topics (Conflict & security; Diplomacy & institutions; Trade & economy; Energy & resources; Technology & power; India & the world); regions as a filter.
+
+### Q-51 · Dated daily edition or rolling feed; who sets the lead?
+- **Leaning:** dated edition plus archive; the administrator sets the lead (new featured rank).
+
+### Q-52 · May a files-first reading pilot precede Stage 3.5, and does 3.7 apply to an owner-only public studio?
+- **Leaning:** files-first only for design validation; 3.7 before outside publishers; a lighter independent review before the owner publishes publicly.
+
+### Q-53 · AI disclosure: site-wide note, per-story line, or both?
+- **Leaning:** both (site-wide method note and a one-line footer per story).
+
+### Q-54 · Does "Whose Body Is It?" appear on the news front page?
+- **Leaning:** no, stays held until Q-16 closes (see Q-28).

@@ -1,0 +1,1024 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>InScapio Editorial: design proposal prototype</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Literata:opsz,wght@7..72,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="prototype.css">
+</head>
+<body>
+<a class="sr" href="#stage">Skip to prototype</a>
+<header class="pc-bar" role="banner">
+  <span class="pc-title">InScapio Editorial</span>
+  <span class="pc-tag">Design proposal · nothing here is implemented</span>
+  <nav class="pc-tabs" aria-label="Design pages" id="pageTabs"></nav>
+  <div class="pc-ctl" role="group" aria-label="Prototype controls">
+    <span>Device</span>
+    <button type="button" data-w="1280" aria-pressed="true">Desktop 1280</button>
+    <button type="button" data-w="768" aria-pressed="false">Tablet 768</button>
+    <button type="button" data-w="375" aria-pressed="false">Mobile 375</button>
+    <button type="button" id="annoBtn" aria-pressed="false">Annotations</button>
+    <button type="button" id="rmBtn" aria-pressed="false">Simulate reduced motion</button>
+  </div>
+</header>
+<nav class="pc-sub" aria-label="Screens on this page" id="subNav"></nav>
+<div class="pc-meta" id="metaBar" aria-live="polite"></div>
+
+<main class="stage" id="stage" tabindex="-1">
+<div class="device" id="device">
+
+<!-- ================= PAGE 1: direction ================= -->
+<section class="screen" data-page="1" data-id="direction" data-label="Direction & principles" data-status="proposed" data-note="Product direction, IA, journeys. Text only; nothing to implement." hidden>
+<div class="doc">
+  <h1>Product direction and design principles</h1>
+  <p><b>One sentence.</b> InScapio stays “where knowledge becomes an experience”. The new <em>Edition</em> adds a daily, human-curated front page whose stories are structured explainers, not articles with a skin on top. Everything shown here is a <b>proposal</b>; the screen inventory in <code>01-screen-inventory.md</code> says what exists.</p>
+  <div class="anno"><b>Conflict to resolve (Q-45):</b> docs/product/positioning.md says “timeless understanding rather than timely reporting”. A daily edition is timely. Recommended resolution: keep the product promise (<em>understand, don’t just consume</em>) and add an “Edition” layer; each story links to a timeless explainer when one exists.</div>
+
+  <h2>Principles</h2>
+  <table>
+    <tr><th>#</th><th>Principle</th><th>What it changes in the design</th></tr>
+    <tr><td>1</td><td>Reading first, interaction second</td><td>Every story is fully understandable as text. Timeline, chart and stakeholder blocks are expansions, never gates.</td></tr>
+    <tr><td>2</td><td>Say how we know</td><td>Every claim carries an epistemic label (Established / Attributed / Contested / Analysis / Scenario / Unresolved) shown as text + icon, never colour alone.</td></tr>
+    <tr><td>3</td><td>A human signs every story</td><td>Publication requires an explicit, named approval. Public pages say “Reviewed and published by the editor”, and disclose AI assistance in the method note.</td></tr>
+    <tr><td>4</td><td>Corrections are visible</td><td>Updated vs Corrected are different states with their own banner and a public change log. Unpublished stories leave a tombstone, not a 404.</td></tr>
+    <tr><td>5</td><td>Calm motion</td><td>Nothing moves unless the reader asks, except one optional headline rail that is manual by default (see Page 2).</td></tr>
+    <tr><td>6</td><td>Premium, not “newsy”</td><td>Reuse the fog / paper / deep-teal palette, Bricolage display + Literata text, flat shapes, 2–4px radii, hard edges. No red breaking-news bars, no stock-photo grids.</td></tr>
+    <tr><td>7</td><td>Public readers never sign in</td><td>No account prompts, paywall, or cookie wall on the public Edition. Auth exists only for the publisher and admin.</td></tr>
+  </table>
+
+  <h2>Proposed information architecture</h2>
+  <div class="ia" tabindex="0" role="region" aria-label="Information architecture">/                       Edition front page (Today)            [replaces ReadExploreStrip hero block]
+/story/[slug]          Story page (kind: news)                [new content type]
+/topics                All topics (index)
+/topics/[topic]        Topic page: current stories + explainers
+/explore               NEW small index of existing experiences (today: only the #rooms anchor on /)
+/experiences/[slug]    Existing experience pages (kept, unchanged)
+/about  /method  /corrections  /ai-use     Editorial policy pages (new copy; counsel review)
+/studio/*              Private workspace (publisher/admin only; noindex; not linked from public nav)
+/sign-in  /invite/[token]  /mfa            Auth (never required to read)</div>
+  <p><b>Starting taxonomy (recommended, 6 topics, not the 10+ suggested):</b> Conflict &amp; security · Diplomacy &amp; institutions · Trade &amp; economy · Energy &amp; resources · Technology &amp; power · India &amp; the world. “Global economics” becomes <em>Trade &amp; economy</em> so it can host economics stories later without a new top-level section. Regions are a <em>filter</em>, not a nav tree.</p>
+
+  <h2>Journeys</h2>
+  <h3>Reader (no account)</h3>
+  <div class="flow"><span>Land on Edition</span><i>→</i><span>Scan lead + rail</span><i>→</i><span>Open story</span><i>→</i><span>Read brief</span><i>→</i><span>Explore timeline / chart</span><i>→</i><span>Check sources</span><i>→</i><span>Related story or explainer</span></div>
+  <h3>Publisher / admin (daily, 5–10 stories)</h3>
+  <div class="flow"><span>Sign in + MFA</span><i>→</i><span>Queue</span><i>→</i><span>Import AI-drafted JSON</span><i>→</i><span>Fix validation errors</span><i>→</i><span>Edit text / sources</span><i>→</i><span>Preview desktop + mobile</span><i>→</i><span>Confirm &amp; publish</span><i>→</i><span>Public URL</span></div>
+  <div class="flow"><span>New info</span><i>→</i><span>Open story</span><i>→</i><span>Choose Update / Correct / Unpublish</span><i>→</i><span>Write public note</span><i>→</i><span>Confirm</span></div>
+  <p>Honest effort estimate: even with the Editorial MVP built, a careful story takes real review time. 5–10 per day is realistic only if import + validation are fast; this is a risk in <code>06-decisions-assumptions-risks.md</code>.</p>
+
+  <h2>How this relates to what exists today</h2>
+  <table>
+    <tr><th>Today (implemented)</th><th>Proposal</th></tr>
+    <tr><td>Home: hero, ReadExploreStrip (drag wipe), rooms, CityWall, closing</td><td>Edition front page replaces the ReadExploreStrip block and rooms. The wipe idea survives as the lead-story “Read it / Explore it” brief stepper. CityWall and closing move to the new /explore index (or are retired; owner choice).</td></tr>
+    <tr><td>Routes today: <code>/</code>, <code>/about</code>, <code>/experiences/[slug]</code> (two file-based experiences), a not-found page. “Explore” is only an anchor to <code>/#rooms</code>.</td><td>Experience pages unchanged. A small <code>/explore</code> index is added because the rooms leave the home page. Linked from the Edition as “Explainers that don’t expire”.</td></tr>
+    <tr><td>No sign-in, studio, or admin UI</td><td>All Page 4 and Page 5 screens are new proposals. Auth (Stage 3.3) and the DB-backed public read path (3.5) are in the current Stage 3 plan; the studio screens (import, editor, preview, publish) are <b>not</b> in Stage 3 and need a new proposed stage (see 05-phased-implementation-proposal.md).</td></tr>
+  </table>
+  <p><span class="badge existing">Existing</span> = in the repository today. <span class="badge partial">Partial</span> = some backing exists (e.g. database tables) but no screen. <span class="badge proposed">Proposed</span> = design only. <span class="badge later">Later</span> = deliberately out of the Editorial MVP.</p>
+</div>
+</section>
+
+<!-- ================= PAGE 2: home ================= -->
+<section class="screen pub" data-page="2" data-id="home" data-label="Edition front page" data-status="proposed" data-note="Replaces the ReadExploreStrip block on / . Needs Stage 3.5 (DB-backed public read path) to publish without a redeploy." hidden>
+<div class="ill-ribbon">Illustrative content. Stories, places and figures on this page are invented for design review, not news.</div>
+<header class="nav" id="homeNav">
+  <a class="wordmark" href="#" data-go="home">InScapio</a>
+  <button class="menu-btn" type="button" aria-expanded="false" aria-controls="homeNavList">Menu</button>
+  <ul id="homeNavList">
+    <li><a href="#" data-go="home" aria-current="page">Today</a></li>
+    <li><a href="#" data-go="topic">Topics</a></li>
+    <li><a href="#" data-go="explore">Explore</a></li>
+    <li><a href="#" data-go="about">About</a></li>
+  </ul>
+</header>
+<div class="mast">
+  <p class="edline">The Edition · Thursday 22 October 2026 · Updated 18:40 IST</p>
+  <h1 class="ttl"><span class="light">The world,</span><span class="strong">made legible.</span></h1>
+  <p class="sub">Today’s world affairs, curated by one editor, explained with timelines, positions and evidence.<small>Each story says what is established, what is claimed, and what is still unknown.</small></p>
+</div>
+
+<div class="edition" id="edition" data-state="typical">
+  <div class="home-ctl" style="padding:0 var(--gut) 14px">
+    <div class="tl-ctl" role="group" aria-label="Preview edition state">
+      <span>Edition state:</span>
+      <div class="seg" id="edState">
+        <button type="button" data-v="few" aria-pressed="false">2 stories</button>
+        <button type="button" data-v="typical" aria-pressed="true">8 stories</button>
+        <button type="button" data-v="many" aria-pressed="false">16 stories</button>
+        <button type="button" data-v="empty" aria-pressed="false">Empty</button>
+        <button type="button" data-v="loading" aria-pressed="false">Loading</button>
+        <button type="button" data-v="error" aria-pressed="false">Error</button>
+      </div>
+      <span>Headline rail:</span>
+      <div class="seg" id="railMode">
+        <button type="button" data-v="manual" aria-pressed="true">Manual (recommended)</button>
+        <button type="button" data-v="ticker" aria-pressed="false">Auto-scroll (variant)</button>
+      </div>
+    </div>
+    <div class="anno"><b>Edition state / rail mode</b> are review controls, not product UI. Rail recommendation: ship <b>manual</b> (scrollable, snap, keyboard arrows). Auto-scroll is included only so the owner can compare; it adds a WCAG 2.2.2 pause control, is paused on hover/focus/reduced-motion, and the spec at docs/design/phase-1-5-experience-specification.md §2 currently bans auto-playing elements (Q-46).</div>
+  </div>
+
+  <div data-st="few typical many">
+    <div class="rail" id="rail" role="region" aria-label="Latest headlines" aria-roledescription="carousel">
+      <span class="rail-lab">Latest</span>
+      <div class="rail-vp" id="railVp" tabindex="0" aria-label="Headlines, scrollable. Use left and right arrow keys."><div class="rail-track" id="railTrack"></div></div>
+      <div class="rail-ctl" id="railCtl">
+        <button type="button" id="railPrev" aria-label="Previous headlines">←</button>
+        <button type="button" id="railNext" aria-label="Next headlines">→</button>
+        <button type="button" id="railPause" aria-pressed="false" hidden>Pause</button>
+      </div>
+    </div>
+    <p class="rail-note" id="railNote">Manual rail: nothing moves on its own. Swipe on touch, arrow keys or buttons on desktop. Reduced-motion users see the same thing.</p>
+  </div>
+
+  <div class="in" data-st="few typical many">
+    <section class="lead" aria-labelledby="leadH" style="margin-left:calc(var(--gut) * -1);margin-right:calc(var(--gut) * -1)">
+      <div class="lead-main">
+        <p class="kicker" style="color:#ffb3c0"><span class="dot"></span> Conflict &amp; security <span style="color:#c6d3d6">· Lead story</span></p>
+        <h2 id="leadH"><a href="#" data-go="geo">Ceasefire talks over the Karesh Strait stall on a 12-nautical-mile question</a></h2>
+        <p class="dek">Both delegations say they want a deal. What each means by “territorial waters” is the difference between a signing and a collapse, and about a fifth of India’s crude imports pass through.</p>
+        <div class="meta"><time datetime="2026-10-22T09:10+05:30">Published 09:10 IST</time><span class="chip s-updated" style="background:#fff">Updated 16:05</span><span>9 min read · 4 interactive parts</span><span class="glyphs"><span class="ep established" data-i="✓">Established</span><span class="ep contested" data-i="≠">Contested</span></span></div>
+        <div><a class="btn primary" href="#" data-go="geo">Open the story</a> <a class="btn secondary" href="#" data-go="geo" style="color:#fff">Jump to timeline</a></div>
+      </div>
+      <aside class="lead-side" aria-label="Thirty-second briefing">
+        <h3>The 30-second version</h3>
+        <ol class="brief-steps" id="briefSteps" aria-label="Briefing steps">
+          <li><button type="button" aria-pressed="true" data-i="0" aria-label="Step 1">1</button></li>
+          <li><button type="button" aria-pressed="false" data-i="1" aria-label="Step 2">2</button></li>
+          <li><button type="button" aria-pressed="false" data-i="2" aria-label="Step 3">3</button></li>
+        </ol>
+        <div class="brief-card" id="briefCard" aria-live="polite"></div>
+        <p style="font:500 .85rem var(--font-display);color:var(--color-ink-muted);margin:0">This replaces the old “Read it / Explore it” wipe: a taste of the interactive form, on the lead story itself.</p>
+      </aside>
+    </section>
+  </div>
+
+  <div class="in" data-st="few typical many">
+    <div class="sec-h"><h2>Today’s briefing</h2><a href="#" data-go="topic">All of today →</a></div>
+    <div class="grid" id="cardGrid"></div>
+    <p id="manyNote" style="font:500 .95rem var(--font-display);color:var(--color-ink-muted);margin:14px 0 0" hidden>Showing the first 9 of 16. The rest load on request, never on scroll, so the footer stays reachable. <button type="button" class="btn secondary" id="moreBtn" style="margin-left:8px">Show 7 earlier stories</button></p>
+    <div class="anno"><b>Behaviour with volume:</b> 1 lead + up to 2 “wide” cards when ≤3 stories; a 3-column grid for 4–10; for &gt;10 only 9 are shown with an explicit “show earlier” button (no infinite scroll) plus a topic filter. Cards are fully clickable, headline is the link, status chip shows New / Updated / Corrected.</div>
+
+    <div class="sec-h"><h2>Follow a thread</h2><a href="#" data-go="topic">All topics →</a></div>
+    <ul class="topics" id="topicChips"></ul>
+  </div>
+
+  <div class="in" data-st="empty">
+    <div class="ghost-card" style="min-height:260px;margin-top:30px;flex-direction:column;gap:10px"><b style="font:800 1.5rem var(--font-display);color:var(--color-ink)">Today’s edition isn’t out yet</b><span>The editor publishes through the day. The most recent edition is below.</span><a class="btn accent" href="#" data-go="topic">Read yesterday’s edition</a></div>
+  </div>
+  <div class="in" data-st="loading" aria-busy="true">
+    <p class="sr" role="status">Loading today’s edition</p>
+    <div class="skel" style="height:300px;margin-top:30px"></div>
+    <div class="grid" style="margin-top:18px"><div class="skel" style="height:170px"></div><div class="skel" style="height:170px"></div><div class="skel" style="height:170px"></div></div>
+  </div>
+  <div class="in" data-st="error">
+    <div class="banner err" role="alert" style="margin-top:30px"><span class="sym">!</span><div><b>We couldn’t load today’s edition.</b> Your connection is fine; the problem is on our side. The last edition we have is from Wednesday. <div style="margin-top:10px"><button class="btn secondary" type="button" data-set-edition="typical">Try again</button> <a class="btn quiet" href="#" data-go="topic">Read Wednesday’s edition</a></div></div></div>
+  </div>
+
+  <div class="band dark" data-st="few typical many" data-on-dark>
+    <div class="in">
+      <div class="sec-h" style="margin-top:0"><h2>How these stories are made</h2></div>
+      <div class="method">
+        <div><h3>1 · Chosen by a person</h3><p>One editor selects what matters each day. Nothing is auto-published.</p></div>
+        <div><h3>2 · Drafted with AI help</h3><p>Reporting and official statements are structured with an AI tool, then checked line by line.</p></div>
+        <div><h3>3 · Every claim sourced</h3><p>Sources, dates and what is established vs claimed are shown on the page.</p></div>
+        <div><h3>4 · Corrected in public</h3><p>Updates and corrections are dated and logged. <a href="#" data-go="about" style="color:#fff">Our policy</a></p></div>
+      </div>
+    </div>
+  </div>
+  <div class="in" data-st="few typical many">
+    <div class="sec-h"><h2>Explainers that don’t expire</h2><a href="#" data-go="explore">Explore all →</a></div>
+    <div class="grid">
+      <article class="card" style="--tc:#4a646b"><p class="kicker"><span class="badge existing">Existing experience</span></p><h3><a href="#" data-go="explore">Existing: the climate scrubber experience</a></h3><p>Today’s two file-based experiences stay exactly as they are and are linked here as timeless background.</p></article>
+      <article class="card" style="--tc:#4a646b"><p class="kicker"><span class="badge existing">Existing experience</span></p><h3><a href="#" data-go="explore">Existing: Whose Body Is It?</a></h3><p>Held from promotion today (<code>HELD_FROM_NEXT</code>); whether it appears on a news front page is open question Q-28/Q-16.</p></article>
+      <article class="card" style="--tc:#6a3fb5"><p class="kicker"><span class="badge later">Later</span></p><h3><a href="#" data-go="explore">Background explainers per story</a></h3><p>Each story can link a timeless explainer (e.g. “How straits become chokepoints”). Authoring is post-MVP.</p></article>
+    </div>
+  </div>
+</div>
+<footer class="foot-site" data-on-dark>
+  <a href="#" data-go="about">About</a><a href="#" data-go="about">Editorial method</a><a href="#" data-go="about">Corrections</a><a href="#" data-go="about">How we use AI</a>
+  <p>InScapio is edited by one person. Stories use sources linked on each page. Illustrative data is always labelled. © 2026 InScapio.</p>
+</footer>
+</section>
+
+<!-- topic / archive -->
+<section class="screen pub" data-page="2" data-id="topic" data-label="Topic & archive page" data-status="proposed" data-note="Lists current + past stories for a topic or a day. Same card component; adds topic filter chips and date groups." hidden>
+<div class="ill-ribbon">Illustrative content.</div>
+<header class="nav"><a class="wordmark" href="#" data-go="home">InScapio</a><button class="menu-btn" type="button" aria-expanded="false" aria-controls="tn">Menu</button>
+<ul id="tn"><li><a href="#" data-go="home">Today</a></li><li><a href="#" data-go="topic" aria-current="page">Topics</a></li><li><a href="#" data-go="explore">Explore</a></li><li><a href="#" data-go="about">About</a></li></ul></header>
+<div class="mast"><p class="edline">Topic</p><h1 class="ttl" style="font-size:clamp(2.6rem,9cqw,6rem)"><span class="strong">Trade &amp; economy</span></h1><p class="sub">Tariffs, supply chains, currencies and the arguments about them.</p></div>
+<div class="in"><ul class="topics" id="topicChips2" aria-label="Topics"></ul>
+<div class="sec-h"><h2>Recent stories</h2><span class="meta light">Newest first · 4 stories this week</span></div>
+<div class="grid" id="topicGrid"></div>
+<div class="anno"><b>Archive rule:</b> unpublished stories disappear from lists but keep their URL as a tombstone (see Page 6). Corrected stories keep their position and show a Corrected chip.</div></div>
+<footer class="foot-site" style="margin-top:50px" data-on-dark><a href="#" data-go="about">About</a><a href="#" data-go="about">Corrections</a></footer>
+</section>
+
+<!-- existing explore stub -->
+<section class="screen pub" data-page="2" data-id="explore" data-label="Explore (new index, stub)" data-status="proposed" data-note="Today “Explore” is only a link to the #rooms section of the home page; there is no /explore page. Because the rooms leave the home page, a small /explore index is proposed. Shown as a stub." hidden>
+<header class="nav"><a class="wordmark" href="#" data-go="home">InScapio</a><ul><li><a href="#" data-go="home">Today</a></li><li><a href="#" data-go="explore" aria-current="page">Explore</a></li></ul></header>
+<div class="mast"><p class="edline">Proposed index · stub</p><h1 class="ttl" style="font-size:clamp(2.4rem,8cqw,5rem)"><span class="strong">Explore</span></h1><p class="sub">Stub. It would list the two existing file-based experiences (today shown as “rooms” on the home page). Experience pages at /experiences/[slug] stay unchanged.</p><p><a class="btn accent" href="#" data-go="home">Back to the Edition</a></p></div>
+</section>
+<section class="screen pub" data-page="2" data-id="about" data-label="About / method (new copy)" data-status="proposed" data-note="Existing /about page needs new copy for editorial method, corrections policy and AI use. Counsel should review before launch." hidden>
+<header class="nav"><a class="wordmark" href="#" data-go="home">InScapio</a><ul><li><a href="#" data-go="home">Today</a></li><li><a href="#" data-go="about" aria-current="page">About</a></li></ul></header>
+<div class="mast"><p class="edline">Editorial method · draft policy copy</p><h1 class="ttl" style="font-size:clamp(2.4rem,8cqw,5rem)"><span class="strong">How we work</span></h1></div>
+<div class="in s-body" style="padding-bottom:50px;background:transparent"><p><b>Draft copy for owner review.</b> One editor chooses stories. Drafts may be prepared with an AI tool from the sources listed on the page; the editor checks every claim and approves publication. We label what is established, attributed, contested, analysis or scenario. Updates add information; corrections fix errors; both are dated and logged. Unpublished stories keep a notice explaining why.</p><div class="anno"><b>Needs owner/counsel input:</b> corrections policy wording, AI-use disclosure, copyright/quotation limits for third-party reporting, defamation risk handling, and whether any Indian digital-news rules apply (Q-49).</div></div>
+</section>
+
+<!-- ================= PAGE 3: stories ================= -->
+<section class="screen story" data-page="3" data-id="geo" data-label="Story A: geopolitics" data-status="proposed" data-note="Uses existing blocks where possible (disclosure, sources, references); timeline, stakeholder and position blocks are proposed new blocks. See 03-content-schema-mapping.md." hidden>
+<div class="s-bar"><a href="#" data-go="home" aria-label="Back to the Edition">← Edition</a><span class="sp"></span><button type="button" data-go="topic">Topics</button><button type="button" id="textSize" aria-pressed="false">Aa</button></div>
+<header class="s-hero" data-on-dark>
+  <div class="in">
+    <p class="kicker" style="color:#ffb3c0"><span class="dot"></span> Conflict &amp; security <span class="ill-flag">Illustrative story</span></p>
+    <h1>Ceasefire talks over the Karesh Strait stall on a 12-nautical-mile question</h1>
+    <p class="dek">Both delegations say they want a deal. What each means by “territorial waters” decides whether a signing happens.</p>
+    <div class="byline"><span>By the InScapio editor</span><time datetime="2026-10-22T09:10+05:30">Published 22 Oct 2026, 09:10 IST</time><time datetime="2026-10-22T16:05+05:30">Updated 16:05 IST</time><span>9 min read</span></div>
+  </div>
+</header>
+<div class="upd" role="note"><span class="chip s-updated">Updated 16:05</span> Added the second round of talks and Marenth’s written response. <a href="#updlog">See what changed</a></div>
+<div class="s-wrap">
+<nav class="outline" aria-label="On this page"><ol id="outlineGeo"></ol></nav>
+<article class="s-body">
+  <aside class="brief" aria-labelledby="bGeo"><h2 id="bGeo">The briefing</h2>
+    <ul>
+      <li><span class="ep established" data-i="✓">Established</span><span>Talks between Veldora and Marenth ended Wednesday without a signed text.<sup class="ref"><a href="#g1" aria-label="Source 1">1</a></sup></span></li>
+      <li><span class="ep contested" data-i="≠">Contested</span><span>The two sides define “territorial waters” differently, 12 vs 24 nautical miles.<sup class="ref"><a href="#g2" aria-label="Source 2">2</a></sup></span></li>
+      <li><span class="ep unresolved" data-i="?">Unresolved</span><span>Whether a third-party monitoring mission will be accepted by both.</span></li>
+    </ul>
+    <p class="legend" style="margin-top:12px">Labels used on this page: <span class="ep established" data-i="✓">Established</span> <span class="ep attributed" data-i="❝">Attributed</span> <span class="ep contested" data-i="≠">Contested</span> <span class="ep analysis" data-i="◇">Analysis</span> <span class="ep scenario" data-i="⟡">Scenario</span> <span class="ep unresolved" data-i="?">Unresolved</span></p>
+  </aside>
+
+  <section class="s-sec" id="g-what" aria-labelledby="hWhat" data-out="What happened"><p class="k">What happened</p><h2 id="hWhat">Two delegations, one unsigned page</h2>
+    <p>After three days in a neutral capital, the Veldoran and Marenthi delegations left Wednesday without signing a one-page ceasefire text.<sup class="ref"><a href="#g1">1</a></sup> Mediators said the draft was “90 per cent agreed”.<sup class="ref"><a href="#g3">3</a></sup> <span class="ep attributed" data-i="❝">Attributed</span></p>
+    <p>The remaining dispute is a single definition: how far from the coast a state may enforce its rules on shipping.<sup class="ref"><a href="#g2">2</a></sup></p>
+    <div class="anno"><b>Block map:</b> paragraph = existing <code>prose</code>; <code>[n]</code> markers = existing reference ids resolved against the sources list; labels = proposed <code>epistemic</code> field on prose paragraphs and ledger entries.</div>
+  </section>
+
+  <section class="s-sec" id="g-time" aria-labelledby="hTime" data-out="Timeline"><p class="k">How we got here</p><h2 id="hTime">Timeline</h2>
+    <div class="tl-ctl" role="group" aria-label="Filter timeline"><span>Show:</span>
+      <div class="seg" id="tlFilter"><button type="button" data-v="all" aria-pressed="true">All 6</button><button type="button" data-v="established" aria-pressed="false">Established</button><button type="button" data-v="contested" aria-pressed="false">Contested</button></div>
+      <button type="button" class="btn secondary" id="tlAll" style="min-height:44px">Expand all</button></div>
+    <ol class="timeline" id="tl"></ol>
+    <div class="anno"><b>Interaction:</b> each event is a disclosure button (Enter / Space), details open in place so keyboard order stays linear. Filter is a toggle group. No horizontal scrubbing is required, which keeps it usable on a 375px screen and by screen readers. Maps to existing <code>disclosure</code> block pattern; a dated <code>timeline</code> block is proposed.</div>
+  </section>
+
+  <section class="s-sec" id="g-who" aria-labelledby="hWho" data-out="Who wants what"><p class="k">Stakeholders</p><h2 id="hWho">Who wants what, as stated publicly</h2>
+    <div class="stk" id="stk"></div>
+  </section>
+
+  <section class="s-sec" id="g-cause" aria-labelledby="hCause" data-out="Cause and effect"><p class="k">Why it matters</p><h2 id="hCause">How a definition becomes a crisis</h2>
+    <ol class="chain">
+      <li><strong>The definition differs.</strong> 12 nm (Veldora) vs 24 nm (Marenth) moves the line across the main shipping lane. <span class="ep analysis" data-i="◇">Analysis</span></li>
+      <li><strong>Inspection rights follow the line.</strong> A 24 nm claim would let Marenth inspect vessels in the lane.<sup class="ref"><a href="#g2">2</a></sup></li>
+      <li><strong>Insurers price the uncertainty.</strong> War-risk premiums for the strait rose after talks stalled. <span class="ep attributed" data-i="❝">Attributed</span> to two shipping associations.<sup class="ref"><a href="#g4">4</a></sup></li>
+      <li><strong>Routes and prices respond.</strong> Longer routes raise delivery costs for importers. <span class="ep scenario" data-i="⟡">Scenario</span></li>
+    </ol>
+  </section>
+
+  <section class="s-sec" id="g-india" aria-labelledby="hIn" data-out="Implications for India"><p class="k">Closer to home</p><h2 id="hIn">What it could mean for India</h2>
+    <div class="india"><h3>Illustrative figures</h3><p><span class="ill-flag">Illustrative data</span> In this invented scenario about a fifth of India’s crude imports pass through the strait. Real figures would be cited from named sources with a retrieval date.</p><p><span class="ep analysis" data-i="◇">Analysis</span> Longer routing would raise landed costs; refiners with spare tank capacity would be less exposed.</p></div>
+  </section>
+
+  <section class="s-sec" id="g-scn" aria-labelledby="hScn" data-out="Possible paths"><p class="k">Hypothetical</p><h2 id="hScn">Three ways the next month could go</h2>
+    <p style="font:500 .9rem var(--font-display)"><span class="ill-flag">Hypothetical</span> Scenarios are not predictions and carry no probabilities.</p>
+    <div class="scn">
+      <div class="s"><span class="ep scenario" data-i="⟡">Scenario</span><h3>Deal on a 12 nm line</h3><p>Monitoring mission accepted; premiums ease.</p></div>
+      <div class="s"><span class="ep scenario" data-i="⟡">Scenario</span><h3>Talks resume, no deal</h3><p>Status quo; shipping continues with higher premiums.</p></div>
+      <div class="s"><span class="ep scenario" data-i="⟡">Scenario</span><h3>Talks collapse</h3><p>Naval escorts for civilian traffic; wider diversions.</p></div>
+    </div>
+  </section>
+
+  <section class="s-sec" id="g-open" aria-labelledby="hOpen" data-out="Still unknown"><p class="k">Unresolved</p><h2 id="hOpen">What we don’t know yet</h2>
+    <ul class="open-q"><li>Will both delegations accept a neutral monitoring mission?</li><li>Is the “90 per cent agreed” claim shared by both sides, or only the mediators?</li><li>Do any existing treaties already settle the 12 vs 24 nm question for this strait?</li></ul>
+  </section>
+
+  <section class="s-sec" id="updlog" aria-labelledby="hLog" data-out="Updates & corrections"><p class="k">Change log</p><h2 id="hLog">Updates and corrections</h2>
+    <ul class="log">
+      <li><time datetime="2026-10-22T16:05+05:30">22 Oct 2026, 16:05 IST</time><span><span class="chip s-updated">Updated</span> Added round-two talks and Marenth’s written response.</span></li>
+      <li><time datetime="2026-10-22T11:30+05:30">22 Oct 2026, 11:30 IST</time><span><span class="chip s-corrected">Corrected</span> An earlier version said talks lasted four days; they lasted three. Fixed in the timeline and text.</span></li>
+      <li><time datetime="2026-10-22T09:10+05:30">22 Oct 2026, 09:10 IST</time><span><span class="chip s-published">Published</span> First version.</span></li>
+    </ul>
+    <div class="anno"><b>Requires:</b> a public, append-only change log. The current projection (<code>published_experiences</code>) has no first-published / updated timestamps or log; the 280-character revision note is private. New migration needed in Stage 3.5 (see mapping doc).</div>
+  </section>
+
+  <section class="s-sec" id="g-src" aria-labelledby="hSrc" data-out="Sources"><p class="k">Evidence</p><h2 id="hSrc">Sources</h2>
+    <ol class="src" id="srcGeo"></ol>
+  </section>
+
+  <section class="s-sec" aria-labelledby="hRel" data-out="Related"><p class="k">Keep going</p><h2 id="hRel">Related</h2>
+    <div class="rel">
+      <a href="#" data-go="econ" style="--c:#a85f00"><small>Trade &amp; economy · story</small><strong>What a hypothetical tariff does to a supply chain</strong></a>
+      <a href="#" data-go="explore" style="--c:#4a646b"><small>Explainer · timeless</small><strong>How straits become chokepoints (existing-style explainer)</strong></a>
+    </div>
+  </section>
+  <p class="end-note">Reviewed and published by the InScapio editor. Draft prepared with AI assistance from the listed sources; every claim checked by the editor. <a href="#" data-go="about">Method</a> · <a href="#" data-go="about">Corrections policy</a></p>
+</article>
+</div>
+</section>
+
+<section class="screen story" data-page="3" data-id="econ" data-label="Story B: trade & economy" data-status="proposed" data-note="Needs a new generic chart block; existing scrubber-chart is climate-specific. Comparison table = proposed block." hidden>
+<div class="s-bar"><a href="#" data-go="home" aria-label="Back to the Edition">← Edition</a><span class="sp"></span><button type="button" data-go="topic">Topics</button></div>
+<header class="s-hero" data-on-dark style="background:#2a1c06">
+  <div class="in">
+    <p class="kicker" style="color:#ffd28a"><span class="dot"></span> Trade &amp; economy <span class="ill-flag">Illustrative story</span></p>
+    <h1>What a hypothetical 20% tariff does to a supply chain</h1>
+    <p class="dek">A worked example: follow one made-up product from factory to shelf, under two tariff assumptions.</p>
+    <div class="byline"><span>By the InScapio editor</span><time datetime="2026-10-22T10:20+05:30">Published 22 Oct 2026, 10:20 IST</time><span>6 min read</span></div>
+  </div>
+</header>
+<div class="s-wrap" style="grid-template-columns:minmax(0,760px);justify-content:center">
+<article class="s-body">
+  <aside class="brief"><h2>The briefing</h2><ul>
+    <li><span class="ep established" data-i="✓">Established</span><span>A tariff is a tax paid at the border by the importer.</span></li>
+    <li><span class="ep analysis" data-i="◇">Analysis</span><span>Who ultimately pays depends on how much each firm can raise prices or cut costs.</span></li>
+    <li><span class="ep scenario" data-i="⟡">Scenario</span><span>All numbers below are invented to show the mechanism.</span></li></ul></aside>
+
+  <section class="s-sec" aria-labelledby="hCh"><p class="k">Chart</p><h2 id="hCh">Landed price of “Widget X”, two assumptions</h2>
+    <div class="chart" id="chartBox">
+      <h3>Shelf price per unit (illustrative)</h3>
+      <p class="sub2"><span class="ill-flag">Illustrative data</span> Invented values, USD per unit, Q1 to Q6 after the tariff starts.</p>
+      <div class="leg"><span><i style="background:#1d6fb8"></i>Importer absorbs half</span><span><i style="background:#a85f00"></i>Full pass-through</span></div>
+      <div id="chartSvgWrap"></div>
+      <div class="readout" id="chartRead" role="status" aria-live="polite">Focus or tap a point to read its value. Arrow keys move between points.</div>
+      <button type="button" class="btn secondary" id="tblToggle" style="margin-top:10px" aria-expanded="false">Show as table</button>
+      <div id="tblWrap" hidden></div>
+    </div>
+    <div class="anno"><b>Accessibility:</b> the chart is never the only representation: a table toggle exposes the same data; points are focusable buttons; series differ by stroke style and direct label, not colour alone (needs the line-dash in final build). Requires a new generic <code>chart</code> block (line/bar, ≤3 series, ≤24 points, explicit units, “illustrative” flag).</div>
+  </section>
+
+  <section class="s-sec" aria-labelledby="hCmp"><p class="k">Comparison</p><h2 id="hCmp">Who bears the cost?</h2>
+    <div class="tbl-wrap"><table class="cmp"><caption class="sr">Cost bearing under two assumptions</caption>
+      <thead><tr><th scope="col">Actor</th><th scope="col">Importer absorbs half</th><th scope="col">Full pass-through</th></tr></thead>
+      <tbody>
+      <tr><th scope="row">Importer</th><td>Margin falls</td><td>Margin unchanged</td></tr>
+      <tr><th scope="row">Retailer</th><td>Small price rise</td><td>Larger price rise</td></tr>
+      <tr><th scope="row">Shopper</th><td>+ $3 per unit</td><td>+ $6 per unit</td></tr>
+      <tr><th scope="row">Exporter</th><td>May cut price to keep orders</td><td>Likely loses some volume</td></tr></tbody></table></div>
+  </section>
+
+  <section class="s-sec" aria-labelledby="hCE"><p class="k">Cause and effect</p><h2 id="hCE">From border tax to shelf price</h2>
+    <ol class="chain"><li><strong>Tariff applies at import.</strong> The importer pays 20% of declared value on arrival. <span class="ep established" data-i="✓">Established</span></li>
+    <li><strong>The importer chooses.</strong> Absorb, pass on, or switch suppliers. <span class="ep analysis" data-i="◇">Analysis</span></li>
+    <li><strong>Demand responds.</strong> If shoppers buy less, firms lose volume. <span class="ep scenario" data-i="⟡">Scenario</span></li></ol>
+  </section>
+
+  <section class="s-sec" aria-labelledby="hS2"><p class="k">Evidence</p><h2 id="hS2">Sources</h2>
+    <ol class="src"><li id="e1">Illustrative worked example prepared by the editor; no external dataset. <div class="m"><span class="ep scenario" data-i="⟡">Scenario</span><span>Checked 22 Oct 2026</span></div></li>
+    <li id="e2">Real stories would cite: customs authority notice, national statistics release, and named research. <div class="m"><span>Type: official · Retrieved: date shown · Archived: yes</span></div></li></ol>
+  </section>
+  <p class="end-note">Reviewed and published by the InScapio editor. Illustrative content for design review.</p>
+</article>
+</div>
+</section>
+
+<!-- ================= PAGE 4: auth ================= -->
+<section class="screen auth" data-page="4" data-id="auth" data-label="Auth screens & states" data-status="proposed" data-note="Stage 3.3 (not started; waits for the owner to confirm a staging Supabase project). No sign-in screen exists today. Emailed sign-in link per D-061 (Proposed, pending owner confirmation); no password, social or self-registration screens are designed." hidden>
+<div class="in" style="max-width:900px">
+  <div class="tl-ctl" role="group" aria-label="Auth state"><span>State:</span>
+    <div class="seg" id="authSeg" style="flex-wrap:wrap"></div></div>
+  <div class="anno"><b>Not for readers.</b> Public stories never ask for sign-in. These screens are reached only from a direct /sign-in address the administrator gives people; the public nav has no sign-in link (Q-47). <b>Authentication ≠ authorisation:</b> after sign-in the app still checks the database role and MFA level (aal2) on every private route; “signed in” alone shows Access denied.</div>
+</div>
+<div id="authStates"></div>
+</section>
+
+<!-- ================= PAGE 5: admin ================= -->
+<section class="screen" data-page="5" data-id="dash" data-label="Dashboard & queue" data-status="proposed" data-note="MVP. Needs sign-in (3.3) and a new Studio stage: the Stage 3 plan explicitly excludes the workspace editor. Today no studio exists." hidden>
+<div class="adm" data-active="dash">
+  <nav class="adm-nav" aria-label="Studio"></nav>
+  <div class="adm-main">
+    <div class="adm-h"><div><h1>Today’s queue</h1><p>Thursday 22 Oct · 8 planned · 3 published · 5 to go</p></div><div><a class="btn accent" href="#" data-go="import">+ Import story</a></div></div>
+    <div class="kpis">
+      <div class="kpi" style="--k:#17787a"><b>3</b><span>Ready to review</span></div>
+      <div class="kpi" style="--k:#4a646b"><b>2</b><span>Drafts</span></div>
+      <div class="kpi" style="--k:#2f7d4f"><b>3</b><span>Published today</span></div>
+      <div class="kpi" style="--k:#8a4f00"><b>1</b><span>Needs correction</span></div>
+    </div>
+    <div class="panel">
+      <h2>Queue</h2>
+      <div class="tabs" id="qTabs" role="group" aria-label="Filter queue"><button type="button" aria-pressed="true" data-v="all">All</button><button type="button" aria-pressed="false" data-v="draft">Drafts</button><button type="button" aria-pressed="false" data-v="ready">Ready</button><button type="button" aria-pressed="false" data-v="published">Published</button></div>
+      <table class="q"><thead><tr><th>Story</th><th>Topic</th><th>Status</th><th>Changed</th><th>Next</th></tr></thead><tbody id="qBody"></tbody></table>
+      <div class="anno"><b>Status vocabulary (shared with the public site):</b> Draft · Ready for review · Published · Updated · Corrected · Unpublished · Held. “Ready” is a private label; “Published” appears only after the database records a human approval and publish. Lead story is chosen with “Set as lead” on a published story (needs a new featured field, mapping doc).</div>
+    </div>
+    <div class="banner info"><span class="sym">i</span><span>Counts and rows are illustrative. A real dashboard reads <code>experiences</code> + revisions through approved APIs (Stage 3.4).</span></div>
+  </div>
+</div>
+</section>
+
+<section class="screen" data-page="5" data-id="import" data-label="Create / import story" data-status="proposed" data-note="Editorial MVP (new Studio stage, not in Stage 3). Requires the validator service (identity set up in 3.3 per D-056; the validation code itself is new work) for full Zod validation; browser can do a fast preview check only." hidden>
+<div class="adm" data-active="import">
+  <nav class="adm-nav" aria-label="Studio"></nav>
+  <div class="adm-main">
+    <div class="adm-h"><div><h1>Import a story</h1><p>Paste the structured JSON your AI tool produced. Nothing is public until you approve it.</p></div></div>
+    <ol class="steps"><li class="done">1 Details</li><li class="on">2 Paste &amp; validate</li><li>3 Edit</li><li>4 Preview</li><li>5 Approve &amp; publish</li></ol>
+    <div class="two">
+      <div class="panel editor-form">
+        <h2>Story details</h2>
+        <div class="field"><label for="im-h">Working headline</label><input id="im-h" value="Ceasefire talks stall on a 12-nautical-mile question"></div>
+        <div class="field"><label for="im-t">Topic</label><select id="im-t"><option>Conflict &amp; security</option><option>Diplomacy &amp; institutions</option><option>Trade &amp; economy</option></select></div>
+        <div class="field"><label for="im-j">Structured story (JSON)</label><textarea id="im-j" rows="9" class="code" style="width:100%;white-space:pre;color:#d7e7ea;background:#0f2228">{ "kind": "news",
+  "slug": "karesh-strait-talks",
+  "title": "Ceasefire talks stall…",
+  "blocks": [ { "type": "prose", … },
+              { "type": "timeline", "events": [ … ] },
+              { "type": "html", "code": "&lt;script&gt;…" } ] }</textarea><span class="hint">Only the closed list of block types is accepted. Anything else is rejected.</span></div>
+        <div><button type="button" class="btn accent" id="runVal">Validate</button> <button type="button" class="btn secondary" id="fixVal">Simulate fixed file</button></div>
+      </div>
+      <div class="panel">
+        <h2>Validation result <span class="chip s-unpublished" id="valChip">3 errors</span></h2>
+        <ul class="vlist" id="valList"></ul>
+        <div class="anno"><b>Two layers:</b> (1) instant browser check for shape and obvious mistakes; (2) authoritative check by the validator service which records a hash and attestation (D-056). The “Save as draft” button stays disabled until layer 2 passes. Errors name the field path and say how to fix it in plain English.</div>
+        <div style="margin-top:12px"><button type="button" class="btn accent" id="saveDraft" disabled>Save as draft</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="screen" data-page="5" data-id="editor" data-label="Story editor" data-status="proposed" data-note="Editorial MVP (new Studio stage). Form-based editing of text, sources and block order. No free-form HTML. Mobile: view and light text fixes only." hidden>
+<div class="adm" data-active="editor">
+  <nav class="adm-nav" aria-label="Studio"></nav>
+  <div class="adm-main">
+    <div class="adm-h"><div><h1>Edit story</h1><p><span class="chip s-draft">Draft</span> <span id="saveState">All changes saved 18:41</span></p></div>
+      <div><button type="button" class="btn secondary" data-go="preview">Preview</button> <button type="button" class="btn accent" data-go="publish">Review &amp; publish</button></div></div>
+    <div class="three">
+      <div class="panel"><h2>Blocks</h2>
+        <ol class="blocks" id="blockList"></ol><div class="sr" role="status" id="blkStatus"></div>
+        <p style="font:500 .82rem var(--font-display);color:var(--color-ink-muted)">Reorder with the arrow buttons. Drag-and-drop is optional and never the only way.</p>
+      </div>
+      <div class="panel editor-form">
+        <h2 id="edTitle">Headline &amp; summary</h2>
+        <div class="field"><label for="ed-h">Headline</label><input id="ed-h" value="Ceasefire talks over the Karesh Strait stall on a 12-nautical-mile question"><span class="hint"><span id="hcount">78</span>/110 characters</span></div>
+        <div class="field"><label for="ed-s">Summary (shown on cards)</label><textarea id="ed-s" rows="3">Both delegations say they want a deal. What each means by “territorial waters” decides whether a signing happens.</textarea></div>
+        <div class="field"><label for="ed-l">Epistemic label for the opening claim</label><select id="ed-l"><option>Established</option><option>Attributed</option><option>Contested</option><option>Analysis</option></select><span class="hint">Required on every claim in the briefing.</span></div>
+        <div class="field"><label for="ed-r">Source for this claim</label><select id="ed-r" aria-describedby="ed-re"><option>1 · Joint statement, Ministry of Foreign Affairs, Veldora</option><option>— choose a source —</option></select><span class="error" id="ed-re" hidden>Pick a source or mark the claim Analysis.</span></div>
+        <div class="anno"><b>Mobile limits:</b> at ≤700px the block list becomes a drawer and these fields stack; reordering, source management and import are desktop-only. Mobile shows a banner offering “Preview” and “Fix a typo”. Rationale: heavy structured editing on a phone is error-prone for a single admin and not required for MVP.</div>
+      </div>
+      <div class="panel"><h2>Sources <span class="chip s-dev">4</span></h2>
+        <ul class="vlist" style="gap:6px"><li class="pass"><span class="sym">✓</span><span>1 Joint statement (official) <small>retrieved 22 Oct</small></span></li><li class="pass"><span class="sym">✓</span><span>2 Marenth written response</span></li><li class="warn"><span class="sym">!</span><span>3 Mediator remarks: no URL, add archived link</span></li><li class="pass"><span class="sym">✓</span><span>4 Shipping associations notice</span></li></ul>
+        <h2 style="margin-top:14px">Related stories</h2><p style="font:500 .9rem var(--font-display);margin:0">2 linked · <a href="#">Add related</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="screen" data-page="5" data-id="preview" data-label="Reader preview" data-status="proposed" data-note="Editorial MVP (new Studio stage). Renders the same components as the public site from the draft revision (needs an authenticated draft-preview read path)." hidden>
+<div class="adm" data-active="preview">
+  <nav class="adm-nav" aria-label="Studio"></nav>
+  <div class="adm-main">
+    <div class="adm-h"><div><h1>Reader preview</h1><p>This is exactly what readers will see. It is not public.</p></div>
+      <div><button type="button" class="btn secondary" data-go="editor">← Back to editing</button> <button type="button" class="btn accent" data-go="publish">Review &amp; publish</button></div></div>
+    <div class="tl-ctl" role="group" aria-label="Preview width"><span>Preview as:</span><div class="seg" id="pvSeg"><button type="button" data-v="100%" aria-pressed="true">Desktop</button><button type="button" data-v="375px" aria-pressed="false">Phone</button></div><span class="chip s-draft">Draft · private link not shareable</span></div>
+    <div class="pv-frame" style="margin:0 auto" id="pvFrame"><div class="pv-bar"><span class="chip s-draft">Preview</span> Not published · expires with your session</div>
+      <div class="pv-body"><p class="kicker" style="color:#a3263d"><span class="dot"></span> Conflict &amp; security</p><h3>Ceasefire talks over the Karesh Strait stall on a 12-nautical-mile question</h3><p style="font-size:1.02rem;max-width:34em">Both delegations say they want a deal. What each means by “territorial waters” decides whether a signing happens.</p><div class="brief" style="margin-top:12px"><h2>The briefing</h2><ul><li><span class="ep established" data-i="✓">Established</span><span>Talks ended Wednesday without a signed text.<sup class="ref"><a href="#">1</a></sup></span></li></ul></div></div></div>
+    <div class="anno"><b>Not a screenshot:</b> in the real build this is the public story component fed by the draft. “Back to editing” never discards unsaved edits (see unsaved-changes dialog, Page 6).</div>
+  </div>
+</div>
+</section>
+
+<section class="screen" data-page="5" data-id="publish" data-label="Review & publish" data-status="proposed" data-note="Editorial MVP (new Studio stage). Maps to the existing human-session-only approval/publish database functions (local, tested, not connected). A separate approval step is a policy choice (Q-48)." hidden>
+<div class="adm" data-active="publish">
+  <nav class="adm-nav" aria-label="Studio"></nav>
+  <div class="adm-main">
+    <div class="adm-h"><div><h1>Review &amp; publish</h1><p>Ceasefire talks over the Karesh Strait… · <span class="chip s-ready" id="pubChip">Ready for review</span></p></div></div>
+    <div id="pubBanner"></div>
+    <div class="two">
+      <div class="panel"><h2>Pre-publish checklist</h2>
+        <ul class="check">
+          <li><span class="sym" style="color:#2f7d4f">✓</span><span>Structure validated <span class="hash">sha256 9f2c…a41e</span></span><span class="chip s-published">Pass</span></li>
+          <li><span class="sym" style="color:#2f7d4f">✓</span><span>Every briefing claim has a label</span><span class="chip s-published">Pass</span></li>
+          <li><span class="sym" style="color:#2f7d4f">✓</span><span>All sources have title, date and URL</span><span class="chip s-published">Pass</span></li>
+          <li><span class="sym" style="color:#8a4f00">!</span><span>Illustrative flag is OFF (this story is marked as real reporting)</span><span class="chip s-corrected">Check</span></li>
+          <li><span class="sym" style="color:#2f7d4f">✓</span><span>Previewed on desktop and phone</span><span class="chip s-published">Pass</span></li>
+        </ul>
+        <p style="font-size:.95rem">Publishing makes this story public at:</p>
+        <p><span class="hash">inscapio.in/story/karesh-strait-talks</span></p>
+        <div><button type="button" class="btn primary" id="openPub">Publish…</button> <button type="button" class="btn secondary" data-go="editor">Back to editing</button></div>
+        <div style="margin-top:10px"><button type="button" class="btn quiet" id="simFail">(Review control) simulate publication failure</button></div>
+      </div>
+      <div class="panel"><h2>After publishing</h2>
+        <ul class="u-list"><li>Public URL shown with copy button.</li><li>Appears in Today and its topic after the next cache refresh (up to 60 seconds, wording to confirm in Stage 3.5).</li><li>You can then <a href="#" data-go="revise">update, correct or unpublish</a>.</li></ul>
+        <div class="anno"><b>Human approval:</b> the button is enabled only for a signed-in admin with MFA. The database refuses publish from non-human sessions (existing). AI never calls this. The app should record who approved and when (existing approvals + audit tables).</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="dlg-back" id="pubDlg" role="presentation"><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="pubDlgH" data-on-dark-no>
+  <h2 id="pubDlgH">Publish this story?</h2>
+  <p>It will become public immediately at <span class="hash">/story/karesh-strait-talks</span>. You can update or unpublish it later, and the public change log will show any edits.</p>
+  <label style="display:flex;gap:10px;align-items:flex-start;font:600 .95rem var(--font-display)"><input type="checkbox" id="pubOk" style="width:24px;height:24px;margin-top:2px"> I have read this story and its sources and approve it for publication.</label>
+  <div class="row"><button type="button" class="btn secondary" id="pubCancel">Cancel</button><button type="button" class="btn primary" id="pubGo" disabled>Publish now</button></div>
+</div></div>
+</section>
+
+<section class="screen" data-page="5" data-id="revise" data-label="Update / correct / unpublish" data-status="proposed" data-note="Editorial MVP (new Studio stage); needs public change log and tombstone (new forward-only migration)." hidden>
+<div class="adm" data-active="revise">
+  <nav class="adm-nav" aria-label="Studio"></nav>
+  <div class="adm-main">
+    <div class="adm-h"><div><h1>Change a published story</h1><p>Ceasefire talks over the Karesh Strait… · <span class="chip s-published">Published 09:10</span> <span class="chip s-updated">Updated 16:05</span></p></div></div>
+    <div class="two">
+      <div class="panel editor-form"><h2>What kind of change?</h2>
+        <fieldset style="border:0;padding:0;margin:0;display:grid;gap:8px"><legend class="sr">Change type</legend>
+          <label style="display:flex;gap:10px"><input type="radio" name="ct" checked data-ct="updated"><span><b>Update</b>: new information added. Shows an “Updated” badge.</span></label>
+          <label style="display:flex;gap:10px"><input type="radio" name="ct" data-ct="corrected"><span><b>Correction</b>: something we got wrong. Shows a “Corrected” banner and logs the error.</span></label>
+          <label style="display:flex;gap:10px"><input type="radio" name="ct" data-ct="unpublished"><span><b>Unpublish</b>: take it down. A notice stays at the URL.</span></label></fieldset>
+        <div class="field"><label for="rv-n">Public note (shown in the change log)</label><textarea id="rv-n" rows="3" aria-describedby="rv-h">An earlier version said talks lasted four days; they lasted three.</textarea><span class="hint" id="rv-h">Public. Plain language. Do not paste private notes here.</span></div>
+        <div class="field"><label for="rv-p">Private note (editors only, max 280 characters)</label><textarea id="rv-p" rows="2" maxlength="280">Checked against Joint statement para 2.</textarea></div>
+        <div><button type="button" class="btn accent" id="rvGo">Apply change…</button></div>
+        <div id="rvOut"></div>
+      </div>
+      <div class="panel"><h2>What readers see</h2>
+        <div id="rvPrev"></div>
+        <div class="anno"><b>Distinctions:</b> Updated = additive. Corrected = fixes an error, banner stays visible. Unpublished = removed from lists, URL shows a tombstone with reason category and date. Existing DB has <code>admin_takedown</code> (admin) and revision notes (private ≤280); public log and tombstone text do not exist yet.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="screen" data-page="5" data-id="invites" data-label="Admin: invitations" data-status="proposed" data-note="Stage 3.3/3.4 (placement of the invitation screen is to be confirmed). Single administrator; manual invitations (owner decision). Backed by existing publisher invite functions; no UI exists." hidden>
+<div class="adm" data-active="invites">
+  <nav class="adm-nav" aria-label="Studio"></nav>
+  <div class="adm-main">
+    <div class="adm-h"><div><h1>People &amp; invitations</h1><p>One administrator. Publishers are invited by you, one at a time.</p></div><div><button type="button" class="btn accent" id="invBtn">Invite publisher</button></div></div>
+    <div class="banner warn"><span class="sym">!</span><span><b>You are the only administrator.</b> The system will not let you remove yourself (existing database rule). You also need a publisher record to publish; the first sign-in sets that up (to verify in Stage 3.3).</span></div>
+    <div class="panel"><h2>Invitations</h2>
+      <table class="q"><thead><tr><th>Email</th><th>Role</th><th>Status</th><th>Expires</th><th>Action</th></tr></thead><tbody>
+        <tr><td data-l="Email">editor.one@example.com</td><td data-l="Role">Publisher</td><td data-l="Status"><span class="chip s-ready">Pending</span></td><td data-l="Expires">in 5 days</td><td data-l="Action"><button class="btn secondary" type="button" style="min-height:44px">Revoke</button></td></tr>
+        <tr><td data-l="Email">past.invite@example.com</td><td data-l="Role">Publisher</td><td data-l="Status"><span class="chip s-unpublished">Expired</span></td><td data-l="Expires">2 days ago</td><td data-l="Action"><button class="btn secondary" type="button" style="min-height:44px">Invite again</button></td></tr>
+        <tr><td data-l="Email">active.pub@example.com</td><td data-l="Role">Publisher</td><td data-l="Status"><span class="chip s-published">Accepted</span></td><td data-l="Expires">n/a</td><td data-l="Action"><button class="btn secondary" type="button" style="min-height:44px">Remove access</button></td></tr></tbody></table>
+      <div class="anno"><b>Not designed:</b> multiple admins, bulk invites, role editing, outside publishers (Stage 3.7 review required first). Per D-061 (Proposed) invitations are manual: the screen records the invitation and the administrator tells the invitee to sign in with that email; it does not send email. Q-44 (how the invitee’s Auth account comes to exist) is open.</div>
+    </div>
+  </div>
+</div>
+<div class="dlg-back" id="invDlg"><div class="dlg" role="dialog" aria-modal="true" aria-labelledby="invH"><h2 id="invH">Invite a publisher</h2>
+  <div class="field"><label for="inv-e">Their email (they must sign in with exactly this address)</label><input id="inv-e" type="email" autocomplete="off"></div>
+  <p style="font:500 .9rem var(--font-display)">They can create drafts and publish. They cannot invite people or take other stories down. Valid for 7 days by default (1–30 allowed).</p>
+  <div class="row"><button type="button" class="btn secondary" id="invCancel">Cancel</button><button type="button" class="btn accent" id="invMake">Create invitation</button></div></div></div>
+</section>
+
+<section class="screen" data-page="5" data-id="security" data-label="Admin: security & account" data-status="proposed" data-note="Stage 3.3. MFA required for admin (owner decision), optional for publishers." hidden>
+<div class="adm" data-active="security">
+  <nav class="adm-nav" aria-label="Studio"></nav>
+  <div class="adm-main">
+    <div class="adm-h"><div><h1>Security &amp; account</h1><p>admin@example.com · Administrator</p></div></div>
+    <div class="two">
+      <div class="panel"><h2>Two-step verification</h2><p><span class="chip s-published">On · authenticator app</span></p><p style="font-size:.95rem">Required for administrators. Enrolled 12 Oct 2026.</p><button type="button" class="btn secondary">Replace authenticator</button>
+        <div class="anno"><b>Recovery (D-058, Q-34):</b> a sole administrator who loses the authenticator is locked out; the only path today is the owner-side runbook, whose Auth steps are unverified (U-11). No recovery UI is designed.</div></div>
+      <div class="panel"><h2>Session</h2><p style="font-size:.95rem">This session started 18:02 · signs out after inactivity (duration open, Q-41).</p><button type="button" class="btn secondary" data-go="auth-out">Sign out</button></div>
+      <div class="panel"><h2>Role &amp; access</h2><ul class="u-list"><li>Administrator: yes (single, protected)</li><li>Publisher record: yes</li><li>Can publish: yes, after MFA</li></ul></div>
+      <div class="panel"><h2>Not here</h2><ul class="u-list"><li>No password change screen until the sign-in method is approved.</li><li>No “delete account”, no API keys, no AI settings (no AI API in v1).</li></ul></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ================= PAGE 6: system states ================= -->
+<section class="screen" data-page="6" data-id="states" data-label="System states gallery" data-status="proposed" data-note="Essential states shared by public and private screens. Reuse existing 404 / error patterns where they exist." hidden>
+<div class="doc" style="max-width:1200px">
+  <h1>Missing screens and system states</h1>
+  <p>Each frame is live (try the buttons). Frames reuse components from Page 7; none of this exists in the application today.</p>
+  <div class="frames cols">
+    <div class="frame"><header>Public · Unpublished story (tombstone) <span class="badge proposed">Proposed</span></header><div class="fb pub">
+      <p class="edline">Story unavailable</p><h2 style="font:800 1.8rem/1.05 var(--font-display);margin:0 0 8px;letter-spacing:-.03em">This story has been taken down</h2>
+      <p>The editor unpublished it on 22 Oct 2026 because a key source was withdrawn. It is not a new development; no replacement is planned.</p>
+      <p><span class="chip s-unpublished">Unpublished</span></p><p><a class="btn accent" href="#" data-go="home">Back to today’s edition</a> <a class="btn quiet" href="#" data-go="about">Corrections policy</a></p></div></div>
+    <div class="frame"><header>Public · Not found <span class="badge existing">Existing 404 pattern, reuse</span></header><div class="fb pub"><h2 style="font:800 1.8rem/1.05 var(--font-display);margin:0 0 8px">That page doesn’t exist</h2><p>Check the address, or start from today’s edition.</p><a class="btn accent" href="#" data-go="home">Go to Today</a></div></div>
+    <div class="frame"><header>Admin · Empty queue</header><div class="fb"><div class="ghost-card" style="flex-direction:column;gap:8px;min-height:180px"><b style="font:800 1.2rem var(--font-display);color:var(--color-ink)">Nothing queued for today</b><span>Import your first structured story to start the day.</span><a class="btn accent" href="#" data-go="import">Import a story</a></div></div></div>
+    <div class="frame"><header>Admin · Loading</header><div class="fb" aria-busy="true"><div class="skel" style="height:22px;width:50%"></div><div class="skel" style="height:14px;margin-top:10px"></div><div class="skel" style="height:14px;margin-top:8px;width:80%"></div><div class="skel" style="height:90px;margin-top:12px"></div><p class="sr" role="status">Loading</p></div></div>
+    <div class="frame"><header>Admin · Validation error summary</header><div class="fb"><div class="banner err" role="alert"><span class="sym">!</span><div><b>3 problems stop you saving.</b><ul style="margin:6px 0 0;padding-left:1.1em"><li><a href="#" data-go="import">Block 4 uses type “html”, which isn’t allowed</a></li><li><a href="#" data-go="editor">Source 3 needs a URL</a></li><li><a href="#" data-go="editor">Briefing claim 2 has no label</a></li></ul></div></div></div></div>
+    <div class="frame"><header>Private · Permission error (403)</header><div class="fb"><div class="banner err" role="alert"><span class="sym">⛔</span><div><b>You don’t have access to this page.</b> You’re signed in, but your account isn’t allowed here. If you think this is wrong, ask the administrator.</div></div><a class="btn secondary" href="#" data-go="home">Go to the public site</a></div></div>
+    <div class="frame"><header>Admin · Unsaved changes <span class="badge proposed">Proposed</span></header><div class="fb"><button type="button" class="btn secondary" id="openUnsaved">Leave editor without saving…</button></div></div>
+    <div class="frame"><header>Admin · Publication failure</header><div class="fb"><div class="banner err" role="alert"><span class="sym">!</span><div><b>Not published.</b> The story is still a draft and nothing changed publicly. Reason: the save did not complete (network). Your edits are kept. <div style="margin-top:8px"><button class="btn secondary" type="button" data-go="publish">Try again</button></div></div></div></div></div>
+    <div class="frame"><header>Session · Expired while editing</header><div class="fb"><div class="banner warn" role="alert"><span class="sym">⏱</span><div><b>You were signed out.</b> Your last saved draft (18:41) is safe. Local unsaved text is kept in this browser until you sign in again. <div style="margin-top:8px"><button class="btn accent" type="button" data-go="auth-signin">Sign in to continue</button></div></div></div></div></div>
+    <div class="frame"><header>Responsive navigation (375px, public)</header><div class="fb" style="width:375px;max-width:100%;margin:0 auto"><header class="nav" style="padding:6px 0"><a class="wordmark" href="#">InScapio</a><button class="menu-btn" type="button" aria-expanded="false" aria-controls="demoNav">Menu</button><ul id="demoNav"><li><a href="#" data-go="home">Today</a></li><li><a href="#" data-go="topic">Topics</a></li><li><a href="#" data-go="explore">Explore</a></li><li><a href="#" data-go="about">About</a></li></ul></header><p style="font:500 .85rem var(--font-display)">Menu button ≥44px, expands in place, Esc closes, focus returns to the button.</p></div></div>
+    <div class="frame"><header>Admin on phone · editing limits</header><div class="fb" style="width:375px;max-width:100%;margin:0 auto"><div class="banner info"><span class="sym">i</span><div><b>Structured editing needs a larger screen.</b> On a phone you can preview, fix a typo, and approve a story you already reviewed on desktop.<div style="margin-top:8px"><button class="btn secondary" type="button" data-go="preview">Preview</button> <button class="btn secondary" type="button">Fix a typo</button></div></div></div></div></div>
+    <div class="frame"><header>Notifications (toast, non-blocking)</header><div class="fb"><button class="btn secondary" type="button" id="toastBtn">Show “Saved” toast</button><p style="font:500 .85rem var(--font-display)">role=status, auto-hides after 6s, never the only record of a result (also visible in page state).</p></div></div>
+    <div class="frame"><header>Drawer (mobile block list)</header><div class="fb"><p style="font:500 .9rem var(--font-display);margin:0">Bottom sheet with focus trap; Esc and a visible Close button; opens from “Blocks (7)” on screens ≤700px.</p></div></div>
+  </div>
+</div>
+<div class="dlg-back" id="unsavedDlg"><div class="dlg" role="alertdialog" aria-modal="true" aria-labelledby="unH" aria-describedby="unD"><h2 id="unH">Leave without saving?</h2><p id="unD">You have changes in “Headline &amp; summary” that haven’t been saved.</p><div class="row"><button type="button" class="btn secondary" id="unLeave">Discard changes</button><button type="button" class="btn accent" id="unStay">Keep editing</button></div></div></div>
+</section>
+
+<!-- ================= PAGE 7: design system ================= -->
+<section class="screen" data-page="7" data-id="system" data-label="Design system & components" data-status="proposed" data-note="Reuses src/design-system/tokens.css values. New tokens listed here are PROPOSED and not in code." hidden>
+<div class="doc" style="max-width:1200px">
+  <h1>Design system and reusable components</h1>
+  <p>Existing tokens are reused unchanged. Additions are marked <span class="badge proposed">Proposed</span>.</p>
+
+  <h2>Colour</h2>
+  <div class="sw">
+    <div><i style="background:#e3e9ea"></i><span>fog #e3e9ea<br>page · existing</span></div>
+    <div><i style="background:#f5f8f8"></i><span>paper #f5f8f8<br>surface · existing</span></div>
+    <div><i style="background:#102c33"></i><span>deep #102c33<br>ink · existing</span></div>
+    <div><i style="background:#4a646b"></i><span>mid #4a646b<br>muted text · existing</span></div>
+    <div><i style="background:#0b2f38"></i><span>tarn #0b2f38<br>dark field · existing</span></div>
+    <div><i style="background:#2447d6"></i><span>cobalt #2447d6<br>accent / focus · existing</span></div>
+    <div><i style="background:#f2a900"></i><span>amber #f2a900<br>attention / focus on dark · existing</span></div>
+  </div>
+  <h3>Topic accents (existing hues, reused as editorial roles)</h3>
+  <div class="sw">
+    <div><i style="background:var(--topic-conflict)"></i><span>Conflict &amp; security<br>accent-rose · Proposed role</span></div>
+    <div><i style="background:var(--topic-diplomacy)"></i><span>Diplomacy &amp; institutions<br>accent-blue</span></div>
+    <div><i style="background:var(--topic-trade)"></i><span>Trade &amp; economy<br>accent-ochre</span></div>
+    <div><i style="background:var(--topic-energy)"></i><span>Energy &amp; resources<br>accent-teal</span></div>
+    <div><i style="background:var(--topic-tech)"></i><span>Technology &amp; power<br>accent-violet</span></div>
+    <div><i style="background:var(--topic-india)"></i><span>India &amp; the world<br>accent-green</span></div>
+  </div>
+  <p class="anno" style="display:block">Topic colour only decorates; the topic name is always printed. Text on accent fills must be ≥4.5:1 (white on these fills passes per existing accents.ts checks; to be re-verified in 04 doc).</p>
+
+  <h3>Status and epistemic labels (Proposed)</h3>
+  <p><span class="chip s-draft">Draft</span> <span class="chip s-ready">Ready</span> <span class="chip s-published">Published</span> <span class="chip s-updated">Updated</span> <span class="chip s-corrected">Corrected</span> <span class="chip s-unpublished">Unpublished</span> <span class="chip s-held">Held</span></p>
+  <p><span class="ep established" data-i="✓">Established</span> <span class="ep attributed" data-i="❝">Attributed</span> <span class="ep contested" data-i="≠">Contested</span> <span class="ep analysis" data-i="◇">Analysis</span> <span class="ep scenario" data-i="⟡">Scenario</span> <span class="ep unresolved" data-i="?">Unresolved</span></p>
+  <p>Every label = text + glyph + border style (solid, dashed, dotted). Colour is a third, redundant cue.</p>
+
+  <h2>Typography</h2>
+  <table class="tok"><tr><th>Role</th><th>Spec</th><th>Sample</th></tr>
+    <tr><td>Edition title</td><td>Bricolage 300/800, wdth 75, −0.045em, clamp(3rem,12cqw,9rem)</td><td style="font:800 2.2rem/1 var(--font-display);letter-spacing:-.04em">The world,</td></tr>
+    <tr><td>Story headline</td><td>Bricolage 800, −0.03em, line-height 0.98</td><td style="font:800 1.8rem/1 var(--font-display);letter-spacing:-.03em">Headline of a story</td></tr>
+    <tr><td>Card headline</td><td>Bricolage 800 1.28rem</td><td style="font:800 1.28rem/1.12 var(--font-display)">Card headline text</td></tr>
+    <tr><td>Body</td><td>Literata 400, 1.0625rem, 1.65, measure ≤34em</td><td style="font:400 1.0625rem/1.65 var(--font-text)">Body copy for reading.</td></tr>
+    <tr><td>Label / meta</td><td>Bricolage 700, 0.72–0.9rem, uppercase tracking .05em</td><td style="font:800 .75rem var(--font-display);letter-spacing:.06em;text-transform:uppercase">Kicker label</td></tr></table>
+
+  <h2>Spacing, layout, shape</h2>
+  <table class="tok"><tr><th>Token</th><th>Value</th><th>Note</th></tr>
+    <tr><td><code>--gut</code></td><td>clamp(18px, 4.5cqw, 56px)</td><td>Page gutter (existing pattern)</td></tr>
+    <tr><td>Target size</td><td>≥44px</td><td>Exceeds WCAG 2.2 AA 2.5.8 (24px)</td></tr>
+    <tr><td>Radius</td><td>2 / 3 / 4px</td><td>Control / chip / card; flat, no shadows (existing)</td></tr>
+    <tr><td>Breakpoints (container)</td><td>640 · 900 · 1000</td><td>Mobile 375 is the design floor</td></tr>
+    <tr><td>Focus</td><td>3px cobalt (amber on dark), offset 3px</td><td>Existing</td></tr></table>
+
+  <h2>Controls</h2>
+  <p><a class="btn primary" href="#">Primary (on dark)</a> <a class="btn accent" href="#">Accent</a> <a class="btn secondary" href="#">Secondary</a> <button class="btn danger" type="button">Destructive</button> <button class="btn accent" type="button" disabled>Disabled</button> <a class="btn quiet" href="#">Quiet link</a></p>
+  <div class="two" style="max-width:700px"><div class="field"><label for="ds1">Text field</label><input id="ds1" value="Default"><span class="hint">Helper text</span></div>
+  <div class="field"><label for="ds2">With error</label><input id="ds2" aria-invalid="true" aria-describedby="ds2e" value="oops"><span class="error" id="ds2e">⚠ Enter a valid email address.</span></div></div>
+  <p class="anno" style="display:block"><b>States to build:</b> default · hover (underline/fill change) · focus-visible (ring) · selected (aria-pressed/current, fill + weight) · disabled (55% + aria-disabled, never the only explanation) · error (icon + text + border).</p>
+
+  <h2>Components</h2>
+  <table class="tok"><tr><th>Component</th><th>Variants</th><th>Notes</th></tr>
+    <tr><td>StoryCard</td><td>standard, wide, compact, related, admin-row</td><td>Whole card clickable via headline link; chip shows New/Updated/Corrected</td></tr>
+    <tr><td>HeadlineRail</td><td>manual (default), auto-scroll (variant)</td><td>Auto: pause button, hover/focus pause, off under reduced motion</td></tr>
+    <tr><td>LeadStory</td><td>with briefing stepper</td><td>Replaces ReadExploreStrip hero role</td></tr>
+    <tr><td>EpistemicLabel / StatusChip</td><td>6 + 7 types</td><td>Text + glyph + border pattern</td></tr>
+    <tr><td>Timeline</td><td>filterable, expandable</td><td>List semantics, disclosure buttons, no horizontal scroll</td></tr>
+    <tr><td>StakeholderCard</td><td>state / organisation / group</td><td>Stated position + interests + source ref, never inferred motives</td></tr>
+    <tr><td>CauseChain</td><td>numbered steps</td><td>Each step carries its label</td></tr>
+    <tr><td>Chart (line/bar)</td><td>1–3 series</td><td>Table alternative, focusable points, “illustrative” flag</td></tr>
+    <tr><td>UpdateBanner / ChangeLog</td><td>updated, corrected</td><td>Banner at top + log at bottom</td></tr>
+    <tr><td>SourceList</td><td>—</td><td>Type, date, retrieved, archived link</td></tr>
+    <tr><td>StudioShell</td><td>sidebar ≥900px, top bar below</td><td>Dark tarn nav distinguishes private from public</td></tr>
+    <tr><td>Dialog / Drawer / Toast / Banner</td><td>confirm, alert, info, warn, ok</td><td>Focus trap, Esc, return focus</td></tr></table>
+
+  <h2>Motion</h2>
+  <p>No component animates by default. Allowed motion: skeleton shimmer (off under reduced motion), disclosure expand (instant under reduced motion), optional rail auto-scroll (variant only). Use the “Simulate reduced motion” control above to preview.</p>
+</div>
+</section>
+
+</div><!-- /device -->
+</main>
+<div class="toast" id="toast" role="status"></div>
+<script>
+(function () {
+  'use strict';
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var PAGES = { 1: '1 Direction', 2: '2 Homepage', 3: '3 Stories', 4: '4 Auth', 5: '5 Workspace', 6: '6 States', 7: '7 System' };
+  var STATUS = { existing: 'Existing in repo', partial: 'Partially implemented', proposed: 'Proposed new screen', later: 'Later (not MVP)' };
+  var reduce = function () { return document.body.classList.contains('rm') || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches); };
+  var screens = $$('.screen');
+  var current = null;
+  var lastFocus = null;
+
+  /* ---------- navigation ---------- */
+  function toast(msg) { var t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(function () { t.classList.remove('on'); }, 6000); }
+  function show(id) {
+    var s = screens.filter(function (x) { return x.dataset.id === id; })[0];
+    if (!s) return false;
+    screens.forEach(function (x) { x.hidden = x !== s; });
+    current = s;
+    $$('#pageTabs button').forEach(function (b) { b.setAttribute('aria-current', String(b.dataset.p === s.dataset.page)); });
+    var sub = $('#subNav'); sub.innerHTML = '<span>Screens:</span>';
+    screens.filter(function (x) { return x.dataset.page === s.dataset.page; }).forEach(function (x) {
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = x.dataset.label; b.setAttribute('aria-current', String(x === s));
+      b.addEventListener('click', function () { show(x.dataset.id); }); sub.appendChild(b);
+    });
+    var st = s.dataset.status;
+    $('#metaBar').innerHTML = '<span class="badge ' + st + '">' + STATUS[st] + '</span><span><b>' + s.dataset.label + '.</b> ' + s.dataset.note + '</span>';
+    try { history.replaceState(null, '', '#' + id); } catch (e) {}
+    window.scrollTo(0, 0); $('#toast').classList.remove('on');
+    return true;
+  }
+  function go(id) {
+    if (id === 'auth-signin') { show('auth'); authShow('signin'); return; }
+    if (id === 'auth-out') { show('auth'); authShow('signed-out'); return; }
+    if (!show(id)) toast('No such screen: ' + id);
+  }
+  var pt = $('#pageTabs');
+  Object.keys(PAGES).forEach(function (p) {
+    var b = document.createElement('button'); b.type = 'button'; b.dataset.p = p; b.textContent = PAGES[p];
+    b.addEventListener('click', function () { var f = screens.filter(function (x) { return x.dataset.page === p; })[0]; show(f.dataset.id); });
+    pt.appendChild(b);
+  });
+  document.addEventListener('click', function (e) {
+    var g = e.target.closest('[data-go]');
+    if (g) { e.preventDefault(); go(g.dataset.go); return; }
+    var a = e.target.closest('a[href="#"]'); if (a) e.preventDefault();
+    var m = e.target.closest('.menu-btn');
+    if (m) { var n = m.closest('.nav'); var o = n.classList.toggle('open'); m.setAttribute('aria-expanded', String(o)); }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      var d = $('.dlg-back.open'); if (d) { closeDlg(d); return; }
+      var n = $('.nav.open'); if (n) { n.classList.remove('open'); var mb = $('.menu-btn', n); mb.setAttribute('aria-expanded', 'false'); mb.focus(); }
+    }
+    if (e.key === 'Tab') {
+      var dd = $('.dlg-back.open'); if (!dd) return;
+      var f = $$('button,input,select,textarea,a[href]', dd).filter(function (x) { return !x.disabled; });
+      if (!f.length) return; var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+  function openDlg(d, focusEl) { lastFocus = document.activeElement; d.classList.add('open'); (focusEl || $('button,input', d)).focus(); }
+  function closeDlg(d) { d.classList.remove('open'); if (lastFocus) lastFocus.focus(); }
+
+  /* ---------- prototype controls ---------- */
+  $$('.pc-ctl [data-w]').forEach(function (b) { b.addEventListener('click', function () {
+    $$('.pc-ctl [data-w]').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+    $('#device').style.setProperty('--dw', b.dataset.w + 'px'); }); });
+  $('#annoBtn').addEventListener('click', function (e) { var on = document.body.classList.toggle('annotate'); e.target.setAttribute('aria-pressed', String(on)); });
+  $('#rmBtn').addEventListener('click', function (e) { var on = document.body.classList.toggle('rm'); e.target.setAttribute('aria-pressed', String(on)); setRail(railMode); });
+  function seg(root, cb) { var el = typeof root === 'string' ? $(root) : root; $$('button', el).forEach(function (b) { b.addEventListener('click', function () {
+    $$('button', el).forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); cb(b.dataset.v); }); }); }
+
+  /* ---------- sample data (all invented) ---------- */
+  var T = { conflict: ['Conflict & security', '#c8374f', '#a3263d'], diplomacy: ['Diplomacy & institutions', '#1d6fb8', '#1d5f9e'], trade: ['Trade & economy', '#a85f00', '#8a4f00'], energy: ['Energy & resources', '#17787a', '#0f5f61'], tech: ['Technology & power', '#6a3fb5', '#5b3a9e'], india: ['India & the world', '#2f7d4f', '#1f6a3f'] };
+  var STORIES = [
+    ['geo', 'conflict', 'Ceasefire talks over the Karesh Strait stall on a 12-nautical-mile question', 'Both sides say they want a deal. A single definition decides whether it is signed.', '09:10', 'updated', 'contested'],
+    ['econ', 'trade', 'What a hypothetical 20% tariff does to a supply chain', 'A worked example: who pays at each step, under two assumptions.', '10:20', 'new', 'scenario'],
+    ['geo', 'diplomacy', 'A summit communiqué, read line by line', 'What changed from last year’s text, and what was quietly dropped.', '11:05', 'new', 'attributed'],
+    ['econ', 'energy', 'Why a pipeline route matters more than its capacity', 'Geography, contracts and who can say no.', '12:40', 'new', 'analysis'],
+    ['geo', 'india', 'India’s three options if the strait stays contested', 'Routes, stocks and diplomacy compared.', '13:15', 'corrected', 'analysis'],
+    ['geo', 'tech', 'Who controls the undersea cables near the strait?', 'A map of ownership and repair capacity.', '14:30', 'new', 'established'],
+    ['econ', 'trade', 'The shipping insurance market explained', 'How war-risk premiums are set and why they jump.', '15:00', 'new', 'established'],
+    ['geo', 'diplomacy', 'What a monitoring mission can and cannot do', 'Mandates, access and past examples.', '16:20', 'new', 'analysis'],
+    ['geo', 'conflict', 'Border incident: two accounts, one timeline', 'Where the statements agree and where they do not.', '07:45', 'new', 'contested'],
+    ['econ', 'energy', 'Grid storage: the numbers behind the headline', 'What the announced capacity means in practice.', '08:10', 'new', 'attributed'],
+    ['geo', 'india', 'A treaty clause nobody is talking about', 'Why a 1990s text may matter this week.', '08:50', 'new', 'unresolved'],
+    ['econ', 'trade', 'Reading a trade statistic without being fooled', 'Gross vs value-added, in one chart.', '09:35', 'new', 'established'],
+    ['geo', 'tech', 'Export controls: a plain-language primer', 'Who restricts what, and why now.', '10:00', 'new', 'attributed'],
+    ['geo', 'diplomacy', 'Seven phrases in a joint statement', 'Diplomatic wording and what it signals.', '10:45', 'new', 'analysis'],
+    ['econ', 'energy', 'Fuel stocks: how many days is “enough”?', 'Strategic reserves compared.', '11:30', 'new', 'established'],
+    ['geo', 'india', 'The diaspora angle', 'Remittance routes and consular planning.', '12:00', 'new', 'unresolved']
+  ];
+  var EPG = { established: ['✓', 'Established'], attributed: ['❝', 'Attributed'], contested: ['≠', 'Contested'], analysis: ['◇', 'Analysis'], scenario: ['⟡', 'Scenario'], unresolved: ['?', 'Unresolved'] };
+  var CHIP = { new: ['s-published', 'New'], updated: ['s-updated', 'Updated'], corrected: ['s-corrected', 'Corrected'] };
+  function card(s, wide) {
+    var t = T[s[1]], c = CHIP[s[5]], e = EPG[s[6]];
+    return '<article class="card' + (wide ? ' wide' : '') + '" style="--tc:' + t[1] + ';--tt:' + t[2] + '"><p class="kicker"><span class="dot"></span>' + t[0] + '</p><h3><a href="#" data-go="' + s[0] + '">' + s[2] + '</a></h3><p>' + s[3] + '</p><div class="foot meta light"><time>' + s[4] + ' IST</time><span class="chip ' + c[0] + '">' + c[1] + '</span><span class="ep ' + s[6] + '" data-i="' + e[0] + '">' + e[1] + '</span></div></article>';
+  }
+  function chips(list, id) {
+    var u = $(id); u.innerHTML = '';
+    Object.keys(T).forEach(function (k, i) { var n = [3, 2, 4, 2, 1, 3][i]; u.insertAdjacentHTML('beforeend', '<li><a href="#" data-go="topic" style="border-color:' + T[k][1] + '"><span class="dot" style="color:' + T[k][1] + '"></span>' + T[k][0] + ' <span class="n">' + n + '</span></a></li>'); });
+  }
+  chips(null, '#topicChips'); chips(null, '#topicChips2');
+
+  /* ---------- homepage state ---------- */
+  var edMode = 'typical', railMode = 'manual', showAll = false;
+  function renderCards() {
+    var list = STORIES.slice(1), html = '';
+    if (edMode === 'few') list = list.slice(0, 1);
+    else if (edMode === 'typical') list = list.slice(0, 7);
+    else if (!showAll) list = list.slice(0, 9);
+    else list = list.slice(0, 15);
+    list.forEach(function (s) { html += card(s, edMode === 'few'); });
+    $('#cardGrid').innerHTML = html;
+    $('#manyNote').hidden = !(edMode === 'many' && !showAll);
+  }
+  function setEdition(v) {
+    edMode = v; showAll = false;
+    $('#edition').dataset.state = v;
+    $$('#edition [data-st]').forEach(function (n) { n.hidden = n.dataset.st.split(' ').indexOf(v) < 0; });
+    $$('#edState button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.v === v)); });
+    renderCards(); buildRail();
+  }
+  seg('#edState', setEdition);
+  $('#moreBtn').addEventListener('click', function () { showAll = true; renderCards(); toast('Showing all 16. Focus stays on the button’s position; the new cards are announced.'); });
+  document.addEventListener('click', function (e) { var b = e.target.closest('[data-set-edition]'); if (b) setEdition(b.dataset.setEdition); });
+
+  /* headline rail */
+  function buildRail() {
+    var n = edMode === 'few' ? 3 : STORIES.length > 10 ? 10 : 8;
+    var items = STORIES.slice(0, n).map(function (s) { return '<a href="#" data-go="' + s[0] + '"><span class="dot" style="color:' + T[s[1]][1] + '"></span><time>' + s[4] + '</time><span class="h">' + s[2] + '</span></a>'; }).join('');
+    var tr = $('#railTrack');
+    tr.innerHTML = items + (railMode === 'ticker' ? '<span aria-hidden="true" style="display:flex">' + items.replace(/<a /g, '<a tabindex="-1" ') + '</span>' : '');
+  }
+  function setRail(m) {
+    railMode = m;
+    var tick = m === 'ticker' && !reduce();
+    var vp = $('#railVp');
+    vp.classList.toggle('ticker', tick);
+    $('#railPause').hidden = !tick;
+    $('#railPause').setAttribute('aria-pressed', 'false'); $('#railPause').textContent = 'Pause'; vp.classList.remove('paused');
+    $('#railNote').textContent = m === 'manual' ? 'Manual rail: nothing moves on its own. Swipe on touch, arrow keys or buttons on desktop. Reduced-motion users see the same thing.'
+      : tick ? 'Auto-scroll variant: slow continuous movement. Pauses on hover, on keyboard focus, and with the Pause button (WCAG 2.2.2). Compare with the manual rail; recommendation is manual.'
+      : 'Auto-scroll was requested but reduced motion is on, so the rail falls back to the manual rail.';
+    buildRail();
+  }
+  seg('#railMode', setRail);
+  $('#railPause').addEventListener('click', function (e) { var p = e.target.getAttribute('aria-pressed') !== 'true'; e.target.setAttribute('aria-pressed', String(p)); e.target.textContent = p ? 'Play' : 'Pause'; $('#railVp').classList.toggle('paused', p); });
+  function railScroll(d) { $('#railVp').scrollBy({ left: d * 320, behavior: reduce() ? 'auto' : 'smooth' }); }
+  $('#railPrev').addEventListener('click', function () { railScroll(-1); });
+  $('#railNext').addEventListener('click', function () { railScroll(1); });
+  $('#railVp').addEventListener('keydown', function (e) { if (e.key === 'ArrowRight') { e.preventDefault(); railScroll(1); } if (e.key === 'ArrowLeft') { e.preventDefault(); railScroll(-1); } });
+
+  /* lead briefing */
+  var BRIEF = [['Established', 'Talks ended Wednesday without a signed one-page text.'], ['Contested', 'The two sides define “territorial waters” as 12 vs 24 nautical miles.'], ['Unresolved', 'Whether both will accept a neutral monitoring mission.']];
+  function brief(i) { var b = BRIEF[i]; $('#briefCard').innerHTML = '<div class="label"><span class="ep ' + b[0].toLowerCase() + '" data-i="' + EPG[b[0].toLowerCase()][0] + '">' + b[0] + '</span></div>' + b[1]; $$('#briefSteps button').forEach(function (x) { x.setAttribute('aria-pressed', String(+x.dataset.i === i)); }); }
+  $$('#briefSteps button').forEach(function (b) { b.addEventListener('click', function () { brief(+b.dataset.i); }); });
+  brief(0);
+  $('#topicGrid').innerHTML = STORIES.filter(function (s) { return s[1] === 'trade' || s[1] === 'energy'; }).map(function (s) { return card(s); }).join('');
+
+  /* ---------- geo story ---------- */
+  var EV = [
+    ['3 Sep', 'Border incident near the strait', 'A patrol vessel and a cargo ship are reported in a close approach. Each side gives a different account of who entered whose waters.', 'contested', 'g2'],
+    ['19 Sep', 'Emergency session of the regional council', 'The council calls for talks. Both states attend.', 'established', 'g1'],
+    ['2 Oct', 'Insurers raise war-risk premiums', 'Two shipping associations report a sharp rise in quoted premiums for the strait.', 'established', 'g4'],
+    ['19 Oct', 'Talks open in a neutral capital', 'Mediators table a one-page ceasefire text.', 'established', 'g3'],
+    ['21 Oct', 'Round two: text “90 per cent agreed”', 'Mediators say the draft is nearly settled; neither delegation confirms the figure.', 'contested', 'g3'],
+    ['22 Oct', 'Delegations leave without signing', 'The remaining gap is the definition of territorial waters.', 'established', 'g1']
+  ];
+  var tl = $('#tl');
+  EV.forEach(function (ev, i) {
+    var e = EPG[ev[3]];
+    tl.insertAdjacentHTML('beforeend', '<li data-c="' + ev[3] + '"><button type="button" class="tl-btn" aria-expanded="false" aria-controls="tx' + i + '"><span class="tl-d"><time>' + ev[0] + ' 2026</time><span class="ep ' + ev[3] + '" data-i="' + e[0] + '">' + e[1] + '</span></span><span class="tl-t">' + ev[1] + '</span></button><div class="tl-x" id="tx' + i + '" hidden><p>' + ev[2] + ' <sup class="ref"><a href="#' + ev[4] + '">' + ev[4].slice(1) + '</a></sup></p></div></li>');
+  });
+  tl.addEventListener('click', function (e) { var b = e.target.closest('.tl-btn'); if (!b) return; var o = b.getAttribute('aria-expanded') !== 'true'; b.setAttribute('aria-expanded', String(o)); $('#' + b.getAttribute('aria-controls')).hidden = !o; });
+  seg('#tlFilter', function (v) { $$('li', tl).forEach(function (li) { li.hidden = v !== 'all' && li.dataset.c !== v; }); });
+  $('#tlAll').addEventListener('click', function (e) { var open = e.target.textContent === 'Expand all'; $$('.tl-btn', tl).forEach(function (b) { b.setAttribute('aria-expanded', String(open)); $('#' + b.getAttribute('aria-controls')).hidden = !open; }); e.target.textContent = open ? 'Collapse all' : 'Expand all'; });
+
+  var STK = [
+    ['Veldora', 'State · coastal', '#1d6fb8', 'Territorial waters end at 12 nautical miles, as in the standard convention.', 'Keep the main shipping lane open; avoid inspections it does not control.', 'Joint statement, para 3', 'g1'],
+    ['Marenth', 'State · neighbour', '#a85f00', 'Enforcement zone should extend to 24 nautical miles for security reasons.', 'Reduce smuggling; keep leverage in the lane.', 'Written response, 21 Oct', 'g2'],
+    ['Mediating group', 'Organisation', '#6a3fb5', 'Text is “90 per cent agreed”; proposes a neutral monitoring mission.', 'A signed text this month.', 'Mediator remarks (no URL yet)', 'g3'],
+    ['Shipping associations', 'Industry', '#17787a', 'Premiums rose because the outcome is uncertain, not because traffic was attacked.', 'Predictable rules and routes.', 'Association notice, 2 Oct', 'g4']
+  ];
+  $('#stk').innerHTML = STK.map(function (s) { return '<article class="stk-card" style="--c:' + s[2] + '"><span class="type">' + s[1] + '</span><h3>' + s[0] + '</h3><dl><div><dt>Stated position <span class="ep attributed" data-i="❝">Attributed</span></dt><dd>' + s[3] + ' <sup class="ref"><a href="#' + s[6] + '">' + s[6].slice(1) + '</a></sup></dd></div><div><dt>Interest (analysis) <span class="ep analysis" data-i="◇">Analysis</span></dt><dd>' + s[4] + '</dd></div><div><dt>Source</dt><dd>' + s[5] + '</dd></div></dl></article>'; }).join('');
+
+  var SRC = [
+    ['g1', 'Joint statement of the regional council, 19 Oct 2026', 'Official · primary', 'Published 19 Oct 2026', 'Retrieved 22 Oct 2026', 'Archived copy: yes'],
+    ['g2', 'Written response of Marenth’s delegation, 21 Oct 2026', 'Official · primary', 'Published 21 Oct 2026', 'Retrieved 22 Oct 2026', 'Archived copy: yes'],
+    ['g3', 'Mediators’ press remarks (transcript)', 'Statement · secondary', 'Dated 21 Oct 2026', 'Retrieved 22 Oct 2026', 'No URL yet: editor must add (validation warning)'],
+    ['g4', 'Shipping associations’ joint notice, 2 Oct 2026', 'Industry · primary', 'Published 2 Oct 2026', 'Retrieved 22 Oct 2026', 'Archived copy: yes']
+  ];
+  $('#srcGeo').innerHTML = SRC.map(function (s) { return '<li id="' + s[0] + '">' + s[1] + '<div class="m"><span>' + s.slice(2).join('</span><span>') + '</span></div></li>'; }).join('');
+  var og = $('#outlineGeo');
+  $$('#g-what,#g-time,#g-who,#g-cause,#g-india,#g-scn,#g-open,#updlog,#g-src').forEach(function (s) { og.insertAdjacentHTML('beforeend', '<li><a href="#' + s.id + '">' + s.dataset.out + '</a></li>'); });
+  $('#textSize').addEventListener('click', function (e) { var on = e.target.getAttribute('aria-pressed') !== 'true'; e.target.setAttribute('aria-pressed', String(on)); $$('.s-body p, .s-body li').forEach(function (p) { p.style.fontSize = on ? '1.25rem' : ''; }); });
+
+  /* ---------- econ chart ---------- */
+  var Q = ['Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6'];
+  var SER = [{ n: 'Importer absorbs half', c: '#1d6fb8', d: '', v: [10, 11.5, 12.5, 13, 13, 13] }, { n: 'Full pass-through', c: '#a85f00', d: '8 6', v: [10, 13, 15, 16, 16, 16] }];
+  var W = 600, H = 280, L = 44, R = 90, TP = 14, B = 34, MN = 8, MX = 18;
+  function X(i) { return L + i * (W - L - R) / (Q.length - 1); }
+  function Y(v) { return TP + (MX - v) * (H - TP - B) / (MX - MN); }
+  function chart() {
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="group" aria-label="Line chart of shelf price over six quarters, two assumptions. A table alternative is available.">';
+    for (var g = MN; g <= MX; g += 2) s += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(g) + '" y2="' + Y(g) + '" stroke="#dedbee"/><text class="ax" x="' + (L - 8) + '" y="' + (Y(g) + 4) + '" text-anchor="end">$' + g + '</text>';
+    Q.forEach(function (q, i) { s += '<text class="ax" x="' + X(i) + '" y="' + (H - 10) + '" text-anchor="middle">' + q + '</text>'; });
+    SER.forEach(function (se, si) {
+      s += '<polyline class="ln" stroke="' + se.c + '" stroke-dasharray="' + se.d + '" points="' + se.v.map(function (v, i) { return X(i) + ',' + Y(v); }).join(' ') + '"/>';
+      s += '<text class="ax" x="' + (X(5) + 10) + '" y="' + (Y(se.v[5]) + 4) + '" style="font-weight:800;fill:' + se.c + '">' + (si ? 'Full' : 'Half') + '</text>';
+      se.v.forEach(function (v, i) { s += '<g class="pt" tabindex="0" role="button" data-s="' + si + '" data-i="' + i + '" aria-label="' + se.n + ', ' + Q[i] + ', $' + v.toFixed(2) + '"><circle cx="' + X(i) + '" cy="' + Y(v) + '" r="9" fill="#fff" stroke="' + se.c + '" stroke-width="2"/></g>'; });
+    });
+    $('#chartSvgWrap').innerHTML = s + '</svg>';
+    var t = '<table><caption>Shelf price per unit, USD (illustrative)</caption><thead><tr><th scope="col">Quarter</th>' + SER.map(function (x) { return '<th scope="col">' + x.n + '</th>'; }).join('') + '</tr></thead><tbody>' + Q.map(function (q, i) { return '<tr><th scope="row">' + q + '</th>' + SER.map(function (x) { return '<td>$' + x.v[i].toFixed(2) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table>';
+    $('#tblWrap').innerHTML = t;
+  }
+  chart();
+  function readout(p) { var si = +p.dataset.s, i = +p.dataset.i, se = SER[si]; var r = $('#chartRead'); r.style.setProperty('--c', se.c); r.textContent = se.n + ' · ' + Q[i] + ': $' + se.v[i].toFixed(2) + ' per unit (illustrative). Change since Q1: +$' + (se.v[i] - se.v[0]).toFixed(2) + '.'; }
+  $('#chartSvgWrap').addEventListener('focusin', function (e) { var p = e.target.closest('.pt'); if (p) readout(p); });
+  $('#chartSvgWrap').addEventListener('click', function (e) { var p = e.target.closest('.pt'); if (p) { p.focus(); readout(p); } });
+  $('#chartSvgWrap').addEventListener('keydown', function (e) {
+    var p = e.target.closest('.pt'); if (!p) return; var si = +p.dataset.s, i = +p.dataset.i, ni = i, ns = si;
+    if (e.key === 'ArrowRight') ni = Math.min(Q.length - 1, i + 1); else if (e.key === 'ArrowLeft') ni = Math.max(0, i - 1); else if (e.key === 'ArrowUp') ns = 1; else if (e.key === 'ArrowDown') ns = 0; else return;
+    e.preventDefault(); var t = $('.pt[data-s="' + ns + '"][data-i="' + ni + '"]', $('#chartSvgWrap')); if (t) t.focus();
+  });
+  $('#tblToggle').addEventListener('click', function (e) { var o = e.target.getAttribute('aria-expanded') !== 'true'; e.target.setAttribute('aria-expanded', String(o)); $('#tblWrap').hidden = !o; e.target.textContent = o ? 'Hide table' : 'Show as table'; });
+
+  /* ---------- auth ---------- */
+  var AUTH = {
+    'signin': ['Sign in', '', '<p>For the editor and invited publishers. Readers don’t need an account.</p><div class="field"><label for="a-e">Email</label><input id="a-e" type="email" autocomplete="username" value="admin@example.com"></div><div class="banner info"><span class="sym">i</span><span><b>Emailed sign-in link</b>, as recommended in D-061 (Proposed until the owner confirms). No password field, no social login, no “create account”. Sender domain and email provider are unresolved (Q-33).</span></div><button class="btn accent" type="button" data-auth="check-email">Continue</button><a class="btn quiet" href="#" data-go="home">Back to the public site</a>'],
+    'signin-error': ['Sign in', 'err', '<div class="banner err" role="alert"><span class="sym">!</span><div><b>We couldn’t sign you in.</b> Check the details and try again. The message is the same whether or not an account exists, so it can’t be used to discover accounts.</div></div><div class="field"><label for="a-e2">Email</label><input id="a-e2" type="email" aria-invalid="true" value="admin@exmple.com"></div><button class="btn accent" type="button" data-auth="check-email">Try again</button>'],
+    'check-email': ['Check your email', 'ok', '<p>If this address can sign in, we’ve sent a sign-in link to <b>admin@example.com</b>. It may take a minute. The link works for about an hour (D-061; exact lifetime to verify) and only once.</p><div class="banner info"><span class="sym">i</span><span>Delivery depends on the staging email settings and the sender domain (Q-33), both still to be confirmed.</span></div><button class="btn secondary" type="button" data-auth="signin">Use a different email</button><button class="btn quiet" type="button" data-auth="mfa-verify">(Review control) I have the email →</button>'],
+    'invite-ok': ['You’re invited', 'ok', '<p>After you signed in, we found an invitation for this email from <b>the InScapio editor</b> to publish stories. It is valid until <b>29 Oct 2026</b>.</p><ul class="u-list"><li>You’ll create drafts and publish stories.</li><li>You can’t invite others or manage the site.</li><li>Readers never see this page.</li></ul><button class="btn accent" type="button" data-auth="activated">Accept and continue</button><button class="btn quiet" type="button" data-auth="invite-expired">(Review) show expired invitation</button>'],
+    'invite-expired': ['This invitation has expired', 'warn', '<p>Invitations last 7 days by default (1–30 possible, D-061). Ask the administrator to create a new one, then sign in again.</p><p>We can’t tell you who invited you from here.</p><button class="btn secondary" type="button" data-go="home">Go to the public site</button><button class="btn quiet" type="button" data-auth="invite-invalid">(Review) show no-invitation case</button>'],
+    'invite-invalid': ['No invitation found', 'err', '<p>You’re signed in, but there is no valid invitation for this email. It may have been used already, revoked, or sent to a different address. Ask the administrator.</p><button class="btn secondary" type="button" data-go="home">Go to the public site</button>'],
+    'activated': ['Your account is ready', 'ok', '<p>You’re signed in as a publisher. Next: sign in again whenever you need to publish.</p><p style="font:500 .9rem var(--font-display)">Two-step verification is optional for publishers and required for the administrator.</p><button class="btn accent" type="button" data-go="dash">Open the studio</button>'],
+    'mfa-enrol': ['Set up two-step verification', '', '<div class="steps-h"><b>Step 1</b><span>Scan</span><span>›</span><span>Step 2 Confirm</span></div><p>Required for the administrator account. Use an authenticator app.</p><div class="qr" role="img" aria-label="Example QR code placeholder"></div><p style="font:500 .85rem var(--font-display)">Can’t scan? Enter this setup key: <span class="hash">EXAMPLE-NOT-A-KEY</span></p><button class="btn accent" type="button" data-auth="mfa-verify">I’ve added it</button><div class="banner warn"><span class="sym">?</span><span><b>No in-app recovery (D-058).</b> If the authenticator is lost, recovery is the documented owner-side procedure in docs/runbooks/admin-recovery.md; its Auth-level steps are unverified (U-11).</span></div>'],
+    'mfa-verify': ['Enter your 6-digit code', '', '<div class="field"><label for="otp">Code from your authenticator app</label><input id="otp" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]*" maxlength="6" style="max-width:10em;font:800 1.4rem var(--font-display);letter-spacing:.2em"></div><button class="btn accent" type="button" data-go="dash">Verify</button><button class="btn quiet" type="button" data-auth="mfa-fail">(Review) wrong code</button>'],
+    'mfa-fail': ['Enter your 6-digit code', 'err', '<div class="banner err" role="alert"><span class="sym">!</span><div><b>That code didn’t work.</b> Codes change every 30 seconds. Check your phone’s clock and try the newest code. After several failures you’ll have to wait before trying again.</div></div><div class="field"><label for="otp2">Code</label><input id="otp2" inputmode="numeric" aria-invalid="true" maxlength="6"></div><button class="btn accent" type="button" data-auth="mfa-verify">Try again</button>'],
+    'denied': ['Access denied', 'err', '<p>You’re signed in, but this account isn’t allowed to open the studio. Signing in doesn’t grant access on its own.</p><button class="btn secondary" type="button" data-go="home">Go to the public site</button><button class="btn quiet" type="button" data-auth="signed-out">Sign out</button>'],
+    'session': ['Your session ended', 'warn', '<p>You were signed out after a period of inactivity. Your last saved draft is safe.</p><button class="btn accent" type="button" data-auth="signin">Sign in again</button><div class="banner info"><span class="sym">i</span><span>Inactivity period and stale-session window are open (Q-41).</span></div>'],
+    'signed-out': ['You’ve signed out', 'ok', '<p>You’re back on the public site. Stories stay readable without an account.</p><button class="btn accent" type="button" data-go="home">Go to today’s edition</button>'],
+    'recover': ['Account recovery', 'warn', '<div class="banner warn"><span class="sym">?</span><div><b>Not designed as a screen: no recovery feature is approved or implemented (D-058).</b> Recommended default, kept separate from this design: the administrator recovers through the documented owner-side runbook; publishers are re-invited. A self-service reset, social login or open registration should not be added without a new owner decision.</div></div><button class="btn secondary" type="button" data-auth="signin">Back to sign in</button>']
+  };
+  var AN = { 'signin': 'Sign in', 'signin-error': 'Sign-in failed', 'check-email': 'Check email', 'invite-ok': 'Invitation', 'invite-expired': 'Invite expired', 'invite-invalid': 'Invite invalid', 'activated': 'Activated', 'mfa-enrol': 'MFA enrol', 'mfa-verify': 'MFA verify', 'mfa-fail': 'MFA wrong code', 'denied': 'Access denied', 'session': 'Session expired', 'signed-out': 'Signed out', 'recover': 'Recovery (unresolved)' };
+  var as = $('#authSeg');
+  Object.keys(AUTH).forEach(function (k) { var b = document.createElement('button'); b.type = 'button'; b.dataset.v = k; b.textContent = AN[k]; b.setAttribute('aria-pressed', 'false'); as.appendChild(b); });
+  function authShow(k) {
+    var a = AUTH[k]; if (!a) return;
+    $$('#authSeg button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.v === k)); });
+    $('#authStates').innerHTML = '<div class="a-card ' + a[1] + '"><a class="wordmark" href="#" data-go="home">InScapio</a><h1>' + a[0] + '</h1>' + a[2] + '</div><div class="auth-notes"><span class="badge proposed" style="justify-self:start">Proposed · not implemented</span></div>';
+    var h = $('#authStates h1'); h.tabIndex = -1; h.focus({ preventScroll: true });
+  }
+  as.addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) authShow(b.dataset.v); });
+  $('#authStates').addEventListener('click', function (e) { var b = e.target.closest('[data-auth]'); if (b) authShow(b.dataset.auth); });
+  authShow('signin');
+
+  /* ---------- admin shell ---------- */
+  var NAV = [['dash', 'Today’s queue'], ['import', 'Import story'], ['editor', 'Editor'], ['preview', 'Preview'], ['publish', 'Review & publish'], ['revise', 'Update / correct'], ['invites', 'People & invites'], ['security', 'Security']];
+  $$('.adm').forEach(function (a) {
+    var n = $('.adm-nav', a), act = a.dataset.active;
+    n.innerHTML = '<a class="wordmark" href="#" data-go="home">InScapio</a><span class="role">Studio · private</span><ul>' + NAV.map(function (x) { return '<li><a href="#" data-go="' + x[0] + '"' + (x[0] === act ? ' aria-current="page"' : '') + '>' + x[1] + '</a></li>'; }).join('') + '<li><a href="#" class="later" aria-disabled="true" data-go="none">Analytics <span class="tinychip">Later</span></a></li><li><a href="#" class="later" aria-disabled="true" data-go="none">AI assist <span class="tinychip">Later</span></a></li></ul><a href="#" data-go="auth-out" style="margin-top:auto">Sign out</a>';
+  });
+
+  var Q_ROWS = [['Karesh Strait talks stall…', 'Conflict & security', 'published', 'Published 09:10 · Updated 16:05'], ['Hypothetical 20% tariff…', 'Trade & economy', 'published', 'Published 10:20'], ['Summit communiqué, line by line', 'Diplomacy', 'published', 'Published 11:05'], ['India’s three options…', 'India & the world', 'ready', 'Edited 17:50'], ['Pipeline route explainer', 'Energy', 'ready', 'Edited 17:12'], ['Undersea cables near the strait', 'Technology', 'ready', 'Edited 16:48'], ['Insurance market explained', 'Trade & economy', 'draft', 'Imported 15:30'], ['Monitoring missions', 'Diplomacy', 'draft', 'Imported 15:34']];
+  var SC = { published: ['s-published', 'Published'], ready: ['s-ready', 'Ready'], draft: ['s-draft', 'Draft'] };
+  function queue(f) { $('#qBody').innerHTML = Q_ROWS.filter(function (r) { return f === 'all' || r[2] === f; }).map(function (r) { return '<tr><td data-l="Story"><a href="#" data-go="editor">' + r[0] + '</a></td><td data-l="Topic">' + r[1] + '</td><td data-l="Status"><span class="chip ' + SC[r[2]][0] + '">' + SC[r[2]][1] + '</span></td><td data-l="Changed">' + r[3] + '</td><td data-l="Next"><a href="#" data-go="' + (r[2] === 'published' ? 'revise' : r[2] === 'ready' ? 'publish' : 'editor') + '">' + (r[2] === 'published' ? 'Update / correct' : r[2] === 'ready' ? 'Review & publish' : 'Edit') + '</a></td></tr>'; }).join(''); }
+  queue('all'); seg('#qTabs', queue);
+
+  /* import validation */
+  var ERRS = [['blocks[2].type', 'The block type “html” is not allowed. Use one of: prose, timeline, stakeholders, cause-chain, chart, comparison, sources, related, … (closed list).'], ['sources[2].url', 'Missing URL. Add a link or an archived copy, or mark the source as offline with a reason.'], ['blocks[0].claims[1].label', 'This briefing claim needs a label: Established, Attributed, Contested, Analysis, Scenario or Unresolved.']];
+  function val(ok) {
+    var l = $('#valList');
+    if (ok) { l.innerHTML = '<li class="pass"><span class="sym">✓</span><span>Structure valid: 9 blocks, 4 sources, 0 errors</span></li><li class="warn"><span class="sym">!</span><span>Warning: source 3 has no archived link <code>sources[2].archive</code></span></li>'; $('#valChip').className = 'chip s-published'; $('#valChip').textContent = 'Valid'; $('#saveDraft').disabled = false; }
+    else { l.innerHTML = ERRS.map(function (x) { return '<li><span class="sym">✕</span><span><code>' + x[0] + '</code><br>' + x[1] + '</span></li>'; }).join(''); $('#valChip').className = 'chip s-unpublished'; $('#valChip').textContent = '3 errors'; $('#saveDraft').disabled = true; }
+  }
+  val(false);
+  $('#runVal').addEventListener('click', function () { val(false); toast('Validation ran: 3 errors.'); });
+  $('#fixVal').addEventListener('click', function () { val(true); toast('Validation passed with 1 warning.'); });
+  $('#saveDraft').addEventListener('click', function () { toast('Saved as draft (illustrative).'); go('editor'); });
+
+  /* editor blocks */
+  var BL = ['Briefing', 'What happened', 'Timeline', 'Stakeholders', 'Cause and effect', 'India implications', 'Scenarios'], sel = 0;
+  function blocks(msg) { var ol = $('#blockList'); ol.innerHTML = BL.map(function (b, i) { return '<li' + (i === sel ? ' aria-current="true"' : '') + '><button type="button" class="btn quiet" data-sel="' + i + '" style="min-height:44px;text-align:left;flex:1">' + (i + 1) + '. ' + b + '</button><span class="mv"><button type="button" data-mv="-1" data-i="' + i + '" aria-label="Move ' + b + ' up"' + (i === 0 ? ' disabled' : '') + '>↑</button><button type="button" data-mv="1" data-i="' + i + '" aria-label="Move ' + b + ' down"' + (i === BL.length - 1 ? ' disabled' : '') + '>↓</button></span></li>'; }).join('') + ''; $('#blkStatus').textContent = msg || ''; $('#edTitle').textContent = BL[sel]; }
+  blocks();
+  $('#blockList').addEventListener('click', function (e) {
+    var m = e.target.closest('[data-mv]'), s = e.target.closest('[data-sel]');
+    if (m) { var i = +m.dataset.i, d = +m.dataset.mv; var t = BL[i]; BL[i] = BL[i + d]; BL[i + d] = t; if (sel === i) sel = i + d; else if (sel === i + d) sel = i; blocks(t + ' moved to position ' + (i + d + 1)); var nb = $('[data-mv="' + d + '"][data-i="' + (i + d) + '"]'); if (nb && !nb.disabled) nb.focus(); $('#saveState').textContent = 'Unsaved changes'; }
+    if (s) { sel = +s.dataset.sel; blocks(); }
+  });
+  $('#ed-h').addEventListener('input', function (e) { $('#hcount').textContent = e.target.value.length; $('#saveState').textContent = 'Unsaved changes'; });
+  $('#ed-r').addEventListener('change', function (e) { $('#ed-re').hidden = e.target.selectedIndex === 0; e.target.setAttribute('aria-invalid', String(e.target.selectedIndex !== 0)); });
+
+  /* preview width */
+  seg('#pvSeg', function (v) { var f = $('#pvFrame'); f.style.width = v; });
+
+  /* publish flow */
+  var pubD = $('#pubDlg');
+  function pubBanner(h) { $('#pubBanner').innerHTML = h; }
+  $('#openPub').addEventListener('click', function () { $('#pubOk').checked = false; $('#pubGo').disabled = true; openDlg(pubD, $('#pubOk')); });
+  $('#pubOk').addEventListener('change', function (e) { $('#pubGo').disabled = !e.target.checked; });
+  $('#pubCancel').addEventListener('click', function () { closeDlg(pubD); });
+  $('#pubGo').addEventListener('click', function () {
+    closeDlg(pubD); $('#pubChip').className = 'chip s-published'; $('#pubChip').textContent = 'Published 22 Oct 2026, 18:46';
+    pubBanner('<div class="banner ok" role="status"><span class="sym">✓</span><div><b>Published.</b> Approved by the administrator at 18:46 IST. Public address: <span class="hash">inscapio.in/story/karesh-strait-talks</span> <button type="button" class="btn secondary" style="min-height:44px" id="cp">Copy link</button> <a href="#" data-go="revise">Update or correct</a></div></div>');
+    $('#cp').addEventListener('click', function () { toast('Link copied (illustrative).'); }); toast('Published.');
+  });
+  $('#simFail').addEventListener('click', function () { pubBanner('<div class="banner err" role="alert"><span class="sym">!</span><div><b>Not published.</b> The story is still a draft and nothing changed publicly. Reason: publishing was refused by the server (example: MFA session older than allowed). Your edits are kept.</div></div>'); $('#pubChip').className = 'chip s-ready'; $('#pubChip').textContent = 'Ready for review'; });
+
+  /* revise */
+  var RV = { updated: ['<div class="upd"><span class="chip s-updated">Updated</span> %n</div>', 'Update published. Readers see an “Updated” badge and the note in the change log.'], corrected: ['<div class="upd correction"><span class="chip s-corrected">Corrected</span> %n</div>', 'Correction published. A “Corrected” banner stays at the top of the story.'], unpublished: ['<div class="banner err"><span class="sym">!</span><div><b>This story has been taken down.</b> %n</div></div>', 'Story unpublished. Its URL shows a notice; it is removed from lists and topic pages.'] };
+  var rt = 'updated';
+  function rvPrev() { $('#rvPrev').innerHTML = RV[rt][0].replace('%n', ($('#rv-n').value || '(no note yet)').replace(/</g, '&lt;')) + '<div class="pv-body" style="margin-top:8px"><b style="font:800 1.1rem var(--font-display)">Ceasefire talks over the Karesh Strait…</b></div>'; }
+  $$('input[name="ct"]').forEach(function (r) { r.addEventListener('change', function () { rt = r.dataset.ct; rvPrev(); }); });
+  $('#rv-n').addEventListener('input', rvPrev); rvPrev();
+  $('#rvGo').addEventListener('click', function () { $('#rvOut').innerHTML = '<div class="banner ok" role="status" style="margin-top:12px"><span class="sym">✓</span><span>' + RV[rt][1] + '</span></div>'; });
+
+  /* invites */
+  $('#invBtn').addEventListener('click', function () { openDlg($('#invDlg'), $('#inv-e')); });
+  $('#invCancel').addEventListener('click', function () { closeDlg($('#invDlg')); });
+  $('#invMake').addEventListener('click', function () { closeDlg($('#invDlg')); toast('Invitation recorded for the address entered. Tell them to sign in at the studio with that email (illustrative).'); });
+
+  /* states gallery */
+  $('#openUnsaved').addEventListener('click', function () { openDlg($('#unsavedDlg'), $('#unStay')); });
+  $('#unStay').addEventListener('click', function () { closeDlg($('#unsavedDlg')); });
+  $('#unLeave').addEventListener('click', function () { closeDlg($('#unsavedDlg')); toast('Changes discarded (illustrative).'); });
+  $('#toastBtn').addEventListener('click', function () { toast('Saved at 18:41 IST'); });
+
+  function pch() { document.documentElement.style.setProperty('--pch', $('.pc-bar').offsetHeight + 'px'); }
+  pch(); window.addEventListener('resize', pch);
+  /* boot */
+  setEdition('typical'); setRail('manual');
+  var start = (location.hash || '').slice(1);
+  if (!show(start)) show('direction');
+  window.addEventListener('hashchange', function () { var id = location.hash.slice(1); if (screens.some(function (x) { return x.dataset.id === id; }) && (!current || current.dataset.id !== id)) show(id); });
+})();
+</script>
+</body>
+</html>
