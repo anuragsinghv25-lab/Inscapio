@@ -23,6 +23,7 @@ Every document carries a **Status** line. Phase 0 documents are *drafts pending 
 | | [`design/phase-1-5-product-design-review.md`](./design/phase-1-5-product-design-review.md) | Is the current build the right foundation? Measurable principles |
 | | [`design/phase-1-5-experience-specification.md`](./design/phase-1-5-experience-specification.md) | Homepage, reader architecture, publisher workspace (design only) |
 | | [`design/ui-library-evaluation.md`](./design/ui-library-evaluation.md) | MUI, HeroUI, UI Lora versus real requirements |
+| | [`design/editorial/README.md`](./design/editorial/README.md) | **Proposed** editorial redesign package: screen inventory, PRD, schema mapping, design system, phasing, decisions and a clickable prototype (design only, nothing implemented) |
 | **Architecture** | [`architecture/architecture-overview.md`](./architecture/architecture-overview.md) | The big picture and stack choices |
 | | [`architecture/frontend-architecture.md`](./architecture/frontend-architecture.md) | Rendering, structure, state |
 | | [`architecture/backend-architecture.md`](./architecture/backend-architecture.md) | Data, auth, jobs, security, privacy |
